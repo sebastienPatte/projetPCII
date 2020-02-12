@@ -27,22 +27,22 @@ public class Affichage extends JPanel{
 		g.drawLine(0, posHorizon, LARG, posHorizon);
 	}
 	private void drawPiste(Graphics g) {
-		Point posJ = etat.getPosJoueur();
+		int posX = etat.getPosX();
 		Point[][] piste = etat.getPiste();
 		for(int i=0; i+1<piste.length; i++) {
 			Point[] t1 = piste[i];
 			Point[] t2 = piste[i+1];
 			g.drawLine(
-					posJ.x+t1[0].x,
-					posJ.y+t1[0].y,
-					posJ.x+t2[0].x,
-					posJ.y+t2[0].y
+					posX+t1[0].x,
+					t1[0].y,
+					posX+t2[0].x,
+					t2[0].y
 			);
 			g.drawLine(
-					posJ.x+t1[1].x,
-					posJ.y+t1[1].y,
-					posJ.x+t2[1].x,
-					posJ.y+t2[1].y
+					posX+t1[1].x,
+					t1[1].y,
+					posX+t2[1].x,
+					t2[1].y
 			);
 		}
 	}

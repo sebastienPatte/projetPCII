@@ -8,39 +8,37 @@ public class Etat {
 	
 	public static int deplacement = 3;
 	private Piste piste;
-	private Point posJoueur;
+	private int posX;
 	private double acceleration;
 	private int vitesse;
 	
 	public Etat() {
 	
 		this.piste = new Piste();
-		this.posJoueur = new Point(Affichage.LARG/2,0);
+		this.posX = Affichage.LARG/2;
 		this.acceleration = 0.0;
 		this.vitesse = 1;
 	}
 	
-	public void avance() {
-		this.posJoueur = new Point(posJoueur.x, posJoueur.y+vitesse);
-	}
 	
 	public Point[][] getPiste(){
 		return this.piste.getLigne();
 	}
 	
-	public Point getPosJoueur() {
-		return this.posJoueur;
+	public int getPosX() {
+		return this.posX;
+	}
+	
+	public void avance() {
+		piste.avance();
 	}
 	
 	public void goLeft() {
-		
-		this.posJoueur = new Point(posJoueur.x+deplacement, posJoueur.y);
-		
+		this.posX = posX+deplacement;
 	}
 	
 	public void goRight() {
-		
-		this.posJoueur = new Point(posJoueur.x-deplacement, posJoueur.y);
-		
+		this.posX = posX-deplacement;
 	}
+	
 }

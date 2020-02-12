@@ -3,7 +3,7 @@ package main;
 
 import javax.swing.JFrame;
 
-
+import control.Avancer;
 import control.Keys;
 import control.RepaintScreen;
 import model.Etat;
@@ -15,7 +15,8 @@ public class Main {
 		Affichage aff = new Affichage(mod);
 		Keys kl = new Keys(mod);
 		
-		(new RepaintScreen(aff)).start();;
+		(new RepaintScreen(aff)).start();
+		(new Avancer(mod)).start();
 		
 		/* Création JFrame*/
 		JFrame fenetre = new JFrame("suivre la ligne");
