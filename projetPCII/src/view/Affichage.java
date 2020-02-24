@@ -34,15 +34,15 @@ public class Affichage extends JPanel{
 			Point[] t2 = piste[i+1];
 			g.drawLine(
 					posX+t1[0].x,
-					t1[0].y,
+					HAUT-t1[0].y,
 					posX+t2[0].x,
-					t2[0].y
+					HAUT-t2[0].y
 			);
 			g.drawLine(
 					posX+t1[1].x,
-					t1[1].y,
+					HAUT-t1[1].y,
 					posX+t2[1].x,
-					t2[1].y
+					HAUT-t2[1].y
 			);
 		}
 	}
@@ -57,6 +57,7 @@ public class Affichage extends JPanel{
 		Graphics2D g2d = (Graphics2D) g;
 		g.clearRect(0, 0, LARG, HAUT);
 		drawPiste(g);
+		g.clearRect(0, 0, LARG, posHorizon);
 		drawJoueur(g);
 		drawHorizon(g);
 	}

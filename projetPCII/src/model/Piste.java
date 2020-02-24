@@ -8,6 +8,8 @@ import view.Affichage;
 
 public class Piste {
 	public static int largeurPiste = 200;
+	public static int incr = Affichage.HAUT/4;
+	public static int dec = 20;
 	private ArrayList<Point> points;
 	private int posY;
 
@@ -20,24 +22,25 @@ public class Piste {
 	}
 	
 	private void initPoints() {
-		for(int i=Affichage.posHorizon; i<=Affichage.HAUT; i+=50) {
-			int x = randint(-largeurPiste/2,-largeurPiste/2+10);
+		for(int i=Affichage.posHorizon; i<=Affichage.HAUT; i+=incr) {
+			int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec);
 			this.points.add(new Point(x,i));
 		}
 	}
 	
 	private void addPoint() {
-		int y = points.get(points.size()-1).y + 50;
-		int x = randint(-largeurPiste/2,-largeurPiste/2+10);
+		int y = points.get(points.size()-1).y + incr;
+		int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec);
 		System.out.println(x+" "+y);
 		this.points.add(new Point(x,y));
 	}
 	
 	private void updatePoints() {
-		
-		while(points.get(1).y < posY) {
-			points.remove(0);
+		if(points.get(points.size()-1).y <= posY + Affichage.HAUT) {
 			addPoint();
+		}
+		if(points.get(1).y < posY ) {
+			points.remove(0);
 		}
 		
 	}
@@ -56,7 +59,7 @@ public class Piste {
 	}
 	
 	public void avance() {
-		this.posY += 10;
+		this.posY += 2;
 	}
 
 	/** Génère un chiffre aléatoire entre min et max
