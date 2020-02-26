@@ -36,7 +36,7 @@ public class Etat {
 	}
 	
 	public void avance() {
-		piste.avance();
+		piste.avance((int)vitesseX/10);
 	}
 	
 	public double getVitesse() {

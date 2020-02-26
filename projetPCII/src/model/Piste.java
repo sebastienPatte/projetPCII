@@ -58,8 +58,8 @@ public class Piste {
 		return res;
 	}
 	
-	public void avance() {
-		this.posY += Etat.vitesse;
+	public void avance(int v) {
+		this.posY += v;
 	}
 	
 	public int getPosY() {
