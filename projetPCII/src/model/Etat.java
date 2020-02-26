@@ -31,6 +31,10 @@ public class Etat {
 		return this.posX;
 	}
 	
+	public int getPosY() {
+		return piste.getPosY();
+	}
+	
 	public void avance() {
 		piste.avance();
 	}
