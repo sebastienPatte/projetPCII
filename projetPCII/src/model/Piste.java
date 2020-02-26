@@ -61,6 +61,10 @@ public class Piste {
 	public void avance() {
 		this.posY += Etat.vitesse;
 	}
+	
+	public int getPosY() {
+		return posY;
+	}
 
 	/** Génère un chiffre aléatoire entre min et max
 	 * @param int min

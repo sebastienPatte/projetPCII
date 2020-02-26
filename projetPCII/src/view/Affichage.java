@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -55,9 +56,18 @@ public class Affichage extends JPanel{
 	@Override
     public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
+		//nettoyage fenetre
 		g.clearRect(0, 0, LARG, HAUT);
+		
 		drawPiste(g);
+		//nettoyage horizon
 		g.clearRect(0, 0, LARG, posHorizon);
+		
+		//affichage score
+		String strScore ="Score : "+ etat.getPosY();
+    	FontMetrics fm = getFontMetrics(g.getFont());
+    	int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord
+		g.drawString(strScore, LARG-printedLength, 20);
 		drawJoueur(g);
 		drawHorizon(g);
 	}

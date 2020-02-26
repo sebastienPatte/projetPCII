@@ -41,4 +41,8 @@ public class Etat {
 		this.posX = posX-deplacement;
 	}
 	
+	public int getPosY() {
+		return piste.getPosY();
+	}
+	
 }
