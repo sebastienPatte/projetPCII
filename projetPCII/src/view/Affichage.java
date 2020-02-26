@@ -34,15 +34,15 @@ public class Affichage extends JPanel{
 			Point[] t2 = piste[i+1];
 			g.drawLine(
 					posX+t1[0].x,
-					HAUT-t1[0].y,
+					t1[0].y,
 					posX+t2[0].x,
-					HAUT-t2[0].y
+					t2[0].y
 			);
 			g.drawLine(
 					posX+t1[1].x,
-					HAUT-t1[1].y,
+					t1[1].y,
 					posX+t2[1].x,
-					HAUT-t2[1].y
+					t2[1].y
 			);
 		}
 	}
