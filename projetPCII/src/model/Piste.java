@@ -22,48 +22,44 @@ public class Piste {
 	}
 	
 	private void initPoints() {
-		for(int i=Affichage.HAUT; i>=Affichage.posHorizon; i-=incr) {
+		for(int i=Affichage.posHorizon; i<=Affichage.HAUT; i+=incr) {
 			int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec);
 			this.points.add(new Point(x,i));
 		}
 	}
 	
 	private void addPoint() {
-		int y = points.get(points.size()-1).y - incr;
+		int y = points.get(points.size()-1).y + incr;
 		int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec);
-		System.out.println("addPoint("+x+", "+y+")");
+		System.out.println(x+" "+y);
 		this.points.add(new Point(x,y));
 	}
 	
 	private void updatePoints() {
-		if(points.get(points.size()-1).y  + posY >  Affichage.posHorizon ) {
+		if(points.get(points.size()-1).y <= posY + Affichage.HAUT) {
 			addPoint();
 		}
-		if(points.get(1).y + posY >  Affichage.HAUT ) {
+		if(points.get(1).y < posY ) {
 			points.remove(0);
 		}
 		
 	}
 	
 	public Point[][] getLigne(){
-		//System.out.println("pixels parcourus : "+posY);
+		
 		updatePoints();
-		//System.out.println(points.size());
+		System.out.println(points.size());
 		Point[][] res = new Point[points.size()][2]; 
 		for(int i=0; i<points.size(); i++) {
 			Point p = points.get(i);
-			res[i][0]= new Point (p.x, p.y + posY);
-			res[i][1]= new Point(p.x+largeurPiste, p.y + posY);
+			res[i][0]= new Point (p.x, p.y - posY);
+			res[i][1]= new Point(p.x+largeurPiste, p.y - posY);
 		}
 		return res;
 	}
 	
 	public void avance() {
-		this.posY += Etat.vitesse;
-	}
-	
-	public int getPosY() {
-		return posY;
+		this.posY += 2;
 	}
 
 	/** Génère un chiffre aléatoire entre min et max

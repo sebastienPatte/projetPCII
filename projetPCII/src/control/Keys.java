@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import model.Etat;
 
 public class Keys extends KeyAdapter{
-
+	
 	private Etat etat;
 	
 	public Keys(Etat etat) {
