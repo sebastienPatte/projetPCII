@@ -36,9 +36,11 @@ public class Piste {
 	}
 	
 	private void updatePoints() {
+		//on ajoute un point si le dernier point entre dans le champ de vision 
 		if(points.get(points.size()-1).y  + posY >  Affichage.posHorizon ) {
 			addPoint();
 		}
+		//on retire le 1er point si le deuxième sort de la fenêtre (par le bas)
 		if(points.get(1).y + posY >  Affichage.HAUT ) {
 			points.remove(0);
 		}
@@ -59,6 +61,7 @@ public class Piste {
 	}
 	
 	public void avance(int v) {
+		//on avance de la vitesse v donnée lors de l'appel par Etat
 		this.posY += v;
 	}
 	

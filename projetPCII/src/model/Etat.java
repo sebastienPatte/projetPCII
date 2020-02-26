@@ -35,6 +35,9 @@ public class Etat {
 	}
 	
 	public void avance() {
+		/* 0 <= vitesseX/100 <= 1
+		 * quand vitesseX est à 100 on avance de vitesseMax
+		 */
 		piste.avance((int)(vitesseX/100*vitesseMax));
 	}
 	
