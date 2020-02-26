@@ -11,7 +11,7 @@ public class Etat {
 	private int posX;
 	private double acceleration;
 	private double vitesseX;
-	static int vitesse = 2;
+	static double vitesseMax = 5.0;//pixels par repaint
 	
 	public Etat() {
 	
@@ -19,7 +19,6 @@ public class Etat {
 		this.posX = Affichage.LARG/2;
 		this.acceleration = 0.0;
 		this.vitesseX = 100;
-		this.vitesse = 2;
 	}
 	
 	
@@ -36,7 +35,7 @@ public class Etat {
 	}
 	
 	public void avance() {
-		piste.avance((int)vitesseX/10);
+		piste.avance((int)(vitesseX/100*vitesseMax));
 	}
 	
 	public double getVitesse() {
