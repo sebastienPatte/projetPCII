@@ -10,14 +10,14 @@ public class Etat {
 	private Piste piste;
 	private int posX;
 	private double acceleration;
-	private int vitesse;
+	public static int vitesse = 2;
 	
 	public Etat() {
 	
 		this.piste = new Piste();
 		this.posX = Affichage.LARG/2;
 		this.acceleration = 0.0;
-		this.vitesse = 1;
+
 	}
 	
 	

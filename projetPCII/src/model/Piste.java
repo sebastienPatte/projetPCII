@@ -59,7 +59,7 @@ public class Piste {
 	}
 	
 	public void avance() {
-		this.posY += 2;
+		this.posY += Etat.vitesse;
 	}
 
 	/** Génère un chiffre aléatoire entre min et max
