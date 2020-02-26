@@ -22,7 +22,7 @@ public class Piste {
 	}
 	
 	private void initPoints() {
-		for(int i=Affichage.posHorizon; i<=Affichage.HAUT; i+=incr) {
+		for(int i=0; i<=Affichage.HAUT-Affichage.posHorizon; i+=incr) {
 			int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec);
 			this.points.add(new Point(x,i));
 		}
@@ -46,7 +46,7 @@ public class Piste {
 	}
 	
 	public Point[][] getLigne(){
-		
+		System.out.println("pixels parcourus : "+posY);
 		updatePoints();
 		System.out.println(points.size());
 		Point[][] res = new Point[points.size()][2]; 
