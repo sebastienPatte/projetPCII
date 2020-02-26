@@ -11,7 +11,7 @@ public class Etat {
 	private int posX;
 	private double acceleration;
 	private double vitesseX;
-	private static int vitesse = 2;
+	static int vitesse = 2;
 	
 	public Etat() {
 	
