@@ -14,7 +14,6 @@ public class Etat {
 	static double vitesseMax = 5.0;//pixels par repaint
 	
 	public Etat() {
-	
 		this.piste = new Piste();
 		this.posX = Affichage.LARG/2;
 		this.accel = 100.;
@@ -47,6 +46,7 @@ public class Etat {
 		 * quand accel est à 100 on avance de vitesseMax
 		 */
 		piste.avance(Math.round((float)getVitesse()));
+		
 	}
 	
 	private void updateAccel() {

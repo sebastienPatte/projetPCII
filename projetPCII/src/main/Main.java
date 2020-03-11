@@ -8,6 +8,7 @@ import control.Keys;
 import control.RepaintScreen;
 import control.Vitesse;
 import model.Etat;
+import model.Montagne;
 import view.Affichage;
 
 public class Main {
