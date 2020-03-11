@@ -46,7 +46,7 @@ public class Etat {
 		/* 0 <= accel/100 <= 1
 		 * quand accel est à 100 on avance de vitesseMax
 		 */
-		piste.avance(Math.round(getVitesse()));
+		piste.avance(Math.round((float)getVitesse()));
 	}
 	
 	private void updateAccel() {
