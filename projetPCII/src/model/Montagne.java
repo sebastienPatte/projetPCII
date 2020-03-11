@@ -29,10 +29,10 @@ public class Montagne {
 	
 	private void updatePoints() {
 		if(etat.getPosX()< points.get(0).x + Affichage.LARG/2){
-			addPointGauche();
+			addPointDroite();
 		}else {
 			if(etat.getPosX()> points.get(points.size()-1).x - Affichage.LARG/2){
-				addPointDroite();
+				addPointGauche();
 			}
 		}
 	}
@@ -61,11 +61,6 @@ public class Montagne {
 			}
 		}
 		return res;
-	}
-	
-	
-	public ArrayList<Point> getPoints(){
-		return this.points;
 	}
 	
 	

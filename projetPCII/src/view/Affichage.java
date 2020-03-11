@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.awt.Font;
 
 import javax.swing.JPanel;
@@ -75,6 +76,16 @@ public class Affichage extends JPanel{
 		g.drawString(Double.toString(Math.round(etat.getVitesse())), 75, 475);
 	}
 	
+	private void drawMontagne(Graphics g) {
+		ArrayList<Point> points = etat.getMontagne();
+		for(int i=0; i+1<points.size(); i++) {
+			Point p1 = points.get(i);
+			Point p2 = points.get(i+1);
+			g.drawLine(p1.x, p1.y, p2.x, p2.y);
+		}
+	}
+	
+	
 	@Override
     public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
@@ -90,6 +101,7 @@ public class Affichage extends JPanel{
 		drawHorizon(g);
 		drawVitesse(g);
 		drawClock(g,100,100,25);
+		drawMontagne(g);
 		if(etat.getFin() == 1) {
 			drawEnd(g);
 		}

@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import view.Affichage;
 
@@ -14,7 +15,7 @@ public class Etat {
 	static double vitesseMax = 5.0;//pixels par repaint
 	private Clock clock;
 	private int fin = 0;
-	
+	private Montagne montagne;
 	
 	public Etat() {
 		this.piste = new Piste();
@@ -22,6 +23,7 @@ public class Etat {
 		this.posX = Affichage.LARG/2;
 		this.accel = 100.;
 		this.vitesse =  accel/100*vitesseMax;
+		this.montagne = new Montagne(this);
 	}
 	
 	
@@ -101,7 +103,10 @@ public class Etat {
 		this.posX = posX-deplacement;
 	}
 
-
+	public ArrayList<Point> getMontagne(){
+		return montagne.getPointsVisibles();
+	}
+	
 	public Clock getClock() {
 		return clock;
 	}
