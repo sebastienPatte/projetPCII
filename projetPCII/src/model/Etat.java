@@ -34,8 +34,11 @@ public class Etat {
 		return piste.getPosY();
 	}
 	
+	public void updateVitesse() {
+		this.vitesse = getAccel()/100*vitesse;
+	}
+	
 	public double getVitesse() {
-		this.vitesse = getAccel()/100*vitesseMax;
 		return this.vitesse;
 	}
 	
@@ -43,7 +46,7 @@ public class Etat {
 		/* 0 <= accel/100 <= 1
 		 * quand accel est à 100 on avance de vitesseMax
 		 */
-		piste.avance((int)getVitesse());
+		piste.avance(Math.round(getVitesse()));
 	}
 	
 	private void updateAccel() {
