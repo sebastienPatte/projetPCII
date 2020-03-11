@@ -19,7 +19,7 @@ public class Main {
 		(new Avancer(mod)).start();
 		
 		/* Création JFrame*/
-		JFrame fenetre = new JFrame("suivre la ligne");
+		JFrame fenetre = new JFrame("");
 		/* ajout de l'Affichage(JPanel) à la fenêtre (JFrame)*/
 		fenetre.add(aff);
 		fenetre.pack();

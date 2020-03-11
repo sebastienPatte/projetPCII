@@ -57,31 +57,7 @@ public class Affichage extends JPanel{
 	 * Fonction qui calcul et affiche la vitesse du vehicule en fonction de sa position
 	 */
 	private void drawVitesse(Graphics g) {
-		int posX = etat.getPosX();
-		int away = Math.abs(500-posX);
-		// Decelere 
-		if(etat.getVitesse() > 0 ) {
-			if(away > 10 && away <= 30 && etat.getVitesse() > 75) {
-				etat.setVitesse(etat.getVitesse()- 0.05);
-			}else if (away > 30 && away <= 50 && etat.getVitesse() > 50) {
-				etat.setVitesse(etat.getVitesse() - 0.1);
-			}else if (away > 50) {
-				etat.setVitesse(etat.getVitesse() - 0.3);
-			}
-		}
-		// Accelere
-		if(etat.getVitesse() < 100) {
-			if(away <= 30 ) {
-				etat.setVitesse(etat.getVitesse()+ 0.5);
-			}else if (away > 30 && away <= 50 && etat.getVitesse() < 75) {
-				etat.setVitesse(etat.getVitesse() + 0.4);
-			}else if (away > 50 && away < 100 && etat.getVitesse() < 50) {
-				etat.setVitesse(etat.getVitesse() + 0.3);
-			}
-		}
-		if(etat.getVitesse()>100) {
-			etat.setVitesse(100);
-		}
+		g.drawString(Double.toString(Math.round(etat.getAccel())), 75, 475);
 	}
 	
 	@Override
@@ -98,6 +74,6 @@ public class Affichage extends JPanel{
 		drawJoueur(g);
 		drawHorizon(g);
 		drawVitesse(g);
-		g.drawString(Double.toString(Math.round(etat.getVitesse())), 75, 475);
+		
 	}
 }

@@ -9,16 +9,14 @@ public class Etat {
 	public static int deplacement = 3;
 	private Piste piste;
 	private int posX;
-	private double acceleration;
-	private double vitesseX;
+	private double accel;
 	static double vitesseMax = 5.0;//pixels par repaint
 	
 	public Etat() {
 	
 		this.piste = new Piste();
 		this.posX = Affichage.LARG/2;
-		this.acceleration = 0.0;
-		this.vitesseX = 100;
+		this.accel = 100.;
 	}
 	
 	
@@ -38,15 +36,38 @@ public class Etat {
 		/* 0 <= vitesseX/100 <= 1
 		 * quand vitesseX est à 100 on avance de vitesseMax
 		 */
-		piste.avance((int)(vitesseX/100*vitesseMax));
+		piste.avance((int)(accel/100*vitesseMax));
 	}
 	
-	public double getVitesse() {
-		return this.vitesseX;
+	private void updateAccel() {
+		int away = Math.abs(500-posX);
+		if(accel > 0 ) {
+			if(away > 10 && away <= 30 && accel > 75) {
+				accel-= 0.05;
+			}else if (away > 30 && away <= 50 && accel > 50) {
+				accel -= 0.1;
+			}else if (away > 50) {
+				accel -= 0.3;
+			}
+		}
+		// Accelere
+		if(accel < 100) {
+			if(away <= 30 ) {
+				accel+= 0.5;
+			}else if (away > 30 && away <= 50 && accel < 75) {
+				accel += 0.4;
+			}else if (away > 50 && away < 100 && accel < 50) {
+				accel += 0.3;
+			}
+		}
+		if(accel>100) {
+			accel=100;
+		}
 	}
 	
-	public void setVitesse(double x) {
-		this.vitesseX = x;
+	public double getAccel() {
+		updateAccel();
+		return this.accel;
 	}
 	
 	public void goLeft() {
