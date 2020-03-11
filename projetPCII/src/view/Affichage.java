@@ -53,11 +53,11 @@ public class Affichage extends JPanel{
 		g.drawString("X", Affichage.LARG/2,Affichage.HAUT-20);
 	}
 	
-	/**
+	/**d
 	 * Fonction qui calcul et affiche la vitesse du vehicule en fonction de sa position
 	 */
-	private void drawAccel(Graphics g) {
-		g.drawString(Double.toString(Math.round(etat.getAccel())), 75, 475);
+	private void drawVitesse(Graphics g) {
+		g.drawString(Double.toString(Math.round(etat.getVitesse())), 75, 475);
 	}
 	
 	@Override
@@ -73,7 +73,7 @@ public class Affichage extends JPanel{
 		g.drawString(strScore, LARG-printedLength, 20);
 		drawJoueur(g);
 		drawHorizon(g);
-		drawAccel(g);
+		drawVitesse(g);
 		
 	}
 }
