@@ -7,6 +7,7 @@ import control.Avancer;
 import control.Keys;
 import control.RepaintScreen;
 import control.Vitesse;
+import model.Clock;
 import model.Etat;
 import view.Affichage;
 

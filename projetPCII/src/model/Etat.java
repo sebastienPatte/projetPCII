@@ -12,10 +12,14 @@ public class Etat {
 	private double accel;
 	private double vitesse;
 	static double vitesseMax = 5.0;//pixels par repaint
+	private Clock clock;
+	private int fin = 0;
+	
 	
 	public Etat() {
 	
 		this.piste = new Piste();
+		this.clock = new Clock(20,this);
 		this.posX = Affichage.LARG/2;
 		this.accel = 100.;
 		this.vitesse =  accel/100*vitesseMax;
@@ -40,6 +44,9 @@ public class Etat {
 	
 	public double getVitesse() {
 		return this.vitesse;
+	}
+	public int getFin() {
+		return fin;
 	}
 	
 	public void avance() {
@@ -75,6 +82,12 @@ public class Etat {
 		}
 	}
 	
+	public void gameOver() {
+		this.vitesse = 0;
+		this.accel = 0;
+		this.fin = 1;
+	}
+	
 	public double getAccel() {
 		updateAccel();
 		return this.accel;
@@ -86,6 +99,11 @@ public class Etat {
 	
 	public void goRight() {
 		this.posX = posX-deplacement;
+	}
+
+
+	public Clock getClock() {
+		return clock;
 	}
 	
 }

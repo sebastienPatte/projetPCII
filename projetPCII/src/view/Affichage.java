@@ -1,10 +1,12 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Font;
 
 import javax.swing.JPanel;
 
@@ -16,6 +18,7 @@ public class Affichage extends JPanel{
 	public static int HAUT = 600;
 	public static int posHorizon = 100;
 	
+	
 	private Etat etat;
 	
 	public Affichage(Etat etat) {
@@ -23,6 +26,18 @@ public class Affichage extends JPanel{
 		this.etat = etat;
 	}
 	
+	public static void drawEnd(Graphics g) {
+		g.drawString("GAME OVER", 465, 300);
+	}
+	
+	public void drawClock(Graphics g, int x, int y, int r) {
+		if(etat.getClock().getTempsRestant()>9){
+            g.drawString(""+etat.getClock().getTempsRestant(), 24, 42);
+        }
+        else{
+            g.drawString("0"+etat.getClock().getTempsRestant(), 24, 42);
+        }
+	}
 	
 	private void drawHorizon(Graphics g) {
 		g.drawLine(0, posHorizon, LARG, posHorizon);
@@ -74,6 +89,10 @@ public class Affichage extends JPanel{
 		drawJoueur(g);
 		drawHorizon(g);
 		drawVitesse(g);
+		drawClock(g,100,100,25);
+		if(etat.getFin() == 1) {
+			drawEnd(g);
+		}
 		
 	}
 }
