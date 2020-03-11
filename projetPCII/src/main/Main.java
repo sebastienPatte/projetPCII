@@ -9,6 +9,7 @@ import control.RepaintScreen;
 import control.Vitesse;
 import model.Clock;
 import model.Etat;
+import model.Montagne;
 import view.Affichage;
 
 public class Main {

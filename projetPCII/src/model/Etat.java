@@ -17,7 +17,6 @@ public class Etat {
 	
 	
 	public Etat() {
-	
 		this.piste = new Piste();
 		this.clock = new Clock(20,this);
 		this.posX = Affichage.LARG/2;
@@ -54,6 +53,7 @@ public class Etat {
 		 * quand accel est à 100 on avance de vitesseMax
 		 */
 		piste.avance(Math.round((float)getVitesse()));
+		
 	}
 	
 	private void updateAccel() {
