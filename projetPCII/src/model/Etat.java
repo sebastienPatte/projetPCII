@@ -20,7 +20,7 @@ public class Etat {
 	public Etat() {
 		this.piste = new Piste();
 		this.clock = new Clock(20,this);
-		this.posX = Affichage.LARG/2;
+		this.posX = 0;
 		this.accel = 100.;
 		this.vitesse =  accel/100*vitesseMax;
 		this.montagne = new Montagne(this);
@@ -59,7 +59,7 @@ public class Etat {
 	}
 	
 	private void updateAccel() {
-		int away = Math.abs(500-posX);
+		int away = Math.abs(posX);
 		if(accel > 0 ) {
 			if(away > 10 && away <= 30 && accel > 75) {
 				accel-= 0.05;
@@ -82,6 +82,7 @@ public class Etat {
 		if(accel>100) {
 			accel=100;
 		}
+		System.out.println(accel);
 	}
 	
 	public void gameOver() {

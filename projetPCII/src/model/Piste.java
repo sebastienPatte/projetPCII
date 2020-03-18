@@ -23,14 +23,14 @@ public class Piste {
 	
 	private void initPoints() {
 		for(int i=Affichage.HAUT; i>=Affichage.posHorizon; i-=incr) {
-			int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec);
+			int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec) + Affichage.LARG/2;
 			this.points.add(new Point(x,i));
 		}
 	}
 	
 	private void addPoint() {
 		int y = points.get(points.size()-1).y - incr;
-		int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec);
+		int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec) + Affichage.LARG/2;
 		System.out.println("addPoint("+x+", "+y+")");
 		this.points.add(new Point(x,y));
 	}
