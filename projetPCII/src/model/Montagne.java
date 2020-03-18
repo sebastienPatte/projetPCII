@@ -21,15 +21,15 @@ public class Montagne {
 	
 	private void initPoints() {
 		this.points = new ArrayList<Point>();
-		for(int i=-Affichage.LARG/2; i<= Affichage.LARG/2; i+= randint(ecartMin,ecartMax)) {
+		for(int i=0; i< Affichage.LARG; i+= randint(ecartMin,ecartMax)) {
 			int y = randint(0,Affichage.posHorizon);
 			this.points.add(new Point(i,y));
 		}
 	}
 	
 	private void updatePoints() {
-		//System.out.println("points.get 1 = "+points.get(points.size()-1)+" getPosX ="+etat.getPosX()+"size(points) = "+points.size());
-		if( - etat.getPosX() < points.get(1).x){
+		System.out.println("points.get 1 = "+points.get(points.size()-1)+" getPosX ="+etat.getPosX()+"size(points) = "+points.size());
+		if( - etat.getPosX() < points.get(0).x){
 			addPointGauche();
 		}else {
 			if(- etat.getPosX() > points.get(points.size()-1).x - Affichage.LARG){
@@ -58,7 +58,7 @@ public class Montagne {
 		ArrayList<Point> res = new ArrayList<Point>();
 		for(Point p : points) {
 			//si point visible
-			if(p.x + etat.getPosX() >= 0 && p.x + etat.getPosX()  <= + Affichage.LARG) {
+			if(p.x + etat.getPosX() + ecartMax >= 0 && p.x + etat.getPosX() - ecartMax  <= Affichage.LARG) {
 				res.add(new Point(p.x+etat.getPosX(),p.y));
 			}
 		}
