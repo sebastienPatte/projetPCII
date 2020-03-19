@@ -16,6 +16,13 @@ public class Etat {
 	private Clock clock;
 	private int fin = 0;
 	private Montagne montagne;
+	/**
+	 * etat de la moto :
+	 * 0 : tourne à gauche
+	 * 1 : va tout droit
+	 * 2 : tourne à droite
+	 */
+	private int etatMoto;
 	
 	public Etat() {
 		this.piste = new Piste();
@@ -24,6 +31,7 @@ public class Etat {
 		this.accel = 100.;
 		this.vitesse =  accel/100*vitesseMax;
 		this.montagne = new Montagne(this);
+		this.etatMoto = 1;
 	}
 	
 	
@@ -98,10 +106,16 @@ public class Etat {
 	
 	public void goLeft() {
 		this.posX = posX+deplacement;
+		this.etatMoto = 0;
 	}
 	
 	public void goRight() {
 		this.posX = posX-deplacement;
+		this.etatMoto = 2;
+	}
+	
+	public void goStraight() {
+		this.etatMoto = 1;
 	}
 
 	public ArrayList<Point> getMontagne(){
@@ -110,6 +124,10 @@ public class Etat {
 	
 	public Clock getClock() {
 		return clock;
+	}
+	
+	public int getEtatMoto() {
+		return this.etatMoto;
 	}
 	
 }

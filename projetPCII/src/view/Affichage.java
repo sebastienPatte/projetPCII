@@ -21,10 +21,12 @@ public class Affichage extends JPanel{
 	
 	
 	private Etat etat;
+	private VueMoto moto;
 	
 	public Affichage(Etat etat) {
 		this.setPreferredSize(new Dimension(LARG, HAUT));
 		this.etat = etat;
+		this.moto = new VueMoto(etat);
 	}
 	
 	public static void drawEnd(Graphics g) {
@@ -97,7 +99,7 @@ public class Affichage extends JPanel{
 		FontMetrics fm = getFontMetrics(g.getFont());
 		int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord
 		g.drawString(strScore, LARG-printedLength, 20);
-		drawJoueur(g);
+		this.moto.drawMoto(g);
 		drawHorizon(g);
 		drawVitesse(g);
 		drawClock(g,100,100,25);
