@@ -16,17 +16,19 @@ import model.Etat;
 public class Affichage extends JPanel{
 	private static final long serialVersionUID = 1L;
 	public static int LARG = 1000;
-	public static int HAUT = 600;
-	public static int posHorizon = 100;
+	public static int HAUT = 800;
+	public static int posHorizon = 150;
 	
 	
 	private Etat etat;
 	private VueMoto moto;
+	private VueNuages nuages;
 	
 	public Affichage(Etat etat) {
 		this.setPreferredSize(new Dimension(LARG, HAUT));
 		this.etat = etat;
 		this.moto = new VueMoto(etat);
+		this.nuages = new VueNuages();
 	}
 	
 	public static void drawEnd(Graphics g) {
@@ -99,11 +101,19 @@ public class Affichage extends JPanel{
 		FontMetrics fm = getFontMetrics(g.getFont());
 		int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord
 		g.drawString(strScore, LARG-printedLength, 20);
+		//dessine moto
 		this.moto.drawMoto(g);
+		//dessine nuages
+		this.nuages.dessiner(g);
+		//dessine horizon
 		drawHorizon(g);
+		//affiche la vitesse
 		drawVitesse(g);
+		// affiche le timeout avant de perdre
 		drawClock(g,100,100,25);
+		// affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
+		// si on a perdu on affiche game over
 		if(etat.getFin() == 1) {
 			drawEnd(g);
 		}

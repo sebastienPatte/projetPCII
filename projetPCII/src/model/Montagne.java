@@ -10,6 +10,8 @@ public class Montagne {
 	private ArrayList<Point> points;
 	private int ecartMin;
 	private int ecartMax;
+	/** limite le haut des montagnes à la moitiée de la partie au dessus de l'horizon**/
+	public static int yMin = Affichage.posHorizon/2;
 	
 	
 	public Montagne(Etat etat) {
@@ -22,7 +24,7 @@ public class Montagne {
 	private void initPoints() {
 		this.points = new ArrayList<Point>();
 		for(int i=0; i< Affichage.LARG; i+= randint(ecartMin,ecartMax)) {
-			int y = randint(0,Affichage.posHorizon);
+			int y = randint(yMin,Affichage.posHorizon);
 			this.points.add(new Point(i,y));
 		}
 	}
