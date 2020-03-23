@@ -105,12 +105,12 @@ public class Etat {
 	}
 	
 	public void goLeft() {
-		this.posX = posX+deplacement;
+		this.posX = posX-deplacement;
 		this.etatMoto = 0;
 	}
 	
 	public void goRight() {
-		this.posX = posX-deplacement;
+		this.posX = posX+deplacement;
 		this.etatMoto = 2;
 	}
 	

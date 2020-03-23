@@ -54,15 +54,15 @@ public class Affichage extends JPanel{
 			Point[] t1 = piste[i];
 			Point[] t2 = piste[i+1];
 			g.drawLine(
-					posX+t1[0].x,
+					t1[0].x-posX,
 					t1[0].y,
-					posX+t2[0].x,
+					t2[0].x-posX,
 					t2[0].y
 			);
 			g.drawLine(
-					posX+t1[1].x,
+					t1[1].x-posX,
 					t1[1].y,
-					posX+t2[1].x,
+					t2[1].x-posX,
 					t2[1].y
 			);
 		}
@@ -85,7 +85,7 @@ public class Affichage extends JPanel{
 		for(int i=0; i+1<points.size(); i++) {
 			Point p1 = points.get(i);
 			Point p2 = points.get(i+1);
-			g.drawLine(p1.x, p1.y, p2.x, p2.y);
+			g.drawLine(p1.x , p1.y, p2.x, p2.y);
 		}
 	}
 	

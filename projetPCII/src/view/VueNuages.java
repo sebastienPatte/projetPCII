@@ -56,8 +56,7 @@ public class VueNuages {
 			Nuage nuage = this.list.get(i);
 			
 			// suppression nuages qui sortent de la vue
-			System.out.println(posX);
-			if(nuage.getPosX() < -posX-nuage.getWidth())nuage.terminate();
+			if(nuage.getPosX() < posX-nuage.getWidth())nuage.terminate();
 			
 			//si le nuage s'est arreté, on le retire de la liste  
 			if(!nuage.isRunning()) {
@@ -68,7 +67,7 @@ public class VueNuages {
 				 
 				Image image = ImageIO.read(new File(PATH)).getScaledInstance(nuage.getWidth(), nuage.getHeight(), 100);
 				 
-				g.drawImage(image, posX + nuage.getPosX(), nuage.getPosY(), null);
+				g.drawImage(image,  nuage.getPosX() - posX, nuage.getPosY(), null);
 				
 				}
 				 
