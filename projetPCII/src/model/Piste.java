@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import view.Affichage;
 
 public class Piste {
-	public static int largeurPiste = 200;
+	public static int largeurPiste = 300;
 	public static int incr = Affichage.HAUT/4;
 	public static int dec = 20;
 	private ArrayList<Point> points;
