@@ -18,6 +18,10 @@ public class Affichage extends JPanel{
 	public static int LARG = 1000;
 	public static int HAUT = 800;
 	public static int posHorizon = 150;
+	/*plus il est petit, plus la piste se rétrécit vers l'horizon
+	 * mais si il est trop petit, les bords de la piste peuvent se croiser
+	 */
+	public static int factRetrecissement = 7; 
 	
 	
 	private Etat etat;
@@ -53,8 +57,8 @@ public class Affichage extends JPanel{
 		for(int i=0; i+1<piste.length; i++) {
 			Point[] t1 = piste[i];
 			Point[] t2 = piste[i+1];
-			int decPespectiveT1 = (Affichage.HAUT - t1[0].y)/10;
-			int decPespectiveT2 = (Affichage.HAUT - t2[0].y)/10;
+			int decPespectiveT1 = (Affichage.HAUT - t1[0].y)/factRetrecissement;
+			int decPespectiveT2 = (Affichage.HAUT - t2[0].y)/factRetrecissement;
 			g.drawLine(
 					t1[0].x-posX+decPespectiveT1,
 					t1[0].y,

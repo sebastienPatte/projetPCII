@@ -25,7 +25,7 @@ public class VueNuages {
 	/**
 	 * on a une chance sur probaNuage qu'on nuage apparaisse
 	 */
-	public static int probaNuage= 100;
+	public static int probaNuage= 1000;
 	
 	/**
 	 * liste des nuages
@@ -88,7 +88,7 @@ public class VueNuages {
 		if(this.list.size() < MaxNuages){
 			//on génère un oiseau si on tombe sur 1 
 			if(randint(1,probaNuage) == 1 ) {
-				System.out.println("gen cloud "+list.size());
+				//System.out.println("gen cloud "+list.size());
 				Nuage nuage = new Nuage();
 				(new Thread(nuage)).start();
 				this.list.add(nuage);

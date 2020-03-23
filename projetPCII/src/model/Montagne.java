@@ -59,7 +59,7 @@ public class Montagne {
 		updatePoints();
 		ArrayList<Point> res = new ArrayList<Point>();
 		for(Point p : points) {
-			System.out.println(p);
+			//System.out.println(p);
 			//si point visible
 			if(p.x >= etat.getPosX()-ecartMax && p.x <= etat.getPosX()+ecartMax+Affichage.LARG) {
 				res.add(new Point(p.x-etat.getPosX(),p.y));
