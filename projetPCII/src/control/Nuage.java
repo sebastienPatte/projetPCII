@@ -9,12 +9,16 @@ public class Nuage extends Thread{
 	private boolean running;
 	private int posX;
 	private int posY;
+	private int width;
+	private int height;
 	
-	public Nuage(int maxY) {
+	public Nuage() {		
 		this.running = true;
+		this.width = randint(50,200);
+		this.height = randint(50,Affichage.posHorizon);
 		this.posX = Affichage.LARG;
+		int maxY = Affichage.posHorizon - this.height;
 		this.posY = randint(0,maxY);
-		System.out.println("posY="+posY);
 	}
 	
 	@Override
@@ -52,5 +56,13 @@ public class Nuage extends Thread{
 	
 	public int getPosY() {
 		return this.posY;
+	}
+	
+	public int getWidth() {
+		return this.width;
+	}
+	
+	public int getHeight() {
+		return this.height;
 	}
 }

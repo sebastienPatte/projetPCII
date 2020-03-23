@@ -90,7 +90,7 @@ public class Etat {
 		if(accel>100) {
 			accel=100;
 		}
-		System.out.println(accel);
+		//System.out.println(accel);
 	}
 	
 	public void gameOver() {

@@ -103,8 +103,6 @@ public class Affichage extends JPanel{
 		g.drawString(strScore, LARG-printedLength, 20);
 		//dessine moto
 		this.moto.drawMoto(g);
-		//dessine nuages
-		this.nuages.dessiner(g);
 		//dessine horizon
 		drawHorizon(g);
 		//affiche la vitesse
@@ -113,6 +111,8 @@ public class Affichage extends JPanel{
 		drawClock(g,100,100,25);
 		// affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
+		//dessine nuages
+		this.nuages.dessiner(etat.getPosX(),g);
 		// si on a perdu on affiche game over
 		if(etat.getFin() == 1) {
 			drawEnd(g);

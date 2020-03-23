@@ -20,29 +20,24 @@ public class VueNuages {
 	/**
 	 * Nombre maximum de nuages 
 	 */
-	public static int MaxNuages= 5;
+	public static int MaxNuages= 3;
 	
 	/**
 	 * on a une chance sur probaNuage qu'on nuage apparaisse
 	 */
-	public static int probaNuage= 100;
+	public static int probaNuage= 1000;
 	
-	private int maxY;
 	/**
 	 * liste des oiseaux
 	 */
 	private ArrayList<Nuage> list;
-	
 	/**
 	 * initialise la {@link #list liste d'oiseaux}
 	 */
 	public VueNuages() {
 		this.list = new ArrayList<Nuage>();
-
 		try {
 			Image image = ImageIO.read(new File(PATH));
-			this.maxY = Affichage.posHorizon - image.getHeight(null);
-			System.out.println(maxY);
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +47,7 @@ public class VueNuages {
 	 * dessine les oiseaux qui sont dans la fenetre, supprime ceux qui sont terminés
 	 * @param g
 	 */
-	void dessiner(Graphics g) {
+	void dessiner(int posX, Graphics g) {
 		
 		//générer oiseaux 
 		this.genererNuages();
@@ -67,9 +62,9 @@ public class VueNuages {
 			
 			try {
 				 
-				Image image = ImageIO.read(new File(PATH));
+				Image image = ImageIO.read(new File(PATH)).getScaledInstance(nuage.getWidth(), nuage.getHeight(), 100);
 				 
-				g.drawImage(image, nuage.getPosX(), nuage.getPosY(), null);
+				g.drawImage(image, posX + nuage.getPosX(), nuage.getPosY(), null);
 				
 				}
 				 
@@ -89,7 +84,7 @@ public class VueNuages {
 		if(this.list.size() < MaxNuages){
 			//on génère un oiseau si on tombe sur 1 
 			if(randint(1,probaNuage) == 1 ) {
-				Nuage nuage = new Nuage(maxY);
+				Nuage nuage = new Nuage();
 				(new Thread(nuage)).start();
 				this.list.add(nuage);
 			}
