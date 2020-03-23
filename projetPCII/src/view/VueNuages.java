@@ -25,10 +25,10 @@ public class VueNuages {
 	/**
 	 * on a une chance sur probaNuage qu'on nuage apparaisse
 	 */
-	public static int probaNuage= 1000;
+	public static int probaNuage= 100;
 	
 	/**
-	 * liste des oiseaux
+	 * liste des nuages
 	 */
 	private ArrayList<Nuage> list;
 	/**
@@ -49,13 +49,17 @@ public class VueNuages {
 	 */
 	void dessiner(int posX, Graphics g) {
 		
-		//générer oiseaux 
+		//générer nuages 
 		this.genererNuages();
 		
 		for(int i = 0; i < this.list.size(); i++){
 			Nuage nuage = this.list.get(i);
 			
-			//si l'oiseau s'est arreté, on le retire de la liste  
+			// suppression nuages qui sortent de la vue
+			System.out.println(posX);
+			if(nuage.getPosX() < -posX-nuage.getWidth())nuage.terminate();
+			
+			//si le nuage s'est arreté, on le retire de la liste  
 			if(!nuage.isRunning()) {
 				this.list.remove(nuage);
 			}
@@ -80,10 +84,12 @@ public class VueNuages {
 	 * à chaque rafraichissement de l'affichage on génère un oiseau avec 1 chance sur 10 000 si on a pas dépassé le {@link #MaxOiseaux maximum d'oiseaux}
 	 */
 	void genererNuages() {
-		//on génére des oiseaux seulement si on a pas dépassé la taille max
+		//on génére des nuages seulement si on a pas dépassé la taille max
+		//System.out.println(MaxNuages);
 		if(this.list.size() < MaxNuages){
 			//on génère un oiseau si on tombe sur 1 
 			if(randint(1,probaNuage) == 1 ) {
+				System.out.println("gen cloud "+list.size());
 				Nuage nuage = new Nuage();
 				(new Thread(nuage)).start();
 				this.list.add(nuage);
