@@ -27,7 +27,7 @@ public class VueMoto {
 			 
 			Image image = ImageIO.read(new File(str));
 			 
-			g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null), null);
+			g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-20, null);
 			
 			}
 			 

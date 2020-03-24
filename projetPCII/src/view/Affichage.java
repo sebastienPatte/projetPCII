@@ -74,11 +74,6 @@ public class Affichage extends JPanel{
 		}
 	}
 	
-	private void drawJoueur(Graphics g) {
-		//le joueur est toujours affiché au milieu 
-		g.drawString("X", Affichage.LARG/2,Affichage.HAUT-20);
-	}
-	
 	/**d
 	 * Fonction qui calcul et affiche la vitesse du vehicule en fonction de sa position
 	 */
