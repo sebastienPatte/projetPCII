@@ -19,6 +19,7 @@ public class Etat {
 	private Montagne montagne;
 	private int check = 100;
 	private int tempsCheck = 20;
+	private int time = 20;
 	/**
 	 * etat de la moto :
 	 * 0 : tourne Ã  gauche
