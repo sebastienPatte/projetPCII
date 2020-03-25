@@ -18,6 +18,7 @@ public class Etat {
 	private int fin = 0;
 	private Montagne montagne;
 	private int check = 100;
+	private int time = 20;
 	/**
 	 * etat de la moto :
 	 * 0 : tourne Ã  gauche
@@ -98,7 +99,7 @@ public class Etat {
 	public void checkpoint() {
 		check = piste.getPosY();
 		check += 1000;
-		clock.setTempsRestant(clock.getTempsRestant() + 20);
+		clock.setTempsRestant(clock.getTempsRestant() + time - 1);
 	}
 	
 	public int getPosCheck() {
