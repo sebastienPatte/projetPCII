@@ -1,13 +1,12 @@
 package view;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.awt.Font;
+
 
 import javax.swing.JPanel;
 
@@ -79,10 +78,31 @@ public class Affichage extends JPanel{
 			int indice = (etat.getPosCheck()-etat.getPosY())/Piste.incr+1;
 			//si on est sur l'indice du checkpoint, on le dessine
 			if(indice==i) {
+				int dec1 =0;
+				int dec2 =0;
+				
+				//on affiche le checkpoint sur un tiers de la piste
+				if(etat.getVoieCheck()==0) {
+					dec2=(int)-((2./3)*Piste.largeurPiste)+decPespectiveT1;
+				}else {
+					if(etat.getVoieCheck()==1){
+						dec1=(int)((1./3)*Piste.largeurPiste)-decPespectiveT1/2;
+						dec2=(int)-((1./3)*Piste.largeurPiste)+decPespectiveT1/2;
+						System.out.println(dec1+" "+dec2);
+					}else {
+						if(etat.getVoieCheck()==2) {
+							dec1=(int)((2./3)*Piste.largeurPiste-decPespectiveT1);
+						}
+					}
+				}
+				
+				
+				//System.out.println(etat.getVoieCheck()+" "+dec2);
+				
 				g.drawLine(
-						t1[0].x-posX+decPespectiveT1,
+						t1[0].x-posX+decPespectiveT1+dec1,
 						t1[0].y,
-						t1[1].x-posX-decPespectiveT1,
+						t1[1].x-posX-decPespectiveT1+dec2,
 						t1[1].y
 				);
 			}

@@ -3,10 +3,7 @@ package model;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
-
-import view.*;
 
 public class Clock extends JPanel{
 	

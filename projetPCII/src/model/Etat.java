@@ -2,25 +2,35 @@ package model;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Random;
-
-import view.Affichage;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Etat {
 	
 	public static int deplacement = 3;
 	private Piste piste;
+	/**
+	 * position x du joueur
+	 */
 	private int posX;
+	
 	private double accel;
 	private double vitesse;
 	static double vitesseMax = 5.0;//pixels par repaint
 	private Clock clock;
 	private int fin = 0;
 	private Montagne montagne;
+	/**
+	 * position y du prochain checkpoint
+	 */
 	private int check = 10*Piste.incr;
-	/** temps à ajouter quand on atteint le prochain checkpoint*/
+	/**
+	 *  temps à ajouter quand on atteint le prochain checkpoint
+	 */
 	private int tempsCheck = 30;
-	private int time = 20;
+	/**
+	 * voie sur laquelle est le checkpoint
+	 */
+	private int voieCheck=1;
 	/**
 	 * etat de la moto :
 	 * 0 : tourne Ã  gauche
@@ -113,10 +123,15 @@ public class Etat {
 		//System.out.println(check+" "+piste.getPosY());
 		clock.setTempsRestant(clock.getTempsRestant() + tempsCheck);
 		if(tempsCheck > 5)tempsCheck--;
+		this.voieCheck = randint(0, 2);
 	}
 	
 	public int getPosCheck() {
 		return check;
+	}
+	
+	public int getVoieCheck() {
+		return voieCheck;
 	}
 	
 	public void gameOver() {
@@ -154,6 +169,15 @@ public class Etat {
 	
 	public int getEtatMoto() {
 		return this.etatMoto;
+	}
+	
+	/** Génère un chiffre aléatoire entre min et max
+	 * @param int min
+	 * @param int max
+	 * @return random int between min and max
+	 */
+	private int randint(int min, int max) {
+		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
 }

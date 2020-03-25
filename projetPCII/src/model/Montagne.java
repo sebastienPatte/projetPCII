@@ -30,7 +30,6 @@ public class Montagne {
 	}
 	
 	private void updatePoints() {
-		//System.out.println("points.get 1 = "+points.get(points.size()-1)+" getPosX ="+etat.getPosX()+"size(points) = "+points.size());
 		if(etat.getPosX() < points.get(0).x){
 			addPointGauche();
 		}else {
@@ -41,7 +40,6 @@ public class Montagne {
 	}
 	
 	private void addPointGauche() {
-		//System.out.println("add pt GAUCHE");
 		int x = points.get(0).x - randint(ecartMin, ecartMax);
 		int y =  randint(0, Affichage.posHorizon);
 		// ajout au début
@@ -59,7 +57,6 @@ public class Montagne {
 		updatePoints();
 		ArrayList<Point> res = new ArrayList<Point>();
 		for(Point p : points) {
-			//System.out.println(p);
 			//si point visible
 			if(p.x >= etat.getPosX()-ecartMax && p.x <= etat.getPosX()+ecartMax+Affichage.LARG) {
 				res.add(new Point(p.x-etat.getPosX(),p.y));
