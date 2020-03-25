@@ -13,7 +13,9 @@ import model.Etat;
 public class VueMoto {
 	
 	public static String PATH = "imgs/";
+	public static int decBord = 20;
 	private Etat etat;
+	Image image;
 	
 	public VueMoto(Etat etat) {
 		this.etat = etat;
@@ -25,9 +27,9 @@ public class VueMoto {
 		
 		try {
 			 
-			Image image = ImageIO.read(new File(str));
+			image = ImageIO.read(new File(str));
 			 
-			g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-20, null);
+			g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord, null);
 			
 			}
 			 
@@ -37,6 +39,10 @@ public class VueMoto {
 			 
 			}
 	
+	}
+	
+	public int getHeight() {
+		return image.getHeight(null)+decBord;
 	}
 
 	

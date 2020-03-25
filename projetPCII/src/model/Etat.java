@@ -17,7 +17,8 @@ public class Etat {
 	private Clock clock;
 	private int fin = 0;
 	private Montagne montagne;
-	private int check = 100;
+	private int check = 10*Piste.incr;
+	/** temps à ajouter quand on atteint le prochain checkpoint*/
 	private int tempsCheck = 20;
 	private int time = 20;
 	/**
@@ -33,7 +34,7 @@ public class Etat {
 		this.clock = new Clock(20,this);
 		this.posX = 0;
 		this.accel = 100.;
-		this.vitesse =  accel/100*vitesseMax;
+		this.vitesse =  5;
 		this.montagne = new Montagne(this);
 		this.etatMoto = 1;
 	}
@@ -98,7 +99,8 @@ public class Etat {
 	}
 	
 	public void checkpoint() {
-		check = piste.getPosY() + 1000;
+		check += 10*Piste.incr;
+		//System.out.println(check+" "+piste.getPosY());
 		clock.setTempsRestant(clock.getTempsRestant() + tempsCheck);
 		if(tempsCheck > 1)tempsCheck--;
 	}

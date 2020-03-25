@@ -12,6 +12,7 @@ import java.awt.Font;
 import javax.swing.JPanel;
 
 import model.Etat;
+import model.Piste;
 
 public class Affichage extends JPanel{
 	private static final long serialVersionUID = 1L;
@@ -54,6 +55,7 @@ public class Affichage extends JPanel{
 	private void drawPiste(Graphics g) {
 		int posX = etat.getPosX();
 		Point[][] piste = etat.getPiste();
+		
 		for(int i=0; i+1<piste.length; i++) {
 			Point[] t1 = piste[i];
 			Point[] t2 = piste[i+1];
@@ -70,7 +72,22 @@ public class Affichage extends JPanel{
 					t1[1].y,
 					t2[1].x-posX-decPespectiveT2,
 					t2[1].y
+		
 			);
+			
+			
+			int indice = (etat.getPosCheck()-etat.getPosY())/Piste.incr+1;
+			//System.out.println(indice);
+			if(indice==i) {
+				g.drawLine(
+						t1[0].x-posX+decPespectiveT1,
+						t1[0].y,
+						t1[1].x-posX-decPespectiveT1,
+						t1[1].y
+				);
+				System.out.println("drawLn "+t1[1].y);
+			}
+			
 		}
 	}
 	
@@ -90,14 +107,6 @@ public class Affichage extends JPanel{
 		}
 	}
 	
-	private void drawCheckpoint(Graphics g) {
-		g.drawLine(
-				350,
-				HAUT - (etat.getPosCheck()-etat.getPosY()),
-				700,
-				HAUT - (etat.getPosCheck()-etat.getPosY())
-		);
-	}
 	
 	@Override
     public void paint(Graphics g) {
@@ -107,14 +116,16 @@ public class Affichage extends JPanel{
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affichage score
 		String strScore ="Score : "+ etat.getPosY();
-	   	if(etat.getPosY() == etat.getPosCheck()) {
-			etat.checkpoint();
-		}
+	   
 		FontMetrics fm = getFontMetrics(g.getFont());
 		int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord
 		g.drawString(strScore, LARG-printedLength, 20);
 		//dessine moto
 		this.moto.drawMoto(g);
+		//si on a dépassé le checkpoint
+		if(etat.getPosY()+moto.getHeight()>= etat.getPosCheck()) {
+			etat.checkpoint();
+		}
 		//dessine horizon
 		drawHorizon(g);
 		//affiche la vitesse
@@ -125,7 +136,7 @@ public class Affichage extends JPanel{
 		drawMontagne(g);
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
-		drawCheckpoint(g2d);
+		
 		// si on a perdu on affiche game over
 		if(etat.getFin() == 1) {
 			drawEnd(g);
