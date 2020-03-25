@@ -53,7 +53,13 @@ public class Etat {
 	}
 	
 	public void updateVitesse() {
-		this.vitesse = getAccel()/100*vitesse;
+		double newV = getAccel()/100*vitesse;
+		if(newV<vitesseMax) {
+			this.vitesse=newV;
+		}else {
+			this.vitesse = vitesseMax;
+		}
+		
 	}
 	
 	public double getVitesse() {
@@ -83,7 +89,7 @@ public class Etat {
 			}
 		}
 		// Accelere
-		if(accel < 100) {
+		if(accel < 101) {
 			if(away <= 30 ) {
 				accel+= 0.5;
 			}else if (away > 30 && away <= 50 && accel < 75) {
@@ -92,8 +98,8 @@ public class Etat {
 				accel += 0.3;
 			}
 		}
-		if(accel>100) {
-			accel=100;
+		if(accel>101) {
+			accel=101;
 		}
 		//System.out.println(accel);
 	}
