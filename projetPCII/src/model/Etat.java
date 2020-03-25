@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Random;
 
 import view.Affichage;
 
@@ -16,18 +17,18 @@ public class Etat {
 	private Clock clock;
 	private int fin = 0;
 	private Montagne montagne;
-	private int check;
+	private int check = 100;
 	/**
 	 * etat de la moto :
-	 * 0 : tourne à gauche
+	 * 0 : tourne Ã  gauche
 	 * 1 : va tout droit
-	 * 2 : tourne à droite
+	 * 2 : tourne Ã  droite
 	 */
 	private int etatMoto;
 	
 	public Etat() {
 		this.piste = new Piste();
-		this.clock = new Clock(20,this);
+		this.clock = new Clock(0,this);
 		this.posX = 0;
 		this.accel = 100.;
 		this.vitesse =  accel/100*vitesseMax;
@@ -61,7 +62,7 @@ public class Etat {
 	
 	public void avance() {
 		/* 0 <= accel/100 <= 1
-		 * quand accel est à 100 on avance de vitesseMax
+		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
 		piste.avance(Math.round((float)getVitesse()));
 		
@@ -100,16 +101,17 @@ public class Etat {
 		int nb;
 		nb = random.nextInt(5);
 		if(nb == 0) {
-			check += 2000;
+			check += 1300;
 		}else if(nb == 1) {
-			check += 4000;
+			check += 1500;
 		}else if(nb == 2) {
-			check += 6000;
+			check += 1700;
 		}else if(nb == 3) {
-			check += 8000;
+			check += 2000;
 		}else if(nb == 4) {
-			check += 10000;
+			check += 2300;
 		}
+		clock.setTempsRestant(clock.getTempsRestant() + 20);
 	}
 	
 	public int getPosCheck() {
