@@ -97,20 +97,7 @@ public class Etat {
 	
 	public void checkpoint() {
 		check = piste.getPosY();
-		Random random = new Random();
-		int nb;
-		nb = random.nextInt(5);
-		if(nb == 0) {
-			check += 1300;
-		}else if(nb == 1) {
-			check += 1500;
-		}else if(nb == 2) {
-			check += 1700;
-		}else if(nb == 3) {
-			check += 2000;
-		}else if(nb == 4) {
-			check += 2300;
-		}
+		check += 1000;
 		clock.setTempsRestant(clock.getTempsRestant() + 20);
 	}
 	
