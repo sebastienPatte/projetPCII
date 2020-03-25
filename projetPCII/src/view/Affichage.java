@@ -99,6 +99,9 @@ public class Affichage extends JPanel{
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affichage score
 		String strScore ="Score : "+ etat.getPosY();
+	   	if(etat.getPosY() == etat.getPosCheck()) {
+			etat.checkpoint();
+		}
 		FontMetrics fm = getFontMetrics(g.getFont());
 		int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord
 		g.drawString(strScore, LARG-printedLength, 20);
