@@ -19,7 +19,7 @@ public class Etat {
 	private Montagne montagne;
 	private int check = 10*Piste.incr;
 	/** temps à ajouter quand on atteint le prochain checkpoint*/
-	private int tempsCheck = 20;
+	private int tempsCheck = 30;
 	private int time = 20;
 	/**
 	 * etat de la moto :
@@ -31,7 +31,7 @@ public class Etat {
 	
 	public Etat() {
 		this.piste = new Piste();
-		this.clock = new Clock(20,this);
+		this.clock = new Clock(tempsCheck,this);
 		this.posX = 0;
 		this.accel = 100.;
 		this.vitesse =  5;
@@ -53,12 +53,16 @@ public class Etat {
 	}
 	
 	public void updateVitesse() {
+		this.vitesse = getAccel()/100*vitesse;
+		/*
 		double newV = getAccel()/100*vitesse;
+		
 		if(newV<vitesseMax) {
 			this.vitesse=newV;
 		}else {
 			this.vitesse = vitesseMax;
 		}
+		*/
 		
 	}
 	
@@ -89,7 +93,9 @@ public class Etat {
 			}
 		}
 		// Accelere
-		if(accel < 101) {
+		if(accel>100.1) {
+			accel=100.1;
+		}else{
 			if(away <= 30 ) {
 				accel+= 0.5;
 			}else if (away > 30 && away <= 50 && accel < 75) {
@@ -98,9 +104,7 @@ public class Etat {
 				accel += 0.3;
 			}
 		}
-		if(accel>101) {
-			accel=101;
-		}
+		
 		//System.out.println(accel);
 	}
 	
@@ -108,7 +112,7 @@ public class Etat {
 		check += 10*Piste.incr;
 		//System.out.println(check+" "+piste.getPosY());
 		clock.setTempsRestant(clock.getTempsRestant() + tempsCheck);
-		if(tempsCheck > 1)tempsCheck--;
+		if(tempsCheck > 5)tempsCheck--;
 	}
 	
 	public int getPosCheck() {

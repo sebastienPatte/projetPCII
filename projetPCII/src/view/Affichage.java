@@ -75,9 +75,9 @@ public class Affichage extends JPanel{
 		
 			);
 			
-			
+			//calcul indice checkpoint sur la piste
 			int indice = (etat.getPosCheck()-etat.getPosY())/Piste.incr+1;
-			//System.out.println(indice);
+			//si on est sur l'indice du checkpoint, on le dessine
 			if(indice==i) {
 				g.drawLine(
 						t1[0].x-posX+decPespectiveT1,
@@ -85,7 +85,6 @@ public class Affichage extends JPanel{
 						t1[1].x-posX-decPespectiveT1,
 						t1[1].y
 				);
-				System.out.println("drawLn "+t1[1].y);
 			}
 			
 		}
