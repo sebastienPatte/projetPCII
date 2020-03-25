@@ -16,6 +16,7 @@ public class Etat {
 	private Clock clock;
 	private int fin = 0;
 	private Montagne montagne;
+	private int check;
 	/**
 	 * etat de la moto :
 	 * 0 : tourne à gauche
@@ -91,6 +92,28 @@ public class Etat {
 			accel=100;
 		}
 		//System.out.println(accel);
+	}
+	
+	public void checkpoint() {
+		check = piste.getPosY();
+		Random random = new Random();
+		int nb;
+		nb = random.nextInt(5);
+		if(nb == 0) {
+			check += 2000;
+		}else if(nb == 1) {
+			check += 4000;
+		}else if(nb == 2) {
+			check += 6000;
+		}else if(nb == 3) {
+			check += 8000;
+		}else if(nb == 4) {
+			check += 10000;
+		}
+	}
+	
+	public int getPosCheck() {
+		return check;
 	}
 	
 	public void gameOver() {
