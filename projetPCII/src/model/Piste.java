@@ -8,9 +8,23 @@ import view.Affichage;
 
 public class Piste {
 	public static int largeurPiste = 300;
+	/**
+	 * décalage en hauteur entre chaque point de la piste
+	 */
 	public static int incr = Affichage.HAUT/4;
+	/**
+	 * décalage possible à droite et à gauche de la position X du point
+	 * (position X du point aléatoire) 
+	 */
 	public static int dec = 20;
+	/**
+	 * liste des points de la ligne du bord gauche de la piste
+	 * (pas besoin d'avoir les 2 bords car on a {@link #largeurPiste})
+	 */
 	private ArrayList<Point> points;
+	/**
+	 * position Y du joueur (nombre de pixels pacourus)
+	 */
 	private int posY;
 
 	
@@ -21,13 +35,18 @@ public class Piste {
 		initPoints();
 	}
 	
+	/**
+	 * Initialise les points de la piste visibles dès le début
+	 */
 	private void initPoints() {
 		for(int i=Affichage.HAUT; i>=Affichage.posHorizon; i-=incr) {
 			int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec) + Affichage.LARG/2;
 			this.points.add(new Point(x,i));
 		}
 	}
-	
+	/**
+	 * ajoute un point à la {@link Piste#points}
+	 */
 	private void addPoint() {
 		int y = points.get(points.size()-1).y - incr;
 		int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec) + Affichage.LARG/2;
@@ -35,6 +54,10 @@ public class Piste {
 		this.points.add(new Point(x,y));
 	}
 	
+	/**
+	 * on ajoute un point quand le dernier entre dans le champ de vision
+	 * et on en supprime un si il sort du champ de vision
+	 */
 	private void updatePoints() {
 		//on ajoute un point si le dernier point entre dans le champ de vision 
 		if(points.get(points.size()-1).y  + posY >  Affichage.posHorizon ) {
@@ -47,6 +70,10 @@ public class Piste {
 		
 	}
 	
+	
+	/**
+	 * @return la piste sous forme de double tableau contenant les 2 ligne brisées des bords de la piste 
+	 */
 	public Point[][] getLigne(){
 		//System.out.println("pixels parcourus : "+posY);
 		updatePoints();
@@ -60,11 +87,17 @@ public class Piste {
 		return res;
 	}
 	
+	/**
+	 * on avance de la vitesse donnée lors de l'appel par {@link Etat}
+	 * @param v vitesse du joueur
+	 */
 	public void avance(int v) {
-		//on avance de la vitesse v donnée lors de l'appel par Etat
 		this.posY += v;
 	}
 	
+	/**
+	 * @return {@link #posY}
+	 */
 	public int getPosY() {
 		return posY;
 	}

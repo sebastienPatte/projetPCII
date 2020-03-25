@@ -49,19 +49,27 @@ public class Etat {
 		this.etatMoto = 1;
 	}
 	
-	
 	public Point[][] getPiste(){
 		return this.piste.getLigne();
 	}
 	
+	/**
+	 * @return la position X du joueur {@link #posX}
+	 */
 	public int getPosX() {
 		return this.posX;
 	}
 	
+	/**
+	 * @return la position Y du joueur {@link Piste#posY}
+	 */
 	public int getPosY() {
 		return piste.getPosY();
 	}
 	
+	/**
+	 * Met à jour la vitesse par rapport à l'accélération
+	 */
 	public void updateVitesse() {
 		this.vitesse = getAccel()/100*vitesse;
 		/*
@@ -76,13 +84,21 @@ public class Etat {
 		
 	}
 	
+	
 	public double getVitesse() {
 		return this.vitesse;
 	}
+	
+	/**
+	 * @return true si on a perdu, false sinon
+	 */
 	public int getFin() {
 		return fin;
 	}
 	
+	/**
+	 * Avance {@link Piste#posY} en fonction de {@link #vitesse}
+	 */
 	public void avance() {
 		/* 0 <= accel/100 <= 1
 		 * quand accel est Ã  100 on avance de vitesseMax
@@ -91,6 +107,10 @@ public class Etat {
 		
 	}
 	
+	/**
+	 * on réduit {@link #accel} si on s'écarte du centre de la fenetre
+	 * et on l'augmente sinon
+	 */
 	private void updateAccel() {
 		int away = Math.abs(posX);
 		if(accel > 0 ) {
@@ -114,10 +134,11 @@ public class Etat {
 				accel += 0.3;
 			}
 		}
-		
-		//System.out.println(accel);
 	}
 	
+	/**
+	 * Créé un nouveau checkpoint
+	 */
 	public void checkpoint() {
 		check += 10*Piste.incr;
 		//System.out.println(check+" "+piste.getPosY());
@@ -126,47 +147,79 @@ public class Etat {
 		this.voieCheck = randint(0, 2);
 	}
 	
+	/**
+	 * @return {@link #check}
+	 */
 	public int getPosCheck() {
 		return check;
 	}
 	
+	/**
+	 * @return {@link #voieCheck}
+	 */
 	public int getVoieCheck() {
 		return voieCheck;
 	}
 	
+	/**
+	 * lance le game over, vitesse et accel à 0
+	 */
 	public void gameOver() {
 		this.vitesse = 0;
 		this.accel = 0;
 		this.fin = 1;
 	}
 	
+	/**
+	 * Met à jour puis renvoie accel
+	 * @return {@link #accel}
+	 */
 	public double getAccel() {
 		updateAccel();
 		return this.accel;
 	}
 	
+	/**
+	 * Décale {@link #posX} vers la gauche (x négatif)
+	 * et l'{@link #etatMoto} est mit à 0 pour l'image de moto qui tourne à gauche
+	 */
 	public void goLeft() {
 		this.posX = posX-deplacement;
 		this.etatMoto = 0;
 	}
 	
+	/**
+	 * Décale {@link #posX} vers la droite (x négatif)
+	 * et l'{@link #etatMoto} est mit à 2 pour l'image de moto qui tourne à droite
+	 */
 	public void goRight() {
 		this.posX = posX+deplacement;
 		this.etatMoto = 2;
 	}
 	
+	/**
+	 * l'{@link #etatMoto} est mit à 1 pour l'image de la moto qui va tout droit
+	 */
 	public void goStraight() {
 		this.etatMoto = 1;
 	}
 
+	/**
+	 * @return {@link #montagne}
+	 */
 	public ArrayList<Point> getMontagne(){
 		return montagne.getPointsVisibles();
 	}
 	
+	/**
+	 * @return {@link #clock()}
+	 */
 	public Clock getClock() {
 		return clock;
 	}
-	
+	/**
+	 * @return {@link #etatMoto}
+	 */
 	public int getEtatMoto() {
 		return this.etatMoto;
 	}

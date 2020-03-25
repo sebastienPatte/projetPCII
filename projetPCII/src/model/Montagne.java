@@ -8,9 +8,17 @@ import view.Affichage;
 public class Montagne {
 	private Etat etat;
 	private ArrayList<Point> points;
+	/**
+	 * écart minimum en largeur entre chaque point de la ligne brisée
+	 */
 	private int ecartMin;
+	/**
+	 * écart maximum en largeur entre chaque point de la ligne brisée
+	 */
 	private int ecartMax;
-	/** limite le haut des montagnes à la moitiée de la partie au dessus de l'horizon**/
+	/** 
+	 * limite le haut des montagnes à la moitiée de la partie au dessus de l'horizon
+	 */
 	public static int yMin = Affichage.posHorizon/2;
 	
 	
@@ -21,6 +29,9 @@ public class Montagne {
 		initPoints();	
 	}
 	
+	/**
+	 * Initialise les points de la montagne qui sont visible dès le début
+	 */
 	private void initPoints() {
 		this.points = new ArrayList<Point>();
 		for(int i=0; i<Affichage.LARG; i+= randint(ecartMin,ecartMax)) {
@@ -29,6 +40,10 @@ public class Montagne {
 		}
 	}
 	
+	/**
+	 * Ajoute des points à droite où à gauche quand on découvre une nouvelle partie de la montagne.
+	 * On garde tout les points pour que la montagne soit la même quand on revient à la même {@link Etat#posX}
+	 */
 	private void updatePoints() {
 		if(etat.getPosX() < points.get(0).x){
 			addPointGauche();
@@ -39,13 +54,18 @@ public class Montagne {
 		}
 	}
 	
+	/**
+	 * ajoute un point à gauche de la chaîne de montagne
+	 */
 	private void addPointGauche() {
 		int x = points.get(0).x - randint(ecartMin, ecartMax);
 		int y =  randint(0, Affichage.posHorizon);
 		// ajout au début
 		points.add(0, new Point(x,y));
 	}
-	
+	/**
+	 * ajoute un point à droite de la chaîne de montagne
+	 */
 	private void addPointDroite() {
 		int x = points.get(points.size()-1).x + randint(ecartMin, ecartMax);
 		int y =  randint(0, Affichage.posHorizon);
@@ -53,6 +73,9 @@ public class Montagne {
 		points.add(new Point(x,y));
 	}
 	
+	/**
+	 * @return une liste des points de la montagne qui sont visibles par le joueur
+	 */
 	public ArrayList<Point> getPointsVisibles() {
 		updatePoints();
 		ArrayList<Point> res = new ArrayList<Point>();

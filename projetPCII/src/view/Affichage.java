@@ -38,7 +38,13 @@ public class Affichage extends JPanel{
 	public static void drawEnd(Graphics g) {
 		g.drawString("GAME OVER", 465, 300);
 	}
-	
+	/**
+	 * affiche le temps restant avant le game over
+	 * @param g
+	 * @param x
+	 * @param y
+	 * @param r
+	 */
 	public void drawClock(Graphics g, int x, int y, int r) {
 		if(etat.getClock().getTempsRestant()>9){
             g.drawString(""+etat.getClock().getTempsRestant(), 24, 42);
@@ -48,9 +54,18 @@ public class Affichage extends JPanel{
         }
 	}
 	
+	/**
+	 * affiche la ligne de l'horizon en haut de la fenetre
+	 * @param g
+	 */
 	private void drawHorizon(Graphics g) {
 		g.drawLine(0, posHorizon, LARG, posHorizon);
 	}
+	
+	/**
+	 * Affiche la piste et les checkpoints
+	 * @param g
+	 */
 	private void drawPiste(Graphics g) {
 		int posX = etat.getPosX();
 		Point[][] piste = etat.getPiste();
@@ -110,13 +125,17 @@ public class Affichage extends JPanel{
 		}
 	}
 	
-	/**d
+	/**
 	 * Fonction qui calcul et affiche la vitesse du vehicule en fonction de sa position
 	 */
 	private void drawVitesse(Graphics g) {
 		g.drawString(Double.toString(etat.getVitesse()), 75, 475);
 	}
 	
+	/**
+	 * Affiche la Montagne au dessus de l'horizon
+	 * @param g
+	 */
 	private void drawMontagne(Graphics g) {
 		ArrayList<Point> points = etat.getMontagne();
 		for(int i=0; i+1<points.size(); i++) {

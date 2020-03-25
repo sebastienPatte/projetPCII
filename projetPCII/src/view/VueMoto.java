@@ -10,9 +10,15 @@ import javax.imageio.ImageIO;
 import model.Etat;
 
 public class VueMoto {
-	
+	/**
+	 * Chemin vers les images de la moto
+	 */
 	public static String PATH = "imgs/";
+	/**
+	 * Décalage avec le bord bas de la fenêtre pour ne pas être collé au bord
+	 */
 	public static int decBord = 20;
+	
 	private Etat etat;
 	Image image;
 	
@@ -20,6 +26,11 @@ public class VueMoto {
 		this.etat = etat;
 	}
 	
+	/**
+	 * Affiche la moto à sa ({@link Etat#posX position})
+	 * et suivant son {@link Etat#etatMoto état}
+	 * @param g
+	 */
 	public void drawMoto(Graphics g) {
 		
 		String str = PATH+etat.getEtatMoto()+".png";
@@ -40,6 +51,9 @@ public class VueMoto {
 	
 	}
 	
+	/**
+	 * @return la hauteur de l'image de la moto
+	 */
 	public int getHeight() {
 		return image.getHeight(null)+decBord;
 	}
