@@ -78,7 +78,7 @@ public class Affichage extends JPanel{
 	 * Fonction qui calcul et affiche la vitesse du vehicule en fonction de sa position
 	 */
 	private void drawVitesse(Graphics g) {
-		g.drawString(Double.toString(Math.round(etat.getVitesse())), 75, 475);
+		g.drawString(Double.toString(etat.getVitesse()), 75, 475);
 	}
 	
 	private void drawMontagne(Graphics g) {
@@ -90,6 +90,14 @@ public class Affichage extends JPanel{
 		}
 	}
 	
+	private void drawCheckpoint(Graphics g) {
+		g.drawLine(
+				350,
+				HAUT - (etat.getPosCheck()-etat.getPosY()),
+				700,
+				HAUT - (etat.getPosCheck()-etat.getPosY())
+		);
+	}
 	
 	@Override
     public void paint(Graphics g) {
@@ -117,6 +125,7 @@ public class Affichage extends JPanel{
 		drawMontagne(g);
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
+		drawCheckpoint(g2d);
 		// si on a perdu on affiche game over
 		if(etat.getFin() == 1) {
 			drawEnd(g);
