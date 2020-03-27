@@ -35,35 +35,23 @@ public class Checkpoint {
 		return this.posY;
 	}
 	
-	public int[] getPosX(int largeurPiste) {
-		int[] res = new int[2];
+	public double[] getPosX() {
+		double[] res = new double[2];
 		if(voie==0) {
 			res[0] = 0;
-			res[1] = (int) -((2./3)*largeurPiste);
+			res[1] = -2./3;
 		}else {
 			if(voie==1) {
-				res[0] = (int)((1./3)*largeurPiste);
-				res[1] = (int)-((1./3)*largeurPiste);
+				res[0] = 1./3;
+				res[1] = -1./3;
 			}else {
-				res[0] = (int)((2./3)*largeurPiste);
+				res[0] = 2./3;
 				res[1] = 0;
 			}
 		}
 		return res;
 	}
-	/*
-	public int getX2() {
-		if(voie==0) {
-			return (int)-((2./3)*Piste.largeurPiste);
-		}else {
-			if(voie==1) {
-				return (int)-((1./3)*Piste.largeurPiste);
-			}else {
-				return 0;
-			}
-		}
-	}
-	*/
+
 	public Clock getClock() {
 		return this.clock;
 	}

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -23,7 +24,7 @@ public class Affichage extends JPanel{
 	/*plus il est petit, plus la piste se rétrécit vers l'horizon
 	 * mais si il est trop petit, les bords de la piste peuvent se croiser
 	 */
-	public static int factRetrecissement = 3; 
+	public static double factRetrecissement = 2.5; 
 	
 	
 	private Etat etat;
@@ -70,21 +71,25 @@ public class Affichage extends JPanel{
 	 * Affiche la piste et les checkpoints
 	 * @param g
 	 */
-	private void drawPiste(Graphics g) {
+	private void drawPiste(Graphics2D g) {
 		int posX = etat.getPosX();
 		Point[][] piste = etat.getPiste();
 		
 		for(int i=0; i+1<piste.length; i++) {
 			Point[] t1 = piste[i];
 			Point[] t2 = piste[i+1];
-			int decPespectiveT1 = (Affichage.HAUT - t1[0].y)/factRetrecissement;
-			int decPespectiveT2 = (Affichage.HAUT - t2[0].y)/factRetrecissement;
+			
+			//on rétrécit la piste seulement à l'affichage
+			int decPespectiveT1 = (int)((Affichage.HAUT - t1[0].y)/factRetrecissement);
+			int decPespectiveT2 = (int)((Affichage.HAUT - t2[0].y)/factRetrecissement);
+			//affiche bord piste gauche
 			g.drawLine(
 					t1[0].x-posX+decPespectiveT1,
 					t1[0].y,
 					t2[0].x-posX+decPespectiveT2,
 					t2[0].y
 			);
+			//affiche bord piste droite
 			g.drawLine(
 					t1[1].x-posX-decPespectiveT1,
 					t1[1].y,
@@ -93,15 +98,41 @@ public class Affichage extends JPanel{
 		
 			);
 			
+			int largPiste1 = (t1[1].x-posX-decPespectiveT1) - (t1[0].x-posX+decPespectiveT1);
+			int largPiste2 = (t2[1].x-posX-decPespectiveT2) - (t2[0].x-posX+decPespectiveT2);
+			//affiche separation voie gauche
+			
+			//on met les lignes en pointillé
+			float dash[] = {20.0f,10.f};
+			g.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f));
+			
+			g.drawLine(
+					t1[0].x-posX+decPespectiveT1+(largPiste1 * 1/3),
+					t1[0].y,
+					t2[0].x-posX+decPespectiveT2+(largPiste2 * 1/3),
+					t2[0].y
+			);
+			//affiche separation voie droite
+			g.drawLine(
+					t1[1].x-posX-decPespectiveT1-(largPiste1 * 1/3),
+					t1[1].y,
+					t2[1].x-posX-decPespectiveT2-(largPiste2 * 1/3),
+					t2[1].y
+			);
+			
+			//on enleve le pointillé
+			g.setStroke(new BasicStroke(1.0f));
+			
 			//calcul indice checkpoint sur la piste
 			int indice = (etat.getPosCheck()-etat.getPosY())/Piste.incr+1;
 			//si on est sur l'indice du checkpoint, on le dessine
 			if(indice==i) {
-		
-				int largPiste = (t1[1].x-posX-decPespectiveT1) - (t1[0].x-posX+decPespectiveT1);
 				
-				//l'affichage donne la largeur de la piste -> pas très MVC
-				int[] decCheck = check.getPosX(largPiste);
+				int[] decCheck = new int[2]; 
+				decCheck[0] = (int) (check.getPosX()[0] * largPiste1);
+				decCheck[1] = (int)( check.getPosX()[1] * largPiste1);
+				
+				
 				
 				g.setColor(Color.BLUE);
 				g.drawLine(
@@ -141,7 +172,7 @@ public class Affichage extends JPanel{
     public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g.clearRect(0, 0, LARG, HAUT);
-		drawPiste(g);
+		drawPiste(g2d);
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affichage score
 		String strScore ="Score : "+ etat.getPosY();
