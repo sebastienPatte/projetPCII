@@ -8,6 +8,7 @@ public class Etat {
 	
 	public static int deplacement = 3;
 	private Piste piste;
+	
 	/**
 	 * position x du joueur
 	 */
@@ -16,21 +17,10 @@ public class Etat {
 	private double accel;
 	private double vitesse;
 	static double vitesseMax = 5.0;//pixels par repaint
-	private Clock clock;
 	private int fin = 0;
 	private Montagne montagne;
-	/**
-	 * position y du prochain checkpoint
-	 */
-	private int check = 10*Piste.incr;
-	/**
-	 *  temps à ajouter quand on atteint le prochain checkpoint
-	 */
-	private int tempsCheck = 30;
-	/**
-	 * voie sur laquelle est le checkpoint
-	 */
-	private int voieCheck=1;
+	private Checkpoint check;
+	
 	/**
 	 * etat de la moto :
 	 * 0 : tourne Ã  gauche
@@ -41,7 +31,7 @@ public class Etat {
 	
 	public Etat() {
 		this.piste = new Piste();
-		this.clock = new Clock(tempsCheck,this);
+		this.check = new Checkpoint();
 		this.posX = 0;
 		this.accel = 100.;
 		this.vitesse =  5;
@@ -140,26 +130,16 @@ public class Etat {
 	 * Créé un nouveau checkpoint
 	 */
 	public void checkpoint() {
-		check += 10*Piste.incr;
-		//System.out.println(check+" "+piste.getPosY());
-		clock.setTempsRestant(clock.getTempsRestant() + tempsCheck);
-		if(tempsCheck > 5)tempsCheck--;
-		this.voieCheck = randint(0, 2);
+		this.check.nextCheckpoint();
 	}
 	
 	/**
 	 * @return {@link #check}
 	 */
 	public int getPosCheck() {
-		return check;
+		return check.getPosY();
 	}
-	
-	/**
-	 * @return {@link #voieCheck}
-	 */
-	public int getVoieCheck() {
-		return voieCheck;
-	}
+
 	
 	/**
 	 * lance le game over, vitesse et accel à 0
@@ -211,12 +191,10 @@ public class Etat {
 		return montagne.getPointsVisibles();
 	}
 	
-	/**
-	 * @return {@link #clock()}
-	 */
-	public Clock getClock() {
-		return clock;
+	public Checkpoint getCheck(){
+		return this.check;
 	}
+	
 	/**
 	 * @return {@link #etatMoto}
 	 */

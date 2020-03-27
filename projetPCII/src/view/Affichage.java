@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -10,21 +11,23 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import model.Checkpoint;
 import model.Etat;
 import model.Piste;
 
 public class Affichage extends JPanel{
 	private static final long serialVersionUID = 1L;
-	public static int LARG = 1000;
+	public static int LARG = 1400;
 	public static int HAUT = 800;
 	public static int posHorizon = 150;
 	/*plus il est petit, plus la piste se rétrécit vers l'horizon
 	 * mais si il est trop petit, les bords de la piste peuvent se croiser
 	 */
-	public static int factRetrecissement = 7; 
+	public static int factRetrecissement = 3; 
 	
 	
 	private Etat etat;
+	private Checkpoint check;
 	private VueMoto moto;
 	private VueNuages nuages;
 	
@@ -33,6 +36,7 @@ public class Affichage extends JPanel{
 		this.etat = etat;
 		this.moto = new VueMoto(etat);
 		this.nuages = new VueNuages();
+		this.check = etat.getCheck();
 	}
 	
 	public static void drawEnd(Graphics g) {
@@ -46,11 +50,11 @@ public class Affichage extends JPanel{
 	 * @param r
 	 */
 	public void drawClock(Graphics g, int x, int y, int r) {
-		if(etat.getClock().getTempsRestant()>9){
-            g.drawString(""+etat.getClock().getTempsRestant(), 24, 42);
+		if(check.getClock().getTempsRestant()>9){
+            g.drawString(""+check.getClock().getTempsRestant(), 24, 42);
         }
         else{
-            g.drawString("0"+etat.getClock().getTempsRestant(), 24, 42);
+            g.drawString("0"+check.getClock().getTempsRestant(), 24, 42);
         }
 	}
 	
@@ -93,33 +97,20 @@ public class Affichage extends JPanel{
 			int indice = (etat.getPosCheck()-etat.getPosY())/Piste.incr+1;
 			//si on est sur l'indice du checkpoint, on le dessine
 			if(indice==i) {
-				int dec1 =0;
-				int dec2 =0;
+		
+				int largPiste = (t1[1].x-posX-decPespectiveT1) - (t1[0].x-posX+decPespectiveT1);
 				
-				//on affiche le checkpoint sur un tiers de la piste
-				if(etat.getVoieCheck()==0) {
-					dec2=(int)-((2./3)*Piste.largeurPiste)+decPespectiveT1;
-				}else {
-					if(etat.getVoieCheck()==1){
-						dec1=(int)((1./3)*Piste.largeurPiste)-decPespectiveT1/2;
-						dec2=(int)-((1./3)*Piste.largeurPiste)+decPespectiveT1/2;
-						System.out.println(dec1+" "+dec2);
-					}else {
-						if(etat.getVoieCheck()==2) {
-							dec1=(int)((2./3)*Piste.largeurPiste-decPespectiveT1);
-						}
-					}
-				}
+				//l'affichage donne la largeur de la piste -> pas très MVC
+				int[] decCheck = check.getPosX(largPiste);
 				
-				
-				//System.out.println(etat.getVoieCheck()+" "+dec2);
-				
+				g.setColor(Color.BLUE);
 				g.drawLine(
-						t1[0].x-posX+decPespectiveT1+dec1,
+						t1[0].x-posX+decPespectiveT1+decCheck[0],
 						t1[0].y,
-						t1[1].x-posX-decPespectiveT1+dec2,
+						t1[1].x-posX-decPespectiveT1+decCheck[1],
 						t1[1].y
 				);
+				g.setColor(Color.BLACK);
 			}
 			
 		}

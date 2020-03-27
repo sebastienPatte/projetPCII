@@ -28,14 +28,13 @@ public class Clock extends JPanel{
 	 * Construction de l'horloge
 	 * @param x temps initiale en secondes
 	 */
-	public Clock(int x,Etat et) {
+	public Clock(int x) {
 		timer = createTimer();
 		timer.start();
 		setOpaque(false);
 		setPreferredSize(new Dimension(72, 72));
         this.setTempsRestant(x);
         this.setTemps(x);
-        this.etat = et;
 	}
 	
 	public Timer getTimer() {
