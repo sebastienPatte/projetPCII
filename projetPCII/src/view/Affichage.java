@@ -124,7 +124,7 @@ public class Affichage extends JPanel{
 			g.setStroke(new BasicStroke(1.0f));
 			
 			//calcul indice checkpoint sur la piste
-			int indice = (etat.getPosCheck()-etat.getPosY())/Piste.incr+1;
+			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
 			//si on est sur l'indice du checkpoint, on le dessine
 			if(indice==i) {
 				
@@ -182,10 +182,13 @@ public class Affichage extends JPanel{
 		g.drawString(strScore, LARG-printedLength, 20);
 		//dessine moto
 		this.moto.drawMoto(g);
+		
 		//si on a dépassé le checkpoint
-		if(etat.getPosY()+moto.getHeight()>= etat.getPosCheck()) {
-			etat.checkpoint();
+		if(etat.getPosY()+moto.getHeight() >=  check.getPosY()) {
+			etat.testCheckpoint();
+			check.nextCheckpoint();
 		}
+		
 		//dessine horizon
 		drawHorizon(g);
 		//affiche la vitesse

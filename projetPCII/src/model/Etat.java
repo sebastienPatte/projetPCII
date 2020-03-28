@@ -1,8 +1,11 @@
 package model;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+
+import view.Affichage;
 
 public class Etat {
 	
@@ -31,10 +34,10 @@ public class Etat {
 	
 	public Etat() {
 		this.piste = new Piste();
-		this.check = new Checkpoint();
+		this.check = new Checkpoint(this);
 		this.posX = 0;
 		this.accel = 100.;
-		this.vitesse =  5;
+		this.vitesse =  vitesseMax;
 		this.montagne = new Montagne(this);
 		this.etatMoto = 1;
 	}
@@ -61,8 +64,8 @@ public class Etat {
 	 * Met à jour la vitesse par rapport à l'accélération
 	 */
 	public void updateVitesse() {
-		this.vitesse = getAccel()/100*vitesse;
-		/*
+		//this.vitesse = getAccel()/100*vitesse;
+		
 		double newV = getAccel()/100*vitesse;
 		
 		if(newV<vitesseMax) {
@@ -70,7 +73,7 @@ public class Etat {
 		}else {
 			this.vitesse = vitesseMax;
 		}
-		*/
+		
 		
 	}
 	
@@ -94,7 +97,16 @@ public class Etat {
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
 		piste.avance(Math.round((float)getVitesse()));
+	}
+	
+	public void testCheckpoint() {
+		double[] Xcheck = check.getPosX();
+		int x1 = this.getPiste()[1][0].x;
+		int x2 = this.getPiste()[1][1].x;
 		
+		if(posX+Affichage.LARG/2 >= x1+Xcheck[0]*Piste.largeurPiste && posX+Affichage.LARG/2 <= x2+Xcheck[1]*Piste.largeurPiste) {
+			check.addTime();
+		}
 	}
 	
 	/**
@@ -113,8 +125,8 @@ public class Etat {
 			}
 		}
 		// Accelere
-		if(accel>100.1) {
-			accel=100.1;
+		if(accel>=101) {
+			accel=101;
 		}else{
 			if(away <= 30 ) {
 				accel+= 0.5;
@@ -124,22 +136,9 @@ public class Etat {
 				accel += 0.3;
 			}
 		}
+		System.out.println("accel = "+accel);
 	}
 	
-	/**
-	 * Créé un nouveau checkpoint
-	 */
-	public void checkpoint() {
-		this.check.nextCheckpoint();
-	}
-	
-	/**
-	 * @return {@link #check}
-	 */
-	public int getPosCheck() {
-		return check.getPosY();
-	}
-
 	
 	/**
 	 * lance le game over, vitesse et accel à 0

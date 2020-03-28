@@ -10,15 +10,15 @@ public class Checkpoint {
 	/**
 	 * nombre de points de la piste d'écart entre deux checkpoint
 	 */
-	public static int INCR = 6;
+	public static int INCR = 3;
 	private int voie;
 	private int posY;
 	private int time;
 	private Clock clock;
 	
-	public Checkpoint() {
-		this.time = 20;
-		this.clock = new Clock(time);
+	public Checkpoint(Etat etat) {
+		this.time = 50;
+		this.clock = new Clock(time,etat);
 		this.voie = 0;
 		this.posY = 0;
 		nextCheckpoint();
@@ -27,6 +27,9 @@ public class Checkpoint {
 	public void nextCheckpoint() {
 		this.voie = randint(0, VOIE_MAX);
 		this.posY += INCR*Piste.incr;
+	}
+	
+	public void addTime() {
 		clock.setTempsRestant(clock.getTempsRestant() + time);
 		if(time > 5)time--;
 	}
