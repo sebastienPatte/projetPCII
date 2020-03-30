@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+
 import view.Affichage;
 
 public class Piste {
@@ -100,6 +101,16 @@ public class Piste {
 	 */
 	public int getPosY() {
 		return posY;
+	}
+	
+	public int getMidX(int i) {
+		if(i>=0 && i<points.size()) {
+			return points.get(i).x + largeurPiste/2;
+		}else {
+			System.err.println("Erreur : paramètre 'i' invalide dans méthode Piste.getMidX()");
+			return Affichage.LARG/2;
+		}
+			
 	}
 
 	/** Génère un chiffre aléatoire entre min et max

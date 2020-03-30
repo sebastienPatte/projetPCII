@@ -10,6 +10,13 @@ import view.Affichage;
 public class Etat {
 	
 	public static int deplacement = 3;
+	/** 
+	 * ici on prend FACT_ACCEL égal à une demie largeur d'une des 3 voies
+	 * donc quand on est dans la voie du milieu l'accéléraction est > 100 donc on accélère 
+	 * et sur les voies des côtés on est en dessous de 100 donc on décélère 
+	 */
+	public static int FACT_ACCEL = Piste.largeurPiste/6;
+	public static int ACCEL_MAX = 101;
 	private Piste piste;
 	
 	/**
@@ -114,31 +121,21 @@ public class Etat {
 	 * et on l'augmente sinon
 	 */
 	private void updateAccel() {
-		int away = Math.abs(posX);
-		if(accel > 0 ) {
-			if(away > 10 && away <= 30 && accel > 75) {
-				accel-= 0.05;
-			}else if (away > 30 && away <= 50 && accel > 50) {
-				accel -= 0.1;
-			}else if (away > 50) {
-				accel -= 0.3;
-			}
+		double away = (double)(Math.abs(Affichage.LARG/2 - piste.getMidX(0)) + Math.abs(posX)) / FACT_ACCEL;
+		
+		if(accel>0) {
+			accel = ACCEL_MAX - away;
 		}
-		// Accelere
-		if(accel>=101) {
-			accel=101;
-		}else{
-			if(away <= 30 ) {
-				accel+= 0.5;
-			}else if (away > 30 && away <= 50 && accel < 75) {
-				accel += 0.4;
-			}else if (away > 50 && away < 100 && accel < 50) {
-				accel += 0.3;
-			}
+		if(accel>=ACCEL_MAX) {
+			accel=ACCEL_MAX;
 		}
-		System.out.println("accel = "+accel);
+		
+		System.out.println("accel = "+accel+" away = "+away);
 	}
 	
+	public int getMidPiste(int i) {
+		return this.piste.getMidX(i);
+	}
 	
 	/**
 	 * lance le game over, vitesse et accel à 0

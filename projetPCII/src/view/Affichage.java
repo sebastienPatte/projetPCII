@@ -123,6 +123,16 @@ public class Affichage extends JPanel{
 			//on enleve le pointillé
 			g.setStroke(new BasicStroke(1.0f));
 			
+			//affichage ligne milieu
+			if(i<=1) {
+			g.drawLine(
+					etat.getMidPiste(1)-posX,
+					t1[0].y,
+					etat.getMidPiste(1)-posX,
+					t2[0].y
+			);
+			}
+			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
 			//si on est sur l'indice du checkpoint, on le dessine
