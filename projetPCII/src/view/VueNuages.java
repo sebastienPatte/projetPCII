@@ -69,12 +69,12 @@ public class VueNuages {
 				 
 				g.drawImage(image,  nuage.getPosX() - posX, nuage.getPosY(), null);
 				
-				}
+			}
 				 
 				catch (IOException e) {
 				e.printStackTrace();
 				 
-				}
+			}
 
 		}
 	}

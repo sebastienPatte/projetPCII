@@ -6,11 +6,14 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
-
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import model.Obstacle;
@@ -23,10 +26,12 @@ public class Affichage extends JPanel{
 	public static int LARG = 1400;
 	public static int HAUT = 800;
 	public static int posHorizon = 150;
+	public static String PATH= "imgs/red.png";
+	
 	/*plus il est petit, plus la piste se rétrécit vers l'horizon
 	 * mais si il est trop petit, les bords de la piste peuvent se croiser
 	 */
-	public static double factRetrecissement = 2.5; 
+	public static double factRetrecissement = 1/2.5; 
 	
 	
 	private Etat etat;
@@ -80,11 +85,10 @@ public class Affichage extends JPanel{
 		for(int i=0; i+1<piste.length; i++) {
 			Point[] t1 = piste[i];
 			Point[] t2 = piste[i+1];
-			Point[] t3 = piste[i+1];
 			
 			//on rétrécit la piste seulement à l'affichage
-			int decPespectiveT1 = (int)((Affichage.HAUT - t1[0].y)/factRetrecissement);
-			int decPespectiveT2 = (int)((Affichage.HAUT - t2[0].y)/factRetrecissement);
+			int decPespectiveT1 = (int)((Affichage.HAUT - t1[0].y)*factRetrecissement);
+			int decPespectiveT2 = (int)((Affichage.HAUT - t2[0].y)*factRetrecissement);
 			//affiche bord piste gauche
 			g.drawLine(
 					t1[0].x-posX+decPespectiveT1,
@@ -180,11 +184,42 @@ public class Affichage extends JPanel{
 		}
 	}
 	
-	
+	/*
 	private void drawObstacles(Graphics g) {
 		for(Obstacle o : etat.getObstacles()) {
 			Rectangle bounds = o.getBounds();
 			g.drawRect(bounds.x-etat.getPosX(), Affichage.HAUT - (bounds.y - etat.getPosY()), bounds.width, bounds.height);
+		}
+	}
+	*/
+	
+	private void drawObstacles(Graphics g) {
+		for(Obstacle o : etat.getObstacles()) {
+			Rectangle bounds = o.getBounds();
+			try {
+				/*
+				int newWidth  = (int) ( (HAUT - (bounds.y - etat.getPosY()) ) * (factRetrecissement) );
+				int newHeight = (int) ( (HAUT - (bounds.y - etat.getPosY()) ) * (factRetrecissement) );
+				System.out.println("w = "+newWidth+" h = "+newHeight);
+				Image image = ImageIO.read(new File(PATH)).getScaledInstance(newWidth, newHeight, 100);
+				*/
+
+				int y = (bounds.y - etat.getPosY());
+				int x = 0;
+				if(bounds.x < 0) {
+					x = (int)(bounds.x + y*factRetrecissement);
+				}else {
+					x = (int)(bounds.x - y*factRetrecissement);
+				}
+				Image image = ImageIO.read(new File(PATH));
+				g.drawImage(image, LARG/2+x-etat.getPosX(), HAUT - y, null);
+				
+			}
+				 
+				catch (IOException e) {
+				e.printStackTrace();
+				 
+			}
 		}
 	}
 	

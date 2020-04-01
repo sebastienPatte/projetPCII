@@ -16,7 +16,7 @@ public class Etat {
 	 */
 	public static int FACT_ACCEL = Piste.largeurPiste/6;
 	public static int ACCEL_MAX = 101;
-	public static int probaObstacle = 10;
+	public static int probaObstacle = 100;
 	private Piste piste;
 	private ArrayList<Obstacle> obstacles;
 	

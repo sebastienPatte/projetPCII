@@ -15,7 +15,7 @@ public class Obstacle {
 	private int height;
 	
 	public Obstacle(int posY) {
-		this.x = randint(Affichage.LARG/2-Piste.largeurPiste/2,Affichage.LARG/2+Piste.largeurPiste/2);
+		this.x = randint(-Piste.largeurPiste/2,+Piste.largeurPiste/2);
 		this.y = posY+Affichage.HAUT;
 		this.width = randint(20, 50);
 		this.height = randint(20, 50);
