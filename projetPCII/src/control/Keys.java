@@ -22,10 +22,10 @@ public class Keys extends KeyAdapter{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_Q) {
-			etat.goLeft();
+			etat.pressLeft(true);
 		}else {
 			if(e.getKeyCode() == KeyEvent.VK_D) {
-				etat.goRight();
+				etat.pressRight(true);
 			}
 		}
 	}
@@ -33,8 +33,11 @@ public class Keys extends KeyAdapter{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		//si on relache, on va tout droit
-		if ((e.getKeyCode() == KeyEvent.VK_Q) || (e.getKeyCode() == KeyEvent.VK_D)) {
-			etat.goStraight();
+		if (e.getKeyCode() == KeyEvent.VK_Q){
+			etat.pressLeft(false);
+		}
+		if (e.getKeyCode() == KeyEvent.VK_D) {
+			etat.pressRight(false);
 		}
 	}
 

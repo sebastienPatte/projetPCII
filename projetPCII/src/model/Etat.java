@@ -24,6 +24,9 @@ public class Etat {
 	 */
 	private int posX;
 	
+	private boolean leftPressed;
+	private boolean rightPressed;
+	
 	private double accel;
 	private double vitesse;
 	static double vitesseMax = 5.0;//pixels par repaint
@@ -40,6 +43,8 @@ public class Etat {
 	private int etatMoto;
 	
 	public Etat() {
+		this.leftPressed = false;
+		this.rightPressed = false;
 		this.piste = new Piste();
 		this.check = new Checkpoint(this);
 		this.posX = 0;
@@ -155,13 +160,21 @@ public class Etat {
 		return this.accel;
 	}
 	
+	
+	public void pressLeft(boolean b) {
+		this.leftPressed = b;
+	}
+	
+	public void pressRight(boolean b) {
+		this.rightPressed = b;
+	}
+	
 	/**
 	 * Décale {@link #posX} vers la gauche (x négatif)
 	 * et l'{@link #etatMoto} est mit à 0 pour l'image de moto qui tourne à gauche
 	 */
 	public void goLeft() {
 		this.posX = posX-deplacement;
-		this.etatMoto = 0;
 	}
 	
 	/**
@@ -170,7 +183,6 @@ public class Etat {
 	 */
 	public void goRight() {
 		this.posX = posX+deplacement;
-		this.etatMoto = 2;
 	}
 	
 	/**
@@ -191,10 +203,39 @@ public class Etat {
 		return this.check;
 	}
 	
+	
+	/**
+	 * met à jour l'état de la moto et déplace la moto vers la gauche où la droite en fonction des valeurs de {@link #leftPressed} et {@link #rightPressed}
+	 */
+	private void majEtatMoto() {
+		
+		if(leftPressed) {
+			if(rightPressed) {
+				//si les 2 touche sont pressées en même temps alors on va tout droit 
+				this.etatMoto = 1;		
+			}else {
+				//si seulement la touche pour aller à gauche est pressée alors on va à gauche
+				this.etatMoto = 0;
+				goLeft();
+			}	
+		}else {
+			if(rightPressed) {
+				//si seulement la touche pour aller à droite est pressée alors on va à droite
+				this.etatMoto = 2;
+				goRight();
+			}else {
+				//si aucune des 2 touches n'est pressée alors on va tout droit 
+				this.etatMoto = 1;
+			}
+		}
+		
+	}
+	
 	/**
 	 * @return {@link #etatMoto}
 	 */
 	public int getEtatMoto() {
+		majEtatMoto();
 		return this.etatMoto;
 	}
 	
