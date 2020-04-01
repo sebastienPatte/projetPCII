@@ -4,12 +4,11 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-
 import view.Affichage;
 
 public class Etat {
 	
-	public static int deplacement = 3;
+	public static int deplacement = 5;
 	/** 
 	 * ici on prend FACT_ACCEL égal à une demie largeur d'une des 3 voies
 	 * donc quand on est dans la voie du milieu l'accéléraction est > 100 donc on accélère 
@@ -17,7 +16,9 @@ public class Etat {
 	 */
 	public static int FACT_ACCEL = Piste.largeurPiste/6;
 	public static int ACCEL_MAX = 101;
+	public static int probaObstacle = 10;
 	private Piste piste;
+	private ArrayList<Obstacle> obstacles;
 	
 	/**
 	 * position x du joueur
@@ -52,6 +53,7 @@ public class Etat {
 		this.vitesse =  vitesseMax;
 		this.montagne = new Montagne(this);
 		this.etatMoto = 1;
+		this.obstacles = new ArrayList<Obstacle>();
 	}
 	
 	public Point[][] getPiste(){
@@ -246,6 +248,22 @@ public class Etat {
 	 */
 	private int randint(int min, int max) {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
+	}
+	
+	private void updateObstacles() {
+		//on retire le premier obstacle (le plus ancien) tant qu'il est en dehors du champ de vision
+		while(obstacles.size() > 0 && obstacles.get(0).getY() - piste.getPosY()  < 0) {
+			obstacles.remove(0);
+		}
+		if(randint(0,probaObstacle)==0) {
+			obstacles.add(new Obstacle(piste.getPosY()));
+		}
+		System.out.println(obstacles.size()+" obstacles");
+	}
+	
+	public ArrayList<Obstacle> getObstacles() {
+		updateObstacles();
+		return this.obstacles;
 	}
 	
 }

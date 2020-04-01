@@ -51,7 +51,13 @@ public class Piste {
 	private void addPoint() {
 		int y = points.get(points.size()-1).y - incr;
 		int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec) + Affichage.LARG/2;
+		/*
+		Point lastPt = points.get(points.size()-1);
+		int midX = (x+lastPt.x)/2;
+		int midY = (y+lastPt.y)/2;
 		//System.out.println("addPoint("+x+", "+y+")");
+		this.points.add(new Point(midX,midY));
+		*/
 		this.points.add(new Point(x,y));
 	}
 	

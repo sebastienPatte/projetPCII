@@ -28,6 +28,5 @@ public class Main {
 		fenetre.addKeyListener(kl);
 		fenetre.setFocusable(true);
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 	}
 }

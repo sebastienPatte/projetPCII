@@ -5,4 +5,5 @@ module projetPCII1 {
 	exports model;
 
 	requires java.desktop;
+	requires jdk.xml.dom;
 }

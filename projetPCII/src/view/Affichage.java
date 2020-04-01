@@ -7,11 +7,13 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 
 import javax.swing.JPanel;
 
+import model.Obstacle;
 import model.Checkpoint;
 import model.Etat;
 import model.Piste;
@@ -78,6 +80,7 @@ public class Affichage extends JPanel{
 		for(int i=0; i+1<piste.length; i++) {
 			Point[] t1 = piste[i];
 			Point[] t2 = piste[i+1];
+			Point[] t3 = piste[i+1];
 			
 			//on rétrécit la piste seulement à l'affichage
 			int decPespectiveT1 = (int)((Affichage.HAUT - t1[0].y)/factRetrecissement);
@@ -178,6 +181,13 @@ public class Affichage extends JPanel{
 	}
 	
 	
+	private void drawObstacles(Graphics g) {
+		for(Obstacle o : etat.getObstacles()) {
+			Rectangle bounds = o.getBounds();
+			g.drawRect(bounds.x-etat.getPosX(), Affichage.HAUT - (bounds.y - etat.getPosY()), bounds.width, bounds.height);
+		}
+	}
+	
 	@Override
     public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
@@ -209,7 +219,7 @@ public class Affichage extends JPanel{
 		drawMontagne(g);
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
-		
+		drawObstacles(g);
 		// si on a perdu on affiche game over
 		if(etat.getFin() == 1) {
 			drawEnd(g);
