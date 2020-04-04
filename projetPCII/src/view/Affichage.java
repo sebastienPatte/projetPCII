@@ -112,7 +112,7 @@ public class Affichage extends JPanel{
 			//on met les lignes en pointillé
 			float dash[] = {20.0f,10.f};
 			g.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f));
-			
+			//affiche separation voie gauche
 			g.drawLine(
 					t1[0].x-posX+decPespectiveT1+(largPiste1 * 1/3),
 					t1[0].y,
@@ -139,6 +139,8 @@ public class Affichage extends JPanel{
 					t2[0].y
 			);
 			}
+			
+			drawObstacles(largPiste1, i, g);
 			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
@@ -193,33 +195,24 @@ public class Affichage extends JPanel{
 	}
 	*/
 	
-	private void drawObstacles(Graphics g) {
+	private void drawObstacles(int largPisteAff, int i, Graphics g) {
+		int cpt = 0;
 		for(Obstacle o : etat.getObstacles()) {
 			Rectangle bounds = o.getBounds();
-			try {
-				/*
-				int newWidth  = (int) ( (HAUT - (bounds.y - etat.getPosY()) ) * (factRetrecissement) );
-				int newHeight = (int) ( (HAUT - (bounds.y - etat.getPosY()) ) * (factRetrecissement) );
-				System.out.println("w = "+newWidth+" h = "+newHeight);
-				Image image = ImageIO.read(new File(PATH)).getScaledInstance(newWidth, newHeight, 100);
-				*/
-
-				int y = (bounds.y - etat.getPosY());
-				int x = 0;
-				if(bounds.x < 0) {
-					x = (int)(bounds.x + y*factRetrecissement);
-				}else {
-					x = (int)(bounds.x - y*factRetrecissement);
-				}
-				Image image = ImageIO.read(new File(PATH));
-				g.drawImage(image, LARG/2+x-etat.getPosX(), HAUT - y, null);
+			System.out.println((etat.getPiste()[i][0].y)+" == "+o.getY()+" cpt = "+cpt);
+			if(etat.getPiste()[i][0].y == o.getY() ) {	
+				try {
+					int x = (int) (((double)(bounds.x) / Piste.largeurPiste)*largPisteAff);
 				
-			}
-				 
-				catch (IOException e) {
-				e.printStackTrace();
-				 
-			}
+				//	System.out.println(x+" "+y+" "+cpt+" | "+bounds.x+" "+bounds.y);
+					Image image = ImageIO.read(new File(PATH));
+					g.drawImage(image, LARG/2+x-etat.getPosX(), o.getY() , null);
+				
+				}catch (IOException e) {
+					e.printStackTrace(); 
+				}
+			}	
+			cpt++;
 		}
 	}
 	
@@ -254,7 +247,6 @@ public class Affichage extends JPanel{
 		drawMontagne(g);
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
-		drawObstacles(g);
 		// si on a perdu on affiche game over
 		if(etat.getFin() == 1) {
 			drawEnd(g);

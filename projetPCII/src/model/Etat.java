@@ -16,9 +16,8 @@ public class Etat {
 	 */
 	public static int FACT_ACCEL = Piste.largeurPiste/6;
 	public static int ACCEL_MAX = 101;
-	public static int probaObstacle = 100;
 	private Piste piste;
-	private ArrayList<Obstacle> obstacles;
+	
 	
 	/**
 	 * position x du joueur
@@ -53,7 +52,7 @@ public class Etat {
 		this.vitesse =  vitesseMax;
 		this.montagne = new Montagne(this);
 		this.etatMoto = 1;
-		this.obstacles = new ArrayList<Obstacle>();
+		
 	}
 	
 	public Point[][] getPiste(){
@@ -250,20 +249,10 @@ public class Etat {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
-	private void updateObstacles() {
-		//on retire le premier obstacle (le plus ancien) tant qu'il est en dehors du champ de vision
-		while(obstacles.size() > 0 && obstacles.get(0).getY() - piste.getPosY()  < 0) {
-			obstacles.remove(0);
-		}
-		if(randint(0,probaObstacle)==0) {
-			obstacles.add(new Obstacle(piste.getPosY()));
-		}
-		System.out.println(obstacles.size()+" obstacles");
-	}
+	
 	
 	public ArrayList<Obstacle> getObstacles() {
-		updateObstacles();
-		return this.obstacles;
+		return piste.getObstacles();
 	}
 	
 }

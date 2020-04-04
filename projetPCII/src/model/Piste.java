@@ -18,6 +18,7 @@ public class Piste {
 	 * (position X du point aléatoire) 
 	 */
 	public static int dec = 20;
+	public static int probaObstacle = 1000;
 	/**
 	 * liste des points de la ligne du bord gauche de la piste
 	 * (pas besoin d'avoir les 2 bords car on a {@link #largeurPiste})
@@ -27,12 +28,13 @@ public class Piste {
 	 * position Y du joueur (nombre de pixels pacourus)
 	 */
 	private int posY;
-
+	private ArrayList<Obstacle> obstacles;
 	
 	
 	public Piste() {
 		this.points = new ArrayList<Point>();
 		this.posY = 0;
+		this.obstacles = new ArrayList<Obstacle>();
 		initPoints();
 	}
 	
@@ -59,6 +61,7 @@ public class Piste {
 		this.points.add(new Point(midX,midY));
 		*/
 		this.points.add(new Point(x,y));
+		//NOUVEL OBSTACLE si proba et nbObs < nbObsMax
 	}
 	
 	/**
@@ -117,6 +120,22 @@ public class Piste {
 			return Affichage.LARG/2;
 		}
 			
+	}
+	
+	private void updateObstacles() {
+		//on retire le premier obstacle (le plus ancien) tant qu'il est en dehors du champ de vision
+		while(obstacles.size() > 0 && obstacles.get(0).getY() > Affichage.HAUT) {
+			obstacles.remove(0);
+		}
+		if(randint(0,probaObstacle)==0) {
+			//la position y de l'obstacle est posY du dernier point de la piste (négatif, le point le plus en haut au dessus de la fenetre)
+			obstacles.add(new Obstacle(this, points.get(points.size()-1).y));
+		}
+	}
+	
+	public ArrayList<Obstacle> getObstacles() {
+		updateObstacles();
+		return this.obstacles;
 	}
 
 	/** Génère un chiffre aléatoire entre min et max
