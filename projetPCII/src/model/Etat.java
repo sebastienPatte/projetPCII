@@ -48,6 +48,9 @@ public class Etat {
 	 */
 	private int etatMoto;
 	
+	/**
+	 * Constructor
+	 */
 	public Etat() {
 		this.leftPressed = false;
 		this.rightPressed = false;
@@ -61,35 +64,9 @@ public class Etat {
 	}
 	
 	
-	
 	/**
-	 * Met à jour la vitesse par rapport à l'accélération
+	 * on ajoute du temps quand la moto atteint un checkpoint
 	 */
-	public void updateVitesse() {
-		//this.vitesse = getAccel()/100*vitesse;
-		
-		double newV = getAccel()/100*vitesse;
-		
-		if(newV<vitesseMax) {
-			this.vitesse=newV;
-		}else {
-			this.vitesse = vitesseMax;
-		}
-		
-		
-	}
-	
-	
-	/**
-	 * Avance {@link Piste#posY} en fonction de {@link #vitesse}
-	 */
-	public void avance() {
-		/* 0 <= accel/100 <= 1
-		 * quand accel est Ã  100 on avance de vitesseMax
-		 */
-		piste.avance(Math.round((float)getVitesse()));
-	}
-	
 	public void testCheckpoint() {
 		//calcul indice checkpoint sur la piste
 		int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
@@ -110,6 +87,33 @@ public class Etat {
 	}
 	
 	/**
+	 * lance le game over, vitesse et accel à 0
+	 */
+	public void gameOver() {
+		this.vitesse = 0;
+		this.accel = 0;
+		this.fin = 1;
+	}
+	// Avancement de la moto sur la piste ---------------------------------------------------------------------------------
+	
+	/**
+	 * Met à jour la vitesse par rapport à l'accélération
+	 */
+	public void updateVitesse() {
+		//this.vitesse = getAccel()/100*vitesse;
+		
+		double newV = getAccel()/100*vitesse;
+		
+		if(newV<vitesseMax) {
+			this.vitesse=newV;
+		}else {
+			this.vitesse = vitesseMax;
+		}
+		
+		
+	}
+	
+	/**
 	 * on réduit {@link #accel} si on s'écarte du centre de la fenetre
 	 * et on l'augmente sinon
 	 */
@@ -126,21 +130,18 @@ public class Etat {
 		System.out.println("accel = "+accel+" away = "+away);
 	}
 	
-	public int getMidPiste(int i) {
-		return this.piste.getMidX(i);
-	}
-	
 	/**
-	 * lance le game over, vitesse et accel à 0
+	 * Avance {@link Piste#posY} en fonction de {@link #vitesse}
 	 */
-	public void gameOver() {
-		this.vitesse = 0;
-		this.accel = 0;
-		this.fin = 1;
+	public void avance() {
+		/* 0 <= accel/100 <= 1
+		 * quand accel est Ã  100 on avance de vitesseMax
+		 */
+		piste.avance(Math.round((float)getVitesse()));
 	}
 	
 	
-	
+	// Gestion des déplacements de la moto (sur les cotés) ----------------------------------------------------------
 	
 	public void pressLeft(boolean b) {
 		this.leftPressed = b;
@@ -172,12 +173,10 @@ public class Etat {
 	public void goStraight() {
 		this.etatMoto = 1;
 	}
-
-	
-	
 	
 	/**
-	 * met à jour l'état de la moto et déplace la moto vers la gauche où la droite en fonction des valeurs de {@link #leftPressed} et {@link #rightPressed}
+	 * met à jour l'état de la moto et déplace la moto vers la gauche où la droite 
+	 * en fonction des valeurs de {@link #leftPressed} et {@link #rightPressed}
 	 */
 	private void majEtatMoto() {
 		
@@ -327,6 +326,14 @@ public class Etat {
 	 */
 	public int getPosY() {
 		return piste.getPosY();
+	}
+	
+	/**
+	 * @param i
+	 * @return la position X du point au milieu de la piste au point de piste d'indice i
+	 */
+	public int getMidPiste(int i) {
+		return this.piste.getMidX(i);
 	}
 	
 	// Montagne, Checkpoint et Obstacles -------------------------------------------------------
