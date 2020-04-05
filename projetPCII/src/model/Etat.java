@@ -60,27 +60,7 @@ public class Etat {
 		this.etatMoto = 1;
 	}
 	
-	public Point[][] getPiste(){
-		return this.piste.getPiste();
-	}
 	
-	public int getLargPiste(int i) {
-		return piste.getLargPiste(i);
-	}
-	
-	/**
-	 * @return la position X du joueur {@link #posX}
-	 */
-	public int getPosX() {
-		return this.posX;
-	}
-	
-	/**
-	 * @return la position Y du joueur {@link Piste#posY}
-	 */
-	public int getPosY() {
-		return piste.getPosY();
-	}
 	
 	/**
 	 * Met à jour la vitesse par rapport à l'accélération
@@ -99,17 +79,6 @@ public class Etat {
 		
 	}
 	
-	
-	public double getVitesse() {
-		return this.vitesse;
-	}
-	
-	/**
-	 * @return true si on a perdu, false sinon
-	 */
-	public int getFin() {
-		return fin;
-	}
 	
 	/**
 	 * Avance {@link Piste#posY} en fonction de {@link #vitesse}
@@ -170,14 +139,7 @@ public class Etat {
 		this.fin = 1;
 	}
 	
-	/**
-	 * Met à jour puis renvoie accel
-	 * @return {@link #accel}
-	 */
-	public double getAccel() {
-		updateAccel();
-		return this.accel;
-	}
+	
 	
 	
 	public void pressLeft(boolean b) {
@@ -211,16 +173,7 @@ public class Etat {
 		this.etatMoto = 1;
 	}
 
-	/**
-	 * @return {@link #montagne}
-	 */
-	public ArrayList<Point> getMontagne(){
-		return montagne.getPointsVisibles();
-	}
 	
-	public Checkpoint getCheck(){
-		return this.check;
-	}
 	
 	
 	/**
@@ -250,25 +203,10 @@ public class Etat {
 		
 	}
 	
-	private Rectangle getMotoBounds() {
-		String str = VueMoto.PATH+etatMoto+".png";
-		try {
-			Image image = ImageIO.read(new File(str));
-			
-			
-			int height = image.getHeight(null);
-			int width = image.getWidth(null);
-			int x = posX;
-			
-			int y = getPosY();
-			return new Rectangle(x,y,width,height);
-			
-		}catch (IOException e) {
-			e.printStackTrace();
-			return new Rectangle(-1,-1,-1,-1);
-		}
-	}
-	
+	/**
+	 * @param g
+	 * @return true si la moto est en collision avec un obstacle, false sinon
+	 */
 	public boolean testCollision(Graphics g){
 		
 		for(Obstacle o : piste.getObstacles()) {
@@ -309,13 +247,109 @@ public class Etat {
 		return false;
 	}
 	
+	// GETTERS ###############################################################################
 	
+	
+	// ETAT -----------------------------------------------------------------------------------
+	/**
+	 * @return la position X du joueur {@link #posX}
+	 */
+	public int getPosX() {
+		return this.posX;
+	}
+	
+	public double getVitesse() {
+		return this.vitesse;
+	}
+	
+	/**
+	 * @return true si on a perdu, false sinon
+	 */
+	public int getFin() {
+		return fin;
+	}
+	
+	/**
+	 * Met à jour puis renvoie accel
+	 * @return {@link #accel}
+	 */
+	public double getAccel() {
+		updateAccel();
+		return this.accel;
+	}
+	// MOTO -----------------------------------------------------------------------------------
 	/**
 	 * @return {@link #etatMoto}
 	 */
 	public int getEtatMoto() {
 		majEtatMoto();
 		return this.etatMoto;
+	}
+	
+	private Rectangle getMotoBounds() {
+		String str = VueMoto.PATH+etatMoto+".png";
+		try {
+			Image image = ImageIO.read(new File(str));
+			
+			
+			int height = image.getHeight(null);
+			int width = image.getWidth(null);
+			int x = posX;
+			
+			int y = getPosY();
+			return new Rectangle(x,y,width,height);
+			
+		}catch (IOException e) {
+			e.printStackTrace();
+			return new Rectangle(-1,-1,-1,-1);
+		}
+	}
+	
+	// PISTE ---------------------------------------------------------------------------------
+	
+	/**
+	 * @return la piste avec perspective  
+	 */
+	public Point[][] getPiste(){
+		return this.piste.getPiste();
+	}
+	
+	/**
+	 * @param i
+	 * @return la largeur de la piste à son point i
+	 */
+	public int getLargPiste(int i) {
+		return piste.getLargPiste(i);
+	}
+		
+	/**
+	 * @return la position Y du joueur {@link Piste#posY}
+	 */
+	public int getPosY() {
+		return piste.getPosY();
+	}
+	
+	// Montagne, Checkpoint et Obstacles -------------------------------------------------------
+	
+	/**
+	 * @return {@link Montagne#getPointsVisibles()}
+	 */
+	public ArrayList<Point> getMontagne(){
+		return montagne.getPointsVisibles();
+	}
+	/**
+	 * @return {@link #check}
+	 */
+	public Checkpoint getCheck(){
+		return this.check;
+	}
+	
+	public ArrayList<Obstacle> getObstacles(Graphics g) {
+		if(testCollision(g)) {
+			gameOver();
+		}
+		
+		return piste.getObstacles();
 	}
 	
 	/** Génère un chiffre aléatoire entre min et max
@@ -327,14 +361,5 @@ public class Etat {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
-	
-	
-	public ArrayList<Obstacle> getObstacles(Graphics g) {
-		if(testCollision(g)) {
-			gameOver();
-		}
-		
-		return piste.getObstacles();
-	}
 	
 }
