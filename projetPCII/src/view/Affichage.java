@@ -25,7 +25,7 @@ public class Affichage extends JPanel{
 	private static final long serialVersionUID = 1L;
 	public static int LARG = 1400;
 	public static int HAUT = 800;
-	public static int posHorizon = 150;
+	public static int posHorizon = 200;
 	public static String PATH= "imgs/red.png";
 	
 	/*plus il est petit, plus la piste se rétrécit vers l'horizon
@@ -201,7 +201,7 @@ public class Affichage extends JPanel{
 					int width = (int)((double)(o.getBounds().width) / Piste.largeurPiste*largPisteAff);
 					int height =(int)((double)(o.getBounds().height) / Piste.largeurPiste*largPisteAff);
 					
-					Image image = ImageIO.read(new File(PATH)).getScaledInstance(width, height, 100);
+					Image image = ImageIO.read(new File(PATH)).getScaledInstance(width, height, Image.SCALE_SMOOTH);
 					g.drawImage(image, LARG/2+x-etat.getPosX(), o.getY() , null);
 				
 				}catch (IOException e) {

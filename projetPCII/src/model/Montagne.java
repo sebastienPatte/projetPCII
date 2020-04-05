@@ -19,7 +19,7 @@ public class Montagne {
 	/** 
 	 * limite le haut des montagnes à la moitiée de la partie au dessus de l'horizon
 	 */
-	public static int yMin = Affichage.posHorizon/2;
+	public static int yMin = Affichage.posHorizon/4;
 	
 	
 	public Montagne(Etat etat) {
@@ -59,7 +59,7 @@ public class Montagne {
 	 */
 	private void addPointGauche() {
 		int x = points.get(0).x - randint(ecartMin, ecartMax);
-		int y =  randint(0, Affichage.posHorizon);
+		int y =  randint(yMin, Affichage.posHorizon);
 		// ajout au début
 		points.add(0, new Point(x,y));
 	}
@@ -68,7 +68,7 @@ public class Montagne {
 	 */
 	private void addPointDroite() {
 		int x = points.get(points.size()-1).x + randint(ecartMin, ecartMax);
-		int y =  randint(0, Affichage.posHorizon);
+		int y =  randint(yMin, Affichage.posHorizon);
 		// ajout à la fin
 		points.add(new Point(x,y));
 	}
