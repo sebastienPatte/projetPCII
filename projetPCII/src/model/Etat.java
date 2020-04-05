@@ -8,9 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-
 import javax.imageio.ImageIO;
-
 import view.Affichage;
 import view.VueMoto;
 
@@ -63,7 +61,11 @@ public class Etat {
 	}
 	
 	public Point[][] getPiste(){
-		return this.piste.getLigne();
+		return this.piste.getPiste();
+	}
+	
+	public int getLargPiste(int i) {
+		return piste.getLargPiste(i);
 	}
 	
 	/**
@@ -120,11 +122,20 @@ public class Etat {
 	}
 	
 	public void testCheckpoint() {
-		double[] Xcheck = check.getPosX();
-		int x1 = this.getPiste()[1][0].x;
-		int x2 = this.getPiste()[1][1].x;
+		//calcul indice checkpoint sur la piste
+		int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
 		
-		if(posX+Affichage.LARG/2 >= x1+Xcheck[0]*Piste.largeurPiste && posX+Affichage.LARG/2 <= x2+Xcheck[1]*Piste.largeurPiste) {
+		// on récupère x1 et x2 du checkpoint
+		double[] Xcheck = check.getPosX(i);
+		int cX1 = this.getPiste()[i][0].x + (int)Xcheck[0];
+		int cX2 = this.getPiste()[i][1].x + (int)Xcheck[1];
+		// on récupère x1 et x2 de la Moto
+		Rectangle mBounds = getMotoBounds();
+		int mX1 = mBounds.x + Affichage.LARG/2;
+		int mX2 = mBounds.x + mBounds.width + Affichage.LARG/2;
+		//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on gagne du temps
+		if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
+			System.out.println("ADD TIME !!!!!!!!!!!!(ce serait bien de faire un bon affichage au lieu de faire des milliers de prints)");
 			check.addTime();
 		}
 	}

@@ -15,9 +15,11 @@ public class Checkpoint {
 	private int posY;
 	private int time;
 	private Clock clock;
+	private Etat etat;
 	
 	public Checkpoint(Etat etat) {
 		this.time = 50;
+		this.etat = etat;
 		this.clock = new Clock(time,etat);
 		this.voie = 0;
 		this.posY = 0;
@@ -38,8 +40,10 @@ public class Checkpoint {
 		return this.posY;
 	}
 	
-	public double[] getPosX() {
+	public double[] getPosX(int i) {
 		double[] res = new double[2];
+		int largPiste = etat.getLargPiste(i);
+		
 		if(voie==0) {
 			res[0] = 0;
 			res[1] = -2./3;
@@ -52,6 +56,10 @@ public class Checkpoint {
 				res[1] = 0;
 			}
 		}
+		
+		res[0] *= largPiste;
+		res[1] *= largPiste;
+		
 		return res;
 	}
 

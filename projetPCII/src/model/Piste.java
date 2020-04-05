@@ -8,6 +8,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import view.Affichage;
 
 public class Piste {
+	/*plus il est petit, plus la piste se rétrécit vers l'horizon
+	 * mais si il est trop petit, les bords de la piste peuvent se croiser
+	 */
+	public static double factRetrecissement = 1/2.5;
+	
 	public static int largeurPiste = 600;
 	/**
 	 * décalage en hauteur entre chaque point de la piste
@@ -82,7 +87,7 @@ public class Piste {
 	
 	
 	/**
-	 * @return la piste sous forme de double tableau contenant les 2 ligne brisées des bords de la piste 
+	 * @return la piste sous forme de double tableau contenant les 2 ligne brisées des bords de la piste (sans perspective) 
 	 */
 	public Point[][] getLigne(){
 		//System.out.println("pixels parcourus : "+posY);
@@ -95,6 +100,38 @@ public class Piste {
 			res[i][1]= new Point(p.x+largeurPiste, p.y + posY);
 		}
 		return res;
+	}
+	
+	public Point[][] getPiste(){
+		// on récupère la piste sans perspective
+		Point[][] piste = getLigne();
+		
+		for(int i=0; i<piste.length; i++) {
+			Point[] p = piste[i];
+			
+			int decPespectiveT1 = (int)((Affichage.HAUT - p[0].y)*factRetrecissement);
+			
+			//décalage perspective bord piste gauche
+			piste[i][0] = new Point(p[0].x+decPespectiveT1, p[0].y);
+			
+			//décalage perspective bord piste droite
+			piste[i][1] = new Point(p[1].x-decPespectiveT1, p[1].y);
+			
+			//int largPiste = (p[1].x-decPespectiveT1) - (p[0].x+decPespectiveT1);
+		}
+		return piste;
+	}
+	
+	/**
+	 * @param i l'indice du point de la piste
+	 * @return la largeur de la piste à ce point de la piste
+	 */
+	public int getLargPiste(int i) {
+		// on récupère la piste avec perspective
+		Point[][] piste = getPiste();
+		Point[] p = piste[i];
+		// pointDeDroite.x - pointDeGauche.x
+		return (p[1].x - p[0].x);
 	}
 	
 	/**

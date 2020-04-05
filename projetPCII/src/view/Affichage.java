@@ -27,11 +27,7 @@ public class Affichage extends JPanel{
 	public static int HAUT = 800;
 	public static int posHorizon = 200;
 	public static String PATH= "imgs/red.png";
-	
-	/*plus il est petit, plus la piste se rétrécit vers l'horizon
-	 * mais si il est trop petit, les bords de la piste peuvent se croiser
-	 */
-	public static double factRetrecissement = 1/2.5; 
+	 
 	
 	
 	private Etat etat;
@@ -86,27 +82,24 @@ public class Affichage extends JPanel{
 			Point[] t1 = piste[i];
 			Point[] t2 = piste[i+1];
 			
-			//on rétrécit la piste seulement à l'affichage
-			int decPespectiveT1 = (int)((Affichage.HAUT - t1[0].y)*factRetrecissement);
-			int decPespectiveT2 = (int)((Affichage.HAUT - t2[0].y)*factRetrecissement);
 			//affiche bord piste gauche
 			g.drawLine(
-					t1[0].x-posX+decPespectiveT1,
+					t1[0].x-posX,
 					t1[0].y,
-					t2[0].x-posX+decPespectiveT2,
+					t2[0].x-posX,
 					t2[0].y
 			);
 			//affiche bord piste droite
 			g.drawLine(
-					t1[1].x-posX-decPespectiveT1,
+					t1[1].x-posX,
 					t1[1].y,
-					t2[1].x-posX-decPespectiveT2,
+					t2[1].x-posX,
 					t2[1].y
 		
 			);
 			
-			int largPiste1 = (t1[1].x-posX-decPespectiveT1) - (t1[0].x-posX+decPespectiveT1);
-			int largPiste2 = (t2[1].x-posX-decPespectiveT2) - (t2[0].x-posX+decPespectiveT2);
+			int largPiste1 = etat.getLargPiste(i);
+			int largPiste2 = etat.getLargPiste(i+1);
 			//affiche separation voie gauche
 			
 			//on met les lignes en pointillé
@@ -114,16 +107,16 @@ public class Affichage extends JPanel{
 			g.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f));
 			//affiche separation voie gauche
 			g.drawLine(
-					t1[0].x-posX+decPespectiveT1+(largPiste1 * 1/3),
+					t1[0].x-posX+(largPiste1 * 1/3),
 					t1[0].y,
-					t2[0].x-posX+decPespectiveT2+(largPiste2 * 1/3),
+					t2[0].x-posX+(largPiste2 * 1/3),
 					t2[0].y
 			);
 			//affiche separation voie droite
 			g.drawLine(
-					t1[1].x-posX-decPespectiveT1-(largPiste1 * 1/3),
+					t1[1].x-posX-(largPiste1 * 1/3),
 					t1[1].y,
-					t2[1].x-posX-decPespectiveT2-(largPiste2 * 1/3),
+					t2[1].x-posX-(largPiste2 * 1/3),
 					t2[1].y
 			);
 			
@@ -145,25 +138,23 @@ public class Affichage extends JPanel{
 			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
-			//si on est sur l'indice du checkpoint, on le dessine
+			//si t1 est sur l'indice du checkpoint, on le dessine
 			if(indice==i) {
 				
+				//on récupère valeur entière du décalage des positions x1 x2 du checkpoint pour l'afficher sur la bonne voie
 				int[] decCheck = new int[2]; 
-				decCheck[0] = (int) (check.getPosX()[0] * largPiste1);
-				decCheck[1] = (int)( check.getPosX()[1] * largPiste1);
-				
-				
+				decCheck[0] = (int) (check.getPosX(i)[0]);
+				decCheck[1] = (int) (check.getPosX(i)[1]);
 				
 				g.setColor(Color.BLUE);
 				g.drawLine(
-						t1[0].x-posX+decPespectiveT1+decCheck[0],
+						t1[0].x-posX+decCheck[0],
 						t1[0].y,
-						t1[1].x-posX-decPespectiveT1+decCheck[1],
+						t1[1].x-posX+decCheck[1],
 						t1[1].y
 				);
 				g.setColor(Color.BLACK);
 			}
-			
 		}
 	}
 	
