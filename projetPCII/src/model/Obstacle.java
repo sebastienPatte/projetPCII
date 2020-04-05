@@ -20,9 +20,7 @@ public class Obstacle {
 		this.height = randint(50, 100);
 	}
 	
-	public int getX() {
-		return this.x;
-	}
+	
 	
 	public int getY() {
 		return this.y+piste.getPosY();
@@ -31,7 +29,20 @@ public class Obstacle {
 	
 	
 	public Rectangle getBounds() {
-		return new Rectangle(x, getY(), width, height);
+		if(getY()>Affichage.posHorizon) {	
+			
+			//calcul largPiste à l'endroit du checkpoint
+			int largPiste = piste.getLargPisteEnY(getY());
+			//System.out.println(largPiste);
+			int newX      = (int) ((double)(x) / Piste.largeurPiste*largPiste);
+			int newWidth  = (int) ((double)(width) / Piste.largeurPiste*largPiste);
+			int newHeight = (int) ((double)(height) / Piste.largeurPiste*largPiste);
+			
+			return new Rectangle(newX, getY(), newWidth, newHeight);
+		}else {
+			return new Rectangle(x, getY(), width, height);
+		}
+		
 	}
 	
 	/** Génère un chiffre aléatoire entre min et max

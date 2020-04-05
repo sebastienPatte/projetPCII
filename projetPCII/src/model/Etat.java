@@ -234,9 +234,7 @@ public class Etat {
 			if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height && oBounds.y <= Affichage.HAUT - motoBounds.height) {
 				//si l'obstacle arrive à la position y de la moto
 				
-				g.drawRect(Affichage.LARG/2-posX+oBounds.x,oBounds.y,oBounds.width,oBounds.height);
-				
-				if(oBounds.x <= motoBounds.x  + motoBounds.width &&  oBounds.x >= motoBounds.x) {
+				if(oBounds.x <= motoBounds.x + motoBounds.width &&  oBounds.x >= motoBounds.x) {
 					//et que l'obstacle chevauche la moto par la droite
 					//
 					int x1M = motoBounds.x;

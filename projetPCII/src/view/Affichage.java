@@ -186,13 +186,9 @@ public class Affichage extends JPanel{
 			Rectangle bounds = o.getBounds();
 			if(etat.getPiste()[i][0].y == o.getY() ) {	
 				try {
-					int x = (int) (((double)(bounds.x) / Piste.largeurPiste)*largPisteAff);
 					
-					int width = (int)((double)(o.getBounds().width) / Piste.largeurPiste*largPisteAff);
-					int height =(int)((double)(o.getBounds().height) / Piste.largeurPiste*largPisteAff);
-					
-					Image image = ImageIO.read(new File(PATH)).getScaledInstance(width, height, Image.SCALE_SMOOTH);
-					g.drawImage(image, LARG/2+x-etat.getPosX(), o.getY() , null);
+					Image image = ImageIO.read(new File(PATH)).getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
+					g.drawImage(image, LARG/2+bounds.x-etat.getPosX(), o.getY() , null);
 				
 				}catch (IOException e) {
 					e.printStackTrace(); 

@@ -23,7 +23,7 @@ public class Piste {
 	 * (position X du point aléatoire) 
 	 */
 	public static int dec = 20;
-	public static int probaObstacle = 1000;
+	public static int probaObstacle = 100;
 	/**
 	 * liste des points de la ligne du bord gauche de la piste
 	 * (pas besoin d'avoir les 2 bords car on a {@link #largeurPiste})
@@ -132,6 +132,18 @@ public class Piste {
 		Point[] p = piste[i];
 		// pointDeDroite.x - pointDeGauche.x
 		return (p[1].x - p[0].x);
+	}
+	
+	/**
+	 * @param y la posY d'un point
+	 * @return la largeur de la piste à ce point de la piste
+	 */
+	public int getLargPisteEnY(int y) {
+		for(Point[] pts : getPiste()) {
+			if(pts[0].y == y)return pts[1].x - pts[0].x;
+		}
+		System.err.println("Erreur : appel de getLargPisteEnY avec un y invalide !!! "+y);
+		return -1;
 	}
 	
 	/**
