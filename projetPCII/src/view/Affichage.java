@@ -191,7 +191,7 @@ public class Affichage extends JPanel{
 	
 	private void drawObstacles(int largPisteAff, int i, Graphics g) {
 		int cpt = 0;
-		for(Obstacle o : etat.getObstacles()) {
+		for(Obstacle o : etat.getObstacles(g)) {
 			Rectangle bounds = o.getBounds();
 			if(etat.getPiste()[i][0].y == o.getY() ) {	
 				try {

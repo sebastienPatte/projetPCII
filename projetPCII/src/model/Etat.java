@@ -243,10 +243,13 @@ public class Etat {
 		String str = VueMoto.PATH+etatMoto+".png";
 		try {
 			Image image = ImageIO.read(new File(str));
-			int x = posX;
-			int y = getPosY();
+			
+			
 			int height = image.getHeight(null);
 			int width = image.getWidth(null);
+			int x = posX;
+			
+			int y = getPosY();
 			return new Rectangle(x,y,width,height);
 			
 		}catch (IOException e) {
@@ -255,19 +258,37 @@ public class Etat {
 		}
 	}
 	
-	public boolean testCollision() {
+	public boolean testCollision(Graphics g){
 		
 		for(Obstacle o : piste.getObstacles()) {
 			Rectangle oBounds = o.getBounds();
 			Rectangle motoBounds = getMotoBounds();
-			if(oBounds.y+oBounds.height >= Affichage.HAUT - (motoBounds.height+VueMoto.decBord) && oBounds.y <= Affichage.HAUT - motoBounds.height) {
+			g.drawRect( Affichage.LARG/2 , Affichage.HAUT - motoBounds.height - VueMoto.decBord, motoBounds.width, motoBounds.height);
+			if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height && oBounds.y <= Affichage.HAUT - motoBounds.height) {
 				//si l'obstacle arrive à la position y de la moto
-				if(oBounds.x <= motoBounds.x + motoBounds.width &&  oBounds.x >= motoBounds.x) {
-					System.out.println("collision "+motoBounds.x+" "+oBounds.x);
+				
+				g.drawRect(Affichage.LARG/2-posX+oBounds.x,oBounds.y,oBounds.width,oBounds.height);
+				
+				if(oBounds.x <= motoBounds.x  + motoBounds.width &&  oBounds.x >= motoBounds.x) {
+					//et que l'obstacle chevauche la moto par la droite
+					//
+					int x1M = motoBounds.x;
+					int x2M = motoBounds.x+motoBounds.width;
+					int x1O = oBounds.x;
+					int x2O = x1O+oBounds.width;
+					System.out.println("collision x1m "+x1M+"="+posX+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
+					//
 					return true;
 				}else {
-					if(motoBounds.x <= oBounds.x + oBounds.width && motoBounds.x >= oBounds.x) {
-						System.out.println("collision "+motoBounds.x+" "+oBounds.x);
+					if(motoBounds.x  <= oBounds.x + oBounds.width && motoBounds.x  >= oBounds.x) {
+						//et que l'obstacle chevauche la moto par la gauche
+						//
+						int x1M = motoBounds.x;
+						int x2M = x1M+motoBounds.width;
+						int x1O = oBounds.x;
+						int x2O = x1O+oBounds.width;
+						System.out.println("collision x1m "+x1M+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
+						//
 						return true;
 					}
 				}
@@ -297,8 +318,8 @@ public class Etat {
 	
 	
 	
-	public ArrayList<Obstacle> getObstacles() {
-		if(testCollision()) {
+	public ArrayList<Obstacle> getObstacles(Graphics g) {
+		if(testCollision(g)) {
 			gameOver();
 		}
 		
