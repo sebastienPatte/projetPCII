@@ -13,6 +13,4 @@ public class VueObstacles {
 	public VueObstacles(Etat etat) {
 		this.etat = etat;
 	}
-	
-	
 }

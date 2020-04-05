@@ -140,6 +140,7 @@ public class Affichage extends JPanel{
 			);
 			}
 			
+			//on affiche un obstacle si il y en a un à ce point de la piste
 			drawObstacles(largPiste1, i, g);
 			
 			//calcul indice checkpoint sur la piste
@@ -186,14 +187,7 @@ public class Affichage extends JPanel{
 		}
 	}
 	
-	/*
-	private void drawObstacles(Graphics g) {
-		for(Obstacle o : etat.getObstacles()) {
-			Rectangle bounds = o.getBounds();
-			g.drawRect(bounds.x-etat.getPosX(), Affichage.HAUT - (bounds.y - etat.getPosY()), bounds.width, bounds.height);
-		}
-	}
-	*/
+	
 	
 	private void drawObstacles(int largPisteAff, int i, Graphics g) {
 		int cpt = 0;
@@ -203,9 +197,11 @@ public class Affichage extends JPanel{
 			if(etat.getPiste()[i][0].y == o.getY() ) {	
 				try {
 					int x = (int) (((double)(bounds.x) / Piste.largeurPiste)*largPisteAff);
-				
-				//	System.out.println(x+" "+y+" "+cpt+" | "+bounds.x+" "+bounds.y);
-					Image image = ImageIO.read(new File(PATH));
+					
+					int width = (int)((double)(o.getBounds().width) / Piste.largeurPiste*largPisteAff);
+					int height =(int)((double)(o.getBounds().height) / Piste.largeurPiste*largPisteAff);
+					
+					Image image = ImageIO.read(new File(PATH)).getScaledInstance(width, height, 100);
 					g.drawImage(image, LARG/2+x-etat.getPosX(), o.getY() , null);
 				
 				}catch (IOException e) {

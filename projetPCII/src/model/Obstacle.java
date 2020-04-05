@@ -16,8 +16,8 @@ public class Obstacle {
 		this.piste = piste;
 		this.x = randint(-Piste.largeurPiste/2,+Piste.largeurPiste/2);
 		this.y =  y ;
-		this.width = randint(20, 50);
-		this.height = randint(20, 50);
+		this.width = randint(50, 100);
+		this.height = randint(50, 100);
 	}
 	
 	public int getX() {
@@ -31,7 +31,7 @@ public class Obstacle {
 	
 	
 	public Rectangle getBounds() {
-		return new Rectangle(x, y, width, height);
+		return new Rectangle(x, getY(), width, height);
 	}
 	
 	/** Génère un chiffre aléatoire entre min et max
