@@ -193,7 +193,6 @@ public class Affichage extends JPanel{
 		int cpt = 0;
 		for(Obstacle o : etat.getObstacles()) {
 			Rectangle bounds = o.getBounds();
-			System.out.println((etat.getPiste()[i][0].y)+" == "+o.getY()+" cpt = "+cpt);
 			if(etat.getPiste()[i][0].y == o.getY() ) {	
 				try {
 					int x = (int) (((double)(bounds.x) / Piste.largeurPiste)*largPisteAff);
@@ -228,10 +227,12 @@ public class Affichage extends JPanel{
 		this.moto.drawMoto(g);
 		
 		//si on a dépassé le checkpoint
+		
 		if(etat.getPosY()+moto.getHeight() >=  check.getPosY()) {
 			etat.testCheckpoint();
 			check.nextCheckpoint();
 		}
+		
 		
 		//dessine horizon
 		drawHorizon(g);

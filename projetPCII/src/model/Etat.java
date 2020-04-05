@@ -1,10 +1,18 @@
 package model;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+
+import javax.imageio.ImageIO;
+
 import view.Affichage;
+import view.VueMoto;
 
 public class Etat {
 	
@@ -52,7 +60,6 @@ public class Etat {
 		this.vitesse =  vitesseMax;
 		this.montagne = new Montagne(this);
 		this.etatMoto = 1;
-		
 	}
 	
 	public Point[][] getPiste(){
@@ -232,6 +239,45 @@ public class Etat {
 		
 	}
 	
+	private Rectangle getMotoBounds() {
+		String str = VueMoto.PATH+etatMoto+".png";
+		try {
+			Image image = ImageIO.read(new File(str));
+			int x = posX;
+			int y = getPosY();
+			int height = image.getHeight(null);
+			int width = image.getWidth(null);
+			return new Rectangle(x,y,width,height);
+			
+		}catch (IOException e) {
+			e.printStackTrace();
+			return new Rectangle(-1,-1,-1,-1);
+		}
+	}
+	
+	public boolean testCollision() {
+		
+		for(Obstacle o : piste.getObstacles()) {
+			Rectangle oBounds = o.getBounds();
+			Rectangle motoBounds = getMotoBounds();
+			if(oBounds.y+oBounds.height >= Affichage.HAUT - (motoBounds.height+VueMoto.decBord) && oBounds.y <= Affichage.HAUT - motoBounds.height) {
+				//si l'obstacle arrive à la position y de la moto
+				if(oBounds.x <= motoBounds.x + motoBounds.width &&  oBounds.x >= motoBounds.x) {
+					System.out.println("collision "+motoBounds.x+" "+oBounds.x);
+					return true;
+				}else {
+					if(motoBounds.x <= oBounds.x + oBounds.width && motoBounds.x >= oBounds.x) {
+						System.out.println("collision "+motoBounds.x+" "+oBounds.x);
+						return true;
+					}
+				}
+				
+			}
+		}
+		return false;
+	}
+	
+	
 	/**
 	 * @return {@link #etatMoto}
 	 */
@@ -252,6 +298,10 @@ public class Etat {
 	
 	
 	public ArrayList<Obstacle> getObstacles() {
+		if(testCollision()) {
+			gameOver();
+		}
+		
 		return piste.getObstacles();
 	}
 	
