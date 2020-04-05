@@ -23,7 +23,7 @@ public class Piste {
 	 * (position X du point aléatoire) 
 	 */
 	public static int dec = 20;
-	public static int probaObstacle = 100;
+	public static int probaObstacle = 1000;
 	/**
 	 * liste des points de la ligne du bord gauche de la piste
 	 * (pas besoin d'avoir les 2 bords car on a {@link #largeurPiste})
@@ -173,7 +173,7 @@ public class Piste {
 	
 	private void updateObstacles() {
 		//on retire le premier obstacle (le plus ancien) tant qu'il est en dehors du champ de vision
-		while(obstacles.size() > 0 && obstacles.get(0).getY() > Affichage.HAUT) {
+		while(obstacles.size() > 0 && obstacles.get(0).getY() >= Affichage.HAUT) {
 			obstacles.remove(0);
 		}
 		if(randint(0,probaObstacle)==0) {

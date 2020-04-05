@@ -220,7 +220,7 @@ public class Etat {
 		}
 		
 	}
-	
+	// Collisions avec les obstacles -------------------------------------------------------------------------------------
 	/**
 	 * @param g
 	 * @return true si la moto est en collision avec un obstacle, false sinon
@@ -231,7 +231,7 @@ public class Etat {
 			Rectangle oBounds = o.getBounds();
 			Rectangle motoBounds = getMotoBounds();
 			g.drawRect( Affichage.LARG/2 , Affichage.HAUT - motoBounds.height - VueMoto.decBord, motoBounds.width, motoBounds.height);
-			if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height && oBounds.y <= Affichage.HAUT - motoBounds.height) {
+			if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - motoBounds.height - VueMoto.decBord) {
 				//si l'obstacle arrive à la position y de la moto
 				
 				if(oBounds.x <= motoBounds.x + motoBounds.width &&  oBounds.x >= motoBounds.x) {
@@ -243,7 +243,7 @@ public class Etat {
 					int x2O = x1O+oBounds.width;
 					System.out.println("collision x1m "+x1M+"="+posX+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
 					//
-					return true;
+					return false;
 				}else {
 					if(motoBounds.x  <= oBounds.x + oBounds.width && motoBounds.x  >= oBounds.x) {
 						//et que l'obstacle chevauche la moto par la gauche
@@ -254,7 +254,7 @@ public class Etat {
 						int x2O = x1O+oBounds.width;
 						System.out.println("collision x1m "+x1M+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
 						//
-						return true;
+						return false;
 					}
 				}
 				
