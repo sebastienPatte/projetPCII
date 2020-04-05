@@ -70,7 +70,7 @@ public class Etat {
 	public void testCheckpoint() {
 		Rectangle mBounds = getMotoBounds();
 		
-		if(mBounds.height + this.getPosY() >=  check.getPosY()) {
+		if(mBounds.height + this.getPosY() + VueMoto.decBord >=  check.getPosY()) {
 		//si le checkpoint a atteint le niveau de la moto
 			
 			//calcul indice checkpoint sur la piste
