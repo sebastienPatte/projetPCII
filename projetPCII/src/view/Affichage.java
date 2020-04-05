@@ -124,7 +124,9 @@ public class Affichage extends JPanel{
 			g.setStroke(new BasicStroke(1.0f));
 			
 			//affichage ligne milieu
-			if(i<=1) {
+			/*
+			 if(i<=1) {
+			 
 			g.drawLine(
 					etat.getMidPiste(1)-posX,
 					t1[0].y,
@@ -132,7 +134,7 @@ public class Affichage extends JPanel{
 					t2[0].y
 			);
 			}
-			
+			*/
 			//on affiche un obstacle si il y en a un à ce point de la piste
 			drawObstacles(largPiste1, i, g);
 			

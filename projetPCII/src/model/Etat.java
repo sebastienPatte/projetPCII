@@ -102,7 +102,6 @@ public class Etat {
 			check.nextCheckpoint();
 			System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
 		}
-		
 	}
 	
 	/**
