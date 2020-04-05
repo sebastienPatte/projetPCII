@@ -230,7 +230,7 @@ public class Etat {
 			Rectangle oBounds = o.getBounds();
 			Rectangle motoBounds = getMotoBounds();
 			g.drawRect( Affichage.LARG/2 , Affichage.HAUT - motoBounds.height - VueMoto.decBord, motoBounds.width, motoBounds.height);
-			if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - motoBounds.height - VueMoto.decBord) {
+			if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - motoBounds.height ) {
 				//si l'obstacle arrive à la position y de la moto
 				
 				if(oBounds.x <= motoBounds.x + motoBounds.width &&  oBounds.x >= motoBounds.x) {
