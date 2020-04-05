@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import control.Avancer;
 import control.Keys;
 import control.RepaintScreen;
+import control.TestCheckpoint;
 import control.Vitesse;
 import model.Etat;
 import view.Affichage;
@@ -19,6 +20,7 @@ public class Main {
 		(new RepaintScreen(aff)).start();
 		(new Avancer(mod)).start();
 		(new Vitesse(mod)).start();
+		(new TestCheckpoint(mod)).start();
 		/* Création JFrame*/
 		JFrame fenetre = new JFrame("");
 		/* ajout de l'Affichage(JPanel) à la fenêtre (JFrame)*/

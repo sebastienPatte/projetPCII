@@ -10,7 +10,7 @@ public class Checkpoint {
 	/**
 	 * nombre de points de la piste d'écart entre deux checkpoint
 	 */
-	public static int INCR = 3;
+	public static int INCR = 5;
 	private int voie;
 	private int posY;
 	private int time;
@@ -29,6 +29,7 @@ public class Checkpoint {
 	public void nextCheckpoint() {
 		this.voie = randint(0, VOIE_MAX);
 		this.posY += INCR*Piste.incr;
+		System.out.println("next CHECK | y = "+posY);
 	}
 	
 	public void addTime() {

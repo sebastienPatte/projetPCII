@@ -141,7 +141,7 @@ public class Affichage extends JPanel{
 			//si t1 est sur l'indice du checkpoint, on le dessine
 			if(indice==i) {
 				
-				//on récupère valeur entière du décalage des positions x1 x2 du checkpoint pour l'afficher sur la bonne voie
+				//on récupère le décalage des positions x1 x2 du checkpoint pour l'afficher sur la bonne voie
 				int[] decCheck = new int[2]; 
 				decCheck[0] = (int) (check.getPosX(i)[0]);
 				decCheck[1] = (int) (check.getPosX(i)[1]);
@@ -217,12 +217,7 @@ public class Affichage extends JPanel{
 		//dessine moto
 		this.moto.drawMoto(g);
 		
-		//si on a dépassé le checkpoint
 		
-		if(etat.getPosY()+moto.getHeight() >=  check.getPosY()) {
-			etat.testCheckpoint();
-			check.nextCheckpoint();
-		}
 		
 		
 		//dessine horizon

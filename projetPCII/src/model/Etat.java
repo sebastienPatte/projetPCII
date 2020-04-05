@@ -68,22 +68,41 @@ public class Etat {
 	 * on ajoute du temps quand la moto atteint un checkpoint
 	 */
 	public void testCheckpoint() {
-		//calcul indice checkpoint sur la piste
-		int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
-		
-		// on récupère x1 et x2 du checkpoint
-		double[] Xcheck = check.getPosX(i);
-		int cX1 = this.getPiste()[i][0].x + (int)Xcheck[0];
-		int cX2 = this.getPiste()[i][1].x + (int)Xcheck[1];
-		// on récupère x1 et x2 de la Moto
 		Rectangle mBounds = getMotoBounds();
-		int mX1 = mBounds.x + Affichage.LARG/2;
-		int mX2 = mBounds.x + mBounds.width + Affichage.LARG/2;
-		//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on gagne du temps
-		if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
-			System.out.println("ADD TIME !!!!!!!!!!!!(ce serait bien de faire un bon affichage au lieu de faire des milliers de prints)");
-			check.addTime();
+		
+		if(mBounds.height + this.getPosY() >=  check.getPosY()) {
+		//si le checkpoint a atteint le niveau de la moto
+			
+			//calcul indice checkpoint sur la piste
+			int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
+			
+			// on récupère x1 et x2 du checkpoint
+			double[] Xcheck = check.getPosX(i);
+			int cX1 = this.getPiste()[i][0].x + (int)Xcheck[0];
+			int cX2 = this.getPiste()[i][1].x + (int)Xcheck[1];
+
+			// on récupère x1 et x2 de la Moto
+			int mX1 = mBounds.x + Affichage.LARG/2;                
+			int mX2 = mBounds.x + mBounds.width + Affichage.LARG/2;
+			
+			if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
+				//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on gagne du temps
+				
+				System.out.println("ADD TIME !!!!!!!!!!!!(ce serait bien de faire un bon affichage au lieu de faire des milliers de prints)");
+				check.addTime();
+				// et on génère le prochain checkpoint
+				check.nextCheckpoint();
+			}else {
+				
+			}
 		}
+		if(check.getPosY() <= this.getPosY()  + VueMoto.decBord) {
+			//sinon si, le checkpoint est sorti de la fenètre alors on passe au suivant sans ajouter de temps
+			System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
+			check.nextCheckpoint();
+			System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
+		}
+		
 	}
 	
 	/**
@@ -355,7 +374,6 @@ public class Etat {
 		if(testCollision(g)) {
 			gameOver();
 		}
-		
 		return piste.getObstacles();
 	}
 	
