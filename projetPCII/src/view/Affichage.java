@@ -3,6 +3,7 @@ package view;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -34,6 +35,7 @@ public class Affichage extends JPanel{
 	private Checkpoint check;
 	private VueMoto moto;
 	private VueNuages nuages;
+	private model.Clock clock;
 	
 	public Affichage(Etat etat) {
 		this.setPreferredSize(new Dimension(LARG, HAUT));
@@ -41,6 +43,7 @@ public class Affichage extends JPanel{
 		this.moto = new VueMoto(etat);
 		this.nuages = new VueNuages();
 		this.check = etat.getCheck();
+		this.clock = check.getClock();
 	}
 	
 	public static void drawEnd(Graphics g) {
@@ -54,12 +57,28 @@ public class Affichage extends JPanel{
 	 * @param r
 	 */
 	public void drawClock(Graphics g, int x, int y, int r) {
-		if(check.getClock().getTempsRestant()>9){
-            g.drawString(""+check.getClock().getTempsRestant(), 24, 42);
+		//on change la police de l'affichage de la Clock
+		int prevFontSize = g.getFont().getSize();
+		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 25)); 
+		
+		int tempsRestant = this.clock.getTempsRestant();
+		if(tempsRestant > 9){
+            g.drawString(""+tempsRestant, 24, 42);
         }
         else{
-            g.drawString("0"+check.getClock().getTempsRestant(), 24, 42);
+            g.drawString("0"+tempsRestant, 24, 42);
         }
+		
+		//quand on gagne du temps on affiche en vert le temps gagné
+		int prevTime = this.clock.getPrevTime();
+		if(tempsRestant >= prevTime) {
+			g.setColor(Color.GREEN);
+			g.drawString("+"+this.clock.getTemps(),5 , 65);
+			g.setColor(Color.BLACK);
+		}
+		//on revient à l'ancienne police
+		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, prevFontSize));
+		
 	}
 	
 	/**

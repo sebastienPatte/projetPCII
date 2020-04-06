@@ -25,6 +25,11 @@ public class Clock extends JPanel{
 	private int tempsInit;
 	
 	/**
+	 * on sauvegarde le temps restant avant de l'actualiser
+	 */
+	private int prevTime;
+	
+	/**
 	 * Construction de l'horloge
 	 * @param x temps initiale en secondes
 	 */
@@ -34,8 +39,9 @@ public class Clock extends JPanel{
 		timer.start();
 		setOpaque(false);
 		setPreferredSize(new Dimension(72, 72));
-        this.setTempsRestant(x);
+        this.tempsRestant = x;
         this.setTemps(x);
+        this.prevTime = this.tempsRestant;
 	}
 	
 	public Timer getTimer() {
@@ -51,7 +57,8 @@ public class Clock extends JPanel{
     }
     
     public void setTempsRestant(int tempsRestant) {
-        this.tempsRestant = tempsRestant; 
+        this.prevTime = this.tempsRestant;
+    	this.tempsRestant = tempsRestant; 
     }
     
     public int getTemps() {
@@ -62,6 +69,10 @@ public class Clock extends JPanel{
         this.tempsInit = temps;
     }
 	
+    public int getPrevTime(){
+    	return this.prevTime;
+    }
+    
 	/**
 	 * demarrage du timer
 	 */
@@ -84,7 +95,7 @@ public class Clock extends JPanel{
         ActionListener action = new ActionListener (){
             public void actionPerformed (ActionEvent event){
                 if(tempsRestant>0){
-                    tempsRestant--;
+                    setTempsRestant(tempsRestant-1);
                 }
                 else{
                     timer.stop();

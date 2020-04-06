@@ -41,6 +41,10 @@ public class Checkpoint {
 		return this.posY;
 	}
 	
+	public int getTime() {
+		return this.time;
+	}
+	
 	public double[] getPosX(int i) {
 		double[] res = new double[2];
 		int largPiste = etat.getLargPiste(i);
