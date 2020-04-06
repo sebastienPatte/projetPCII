@@ -23,7 +23,7 @@ public class Piste {
 	 * (position X du point aléatoire) 
 	 */
 	public static int dec = 20;
-	public static int probaObstacle = 1000;
+	public static int probaObstacle = 50;
 	/**
 	 * liste des points de la ligne du bord gauche de la piste
 	 * (pas besoin d'avoir les 2 bords car on a {@link #largeurPiste})
@@ -35,8 +35,10 @@ public class Piste {
 	private int posY;
 	private ArrayList<Obstacle> obstacles;
 	
+	private Etat etat;
 	
-	public Piste() {
+	public Piste(Etat etat) {
+		this.etat = etat;
 		this.points = new ArrayList<Point>();
 		this.posY = 0;
 		this.obstacles = new ArrayList<Obstacle>();
@@ -117,7 +119,6 @@ public class Piste {
 			//décalage perspective bord piste droite
 			piste[i][1] = new Point(p[1].x-decPespectiveT1, p[1].y);
 			
-			//int largPiste = (p[1].x-decPespectiveT1) - (p[0].x+decPespectiveT1);
 		}
 		return piste;
 	}
@@ -140,9 +141,13 @@ public class Piste {
 	 */
 	public int getLargPisteEnY(int y) {
 		for(Point[] pts : getPiste()) {
-			if(pts[0].y == y)return pts[1].x - pts[0].x;
+			if(y <= pts[0].y && pts[0].y <= y)return pts[1].x - pts[0].x;
 		}
 		System.err.println("Erreur : appel de getLargPisteEnY avec un y invalide !!! "+y);
+		etat.gameOver();
+		for(Point[] pts : getPiste()) {
+			System.err.println(pts[0].y);
+		}
 		return -1;
 	}
 	

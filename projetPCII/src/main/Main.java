@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import control.Avancer;
 import control.Keys;
 import control.RepaintScreen;
+import control.StoppableThread;
 import control.TestCheckpoint;
 import control.Vitesse;
 import model.Etat;
@@ -17,10 +18,16 @@ public class Main {
 		Affichage aff = new Affichage(mod);
 		Keys kl = new Keys(mod);
 		
-		(new RepaintScreen(aff)).start();
-		(new Avancer(mod)).start();
-		(new Vitesse(mod)).start();
-		(new TestCheckpoint(mod)).start();
+		StoppableThread[] threads = { 
+			new RepaintScreen(aff),
+			new Avancer(mod),
+			new Vitesse(mod),
+			new TestCheckpoint(mod)
+		};
+		//démarre tout les theads
+		mod.setThreads(threads);
+		
+		
 		/* Création JFrame*/
 		JFrame fenetre = new JFrame("");
 		/* ajout de l'Affichage(JPanel) à la fenêtre (JFrame)*/

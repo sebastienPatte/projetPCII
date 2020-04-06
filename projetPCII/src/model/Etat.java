@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.imageio.ImageIO;
+
+import control.StoppableThread;
 import view.Affichage;
 import view.VueMoto;
 
@@ -47,6 +49,7 @@ public class Etat {
 	 * 2 : tourne Ã  droite
 	 */
 	private int etatMoto;
+	private StoppableThread[] threads;
 	
 	/**
 	 * Constructor
@@ -54,7 +57,7 @@ public class Etat {
 	public Etat() {
 		this.leftPressed = false;
 		this.rightPressed = false;
-		this.piste = new Piste();
+		this.piste = new Piste(this);
 		this.check = new Checkpoint(this);
 		this.posX = 0;
 		this.accel = 100.;
@@ -87,8 +90,6 @@ public class Etat {
 			
 			if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
 				//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on gagne du temps
-				
-				System.out.println("ADD TIME !!!!!!!!!!!!(ce serait bien de faire un bon affichage au lieu de faire des milliers de prints)");
 				check.addTime();
 				// et on génère le prochain checkpoint
 				check.nextCheckpoint();
@@ -106,12 +107,19 @@ public class Etat {
 	
 	/**
 	 * lance le game over, vitesse et accel à 0
+	 * et stoppe tout les threads
 	 */
 	public void gameOver() {
 		this.vitesse = 0;
 		this.accel = 0;
 		this.fin = 1;
+		
+		for(StoppableThread t : this.threads) {
+			t.terminate();
+		}
+		
 	}
+	
 	// Avancement de la moto sur la piste ---------------------------------------------------------------------------------
 	
 	/**
@@ -260,7 +268,7 @@ public class Etat {
 			}
 		}
 		return false;
-	}
+	}	
 	
 	// GETTERS ###############################################################################
 	
@@ -381,6 +389,15 @@ public class Etat {
 	 */
 	private int randint(int min, int max) {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
+	}
+
+	// SETTERS ###################################################################################
+	
+	public void setThreads(StoppableThread[] threads) {
+		this.threads= threads; 
+		for(StoppableThread t : threads) {
+			t.start();
+		}
 	}
 	
 	

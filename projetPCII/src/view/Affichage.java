@@ -61,6 +61,7 @@ public class Affichage extends JPanel{
 		int prevFontSize = g.getFont().getSize();
 		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 25)); 
 		
+		//affichage du timer en haut à gauche
 		int tempsRestant = this.clock.getTempsRestant();
 		if(tempsRestant > 9){
             g.drawString(""+tempsRestant, 24, 42);
@@ -154,8 +155,7 @@ public class Affichage extends JPanel{
 			);
 			}
 			*/
-			//on affiche un obstacle si il y en a un à ce point de la piste
-			drawObstacles(largPiste1, i, g);
+			
 			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
@@ -201,22 +201,31 @@ public class Affichage extends JPanel{
 	
 	
 	
-	private void drawObstacles(int largPisteAff, int i, Graphics g) {
-		int cpt = 0;
-		for(Obstacle o : etat.getObstacles(g)) {
-			Rectangle bounds = o.getBounds();
-			if(etat.getPiste()[i][0].y == o.getY() ) {	
-				try {
+	private void drawObstacles(Graphics g) {
+		for(int i = 0; i<etat.getPiste().length;i++) {
+
+			for(Obstacle o : etat.getObstacles(g)) {
+				Rectangle bounds = o.getBounds();
+				if(bounds.y > posHorizon && etat.getPiste()[i][0].y == o.getY() ) {	
+					try {
+						
+						Image image = ImageIO.read(new File(PATH)).getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
+						g.drawImage(image, LARG/2+bounds.x-etat.getPosX(), o.getY() , null);
 					
-					Image image = ImageIO.read(new File(PATH)).getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
-					g.drawImage(image, LARG/2+bounds.x-etat.getPosX(), o.getY() , null);
-				
-				}catch (IOException e) {
-					e.printStackTrace(); 
+					}catch (IOException e) {
+						e.printStackTrace(); 
+					}
 				}
-			}	
-			cpt++;
+			}
 		}
+	}
+	
+	private void drawScore(Graphics g) {
+		String strScore ="Score : "+ etat.getPosY();
+		   
+		FontMetrics fm = getFontMetrics(g.getFont());
+		int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord
+		g.drawString(strScore, LARG-printedLength, 20);
 	}
 	
 	@Override
@@ -226,17 +235,9 @@ public class Affichage extends JPanel{
 		drawPiste(g2d);
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affichage score
-		String strScore ="Score : "+ etat.getPosY();
-	   
-		FontMetrics fm = getFontMetrics(g.getFont());
-		int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord
-		g.drawString(strScore, LARG-printedLength, 20);
+		drawScore(g);
 		//dessine moto
 		this.moto.drawMoto(g);
-		
-		
-		
-		
 		//dessine horizon
 		drawHorizon(g);
 		//affiche la vitesse
@@ -247,6 +248,8 @@ public class Affichage extends JPanel{
 		drawMontagne(g);
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
+		//dessine obstacles
+		drawObstacles(g);
 		// si on a perdu on affiche game over
 		if(etat.getFin() == 1) {
 			drawEnd(g);

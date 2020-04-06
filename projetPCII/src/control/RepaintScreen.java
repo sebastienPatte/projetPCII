@@ -5,7 +5,7 @@ import view.Affichage;
 /**
  * Rafraichit l'affichage toutes les {@link #time} millisecondes
  */
-public class RepaintScreen extends Thread{
+public class RepaintScreen extends StoppableThread{
 	
 	/**
 	 * temps entre chaque rafraichissement de l'affichage 
@@ -14,7 +14,7 @@ public class RepaintScreen extends Thread{
 	/**
 	 * indique si le {@link Thread} tourne encore
 	 */
-	private boolean running;
+	private boolean running = true;
 	/**
 	 * instance de Affichage pour lancer le raffraichissement avec {@link Affichage#repaint()}
 	 */
@@ -25,16 +25,9 @@ public class RepaintScreen extends Thread{
 	 * @param aff
 	 */
 	public RepaintScreen(Affichage aff) {
-		this.running = true;
 		this.aff = aff;
 	}
 	
-	/**
-	 * stoppe le Thread
-	 */
-	public void terminate() {
-		this.running = false;
-	}
 	
 	/**
 	 * on appelle {@link Affichage#repaint()} toutes les {@link #time} millisecondes
