@@ -17,8 +17,7 @@ public class Avancer extends StoppableThread{
 		while(this.running) {
 			try { 
 				Thread.sleep(time);
-				this.etat.avance();
-				
+				//this.etat.avance();
 			}
 			catch (Exception e) { e.printStackTrace(); this.terminate(); }
 		}

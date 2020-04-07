@@ -233,12 +233,10 @@ public class Affichage extends JPanel{
 		Graphics2D g2d = (Graphics2D) g;
 		g.clearRect(0, 0, LARG, HAUT);
 		
-		drawPiste(g2d);
+		
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affichage score
 		drawScore(g);
-		//dessine moto
-		this.moto.drawMoto(g);
 		//dessine horizon
 		drawHorizon(g);
 		//affiche la vitesse
@@ -247,6 +245,10 @@ public class Affichage extends JPanel{
 		drawClock(g,100,100,25);
 		// affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
+		//affiche la piste
+		drawPiste(g2d);
+		//dessine moto
+		this.moto.drawMoto(g);
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
 		//dessine obstacles

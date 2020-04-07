@@ -28,7 +28,7 @@ public class Obstacle {
 	
 	
 	public Rectangle getBounds() {
-		if(getY()>Affichage.posHorizon && getY()>Affichage.posHorizon) {	
+		if(getY()>Affichage.posHorizon) {	
 			//calcul largPiste à l'endroit du checkpoint
 			int largPiste = piste.getLargPisteEnY(this.y);
 			//System.out.println(largPiste);
