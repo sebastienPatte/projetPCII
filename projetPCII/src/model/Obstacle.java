@@ -11,6 +11,7 @@ public class Obstacle {
 	private int y;
 	private int width;
 	private int height;
+	private int posY;
 	
 	public Obstacle(Piste piste, int y) {
 		this.piste = piste;
@@ -18,13 +19,13 @@ public class Obstacle {
 		this.y =  y;
 		this.width = randint(50, 100);
 		this.height = randint(50, 100);
+		this.posY = piste.getPosY();
 	}
 	
 	
 	public int getY() {
 		return this.y + piste.getPosY();
 	}
-	
 	
 	
 	public Rectangle getBounds() {

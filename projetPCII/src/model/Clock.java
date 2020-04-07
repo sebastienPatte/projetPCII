@@ -40,8 +40,8 @@ public class Clock extends JPanel{
 		setOpaque(false);
 		setPreferredSize(new Dimension(72, 72));
         this.tempsRestant = x;
-        this.setTemps(x);
-        this.prevTime = this.tempsRestant;
+        this.prevTime = x+1; //pour pas afficher de gain de temps au début
+        this.tempsInit = x;
 	}
 	
 	public Timer getTimer() {

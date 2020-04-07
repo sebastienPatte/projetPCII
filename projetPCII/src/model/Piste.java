@@ -14,7 +14,7 @@ public class Piste {
 	public static double factRetrecissement = 1/2.5;
 	
 	public static int largeurPiste = 600;
-	public static int ObstaclesMax = 10;
+	public static int ObstaclesMax = 3;
 	
 	/**
 	 * décalage en hauteur entre chaque point de la piste
@@ -25,7 +25,7 @@ public class Piste {
 	 * (position X du point aléatoire) 
 	 */
 	public static int dec = 20;
-	public static int probaObstacle = 50;
+	public static int probaObstacle = 1000;
 	/**
 	 * liste des points de la ligne du bord gauche de la piste
 	 * (pas besoin d'avoir les 2 bords car on a {@link #largeurPiste})
@@ -130,7 +130,6 @@ public class Piste {
 			if(y == p.y ) {
 				Point[][] piste = getPiste(); 
 				if(i<piste.length) {
-					System.out.println(piste[i][1].x - piste[i][0].x);
 					return piste[i][1].x - piste[i][0].x;
 				}else {
 					System.err.println("Erreur : getLargPisteEnY le i trouvé est invalide !!! "+i);
@@ -169,8 +168,7 @@ public class Piste {
 		}else {
 			System.err.println("Erreur : paramètre 'i' invalide dans méthode Piste.getMidX()");
 			return Affichage.LARG/2;
-		}
-			
+		}	
 	}
 	
 	private void updateObstacles() {

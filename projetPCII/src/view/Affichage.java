@@ -74,7 +74,7 @@ public class Affichage extends JPanel{
 		int prevTime = this.clock.getPrevTime();
 		if(tempsRestant >= prevTime) {
 			g.setColor(Color.GREEN);
-			g.drawString("+"+this.clock.getTemps(),5 , 65);
+			g.drawString("+"+this.check.getPrevTime(),5 , 65);
 			g.setColor(Color.BLACK);
 		}
 		//on revient à l'ancienne police
@@ -157,6 +157,7 @@ public class Affichage extends JPanel{
 			*/
 			
 			
+			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
 			//si t1 est sur l'indice du checkpoint, on le dessine
@@ -202,23 +203,24 @@ public class Affichage extends JPanel{
 	
 	
 	private void drawObstacles(Graphics g) {
-		for(int i = 0; i<etat.getPiste().length;i++) {
-
-			for(Obstacle o : etat.getObstacles()) {
+		for(Obstacle o : etat.getObstacles()) {
 				Rectangle bounds = o.getBounds();
-				if(bounds.y > posHorizon && etat.getPiste()[i][0].y == o.getY() ) {	
+
+				if(bounds.y > posHorizon) {	
+					
 					try {
 						
 						Image image = ImageIO.read(new File(PATH)).getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
-						g.drawImage(image, LARG/2+bounds.x-etat.getPosX(), o.getY() , null);
+						g.drawImage(image, LARG/2+bounds.x-etat.getPosX(), bounds.y , null);
 					
 					}catch (IOException e) {
 						e.printStackTrace(); 
 					}
+					g.drawRect(LARG/2+bounds.x-etat.getPosX(), o.getY(), bounds.width, bounds.height);
 				}
-			}
 		}
 	}
+		
 	
 	private void drawScore(Graphics g) {
 		String strScore ="Score : "+ etat.getPosY();
@@ -232,26 +234,27 @@ public class Affichage extends JPanel{
     public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g.clearRect(0, 0, LARG, HAUT);
-		//affichage score
-		drawScore(g);
+		
 		//dessine horizon
 		drawHorizon(g);
 		//affiche la vitesse
 		drawVitesse(g);
-		// affiche le timeout avant de perdre
-		drawClock(g,100,100,25);
 		//affiche la piste
 		drawPiste(g2d);
 		//nettoyage horizon
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
+		//dessine obstacles
+		drawObstacles(g);
 		//dessine moto
 		this.moto.drawMoto(g);
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
-		//dessine obstacles
-		drawObstacles(g);
+		// affiche le timeout avant de perdre
+		drawClock(g,100,100,25);
+		//affichage score
+		drawScore(g);
 		// si on a perdu on affiche game over
 		if(etat.getFin() == 1) {
 			drawEnd(g);

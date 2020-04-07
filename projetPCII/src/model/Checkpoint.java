@@ -14,16 +14,18 @@ public class Checkpoint {
 	private int voie;
 	private int posY;
 	private int time;
+	private int prevTime;
 	private Clock clock;
 	private Etat etat;
 	
 	public Checkpoint(Etat etat) {
-		this.time = 50;
+		this.time = 20;
+		this.prevTime = 20;
+		this.posY = INCR*Piste.incr;
 		this.etat = etat;
 		this.clock = new Clock(time,etat);
 		this.voie = 0;
-		this.posY = 0;
-		nextCheckpoint();
+		
 	}
 	
 	public void nextCheckpoint() {
@@ -34,7 +36,11 @@ public class Checkpoint {
 	
 	public void addTime() {
 		clock.setTempsRestant(clock.getTempsRestant() + time);
-		if(time > 5)time--;
+		if(time > 5) {
+			this.prevTime = this.time;
+			this.time--;
+		}
+		System.out.println(time);
 	}
 	
 	public int getPosY() {
@@ -43,6 +49,10 @@ public class Checkpoint {
 	
 	public int getTime() {
 		return this.time;
+	}
+	
+	public int getPrevTime() {
+		return this.prevTime;
 	}
 	
 	public double[] getPosX(int i) {
