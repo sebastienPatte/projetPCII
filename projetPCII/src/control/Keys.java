@@ -23,10 +23,15 @@ public class Keys extends KeyAdapter{
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_Q) {
 			etat.pressLeft(true);
-		}else {
-			if(e.getKeyCode() == KeyEvent.VK_D) {
-				etat.pressRight(true);
-			}
+		}
+		if(e.getKeyCode() == KeyEvent.VK_D) {
+			etat.pressRight(true);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_Z) {
+			etat.pressUp(true);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_S) {
+			etat.pressDown(true);
 		}
 	}
 
@@ -38,6 +43,12 @@ public class Keys extends KeyAdapter{
 		}
 		if (e.getKeyCode() == KeyEvent.VK_D) {
 			etat.pressRight(false);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_Z) {
+			etat.pressUp(false);
+		}
+		if(e.getKeyCode() == KeyEvent.VK_S) {
+			etat.pressDown(false);
 		}
 	}
 

@@ -220,7 +220,6 @@ public class Affichage extends JPanel{
 				}
 		}
 	}
-		
 	
 	private void drawScore(Graphics g) {
 		String strScore ="Score : "+ etat.getPosY();
@@ -259,6 +258,6 @@ public class Affichage extends JPanel{
 		if(etat.getFin() == 1) {
 			drawEnd(g);
 		}
-		
+		System.out.println(etat.getPosVert());
 	}
 }

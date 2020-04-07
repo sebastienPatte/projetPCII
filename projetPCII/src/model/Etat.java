@@ -24,8 +24,9 @@ public class Etat {
 	 */
 	public static int FACT_ACCEL = Piste.largeurPiste/6;
 	public static int ACCEL_MAX = 101;
-	private Piste piste;
+	public static int PosVert_MAX = 50;
 	
+	private Piste piste;
 	
 	/**
 	 * position x du joueur
@@ -34,6 +35,8 @@ public class Etat {
 	
 	private boolean leftPressed;
 	private boolean rightPressed;
+	private boolean upPressed;
+	private boolean downPressed;
 	
 	private double accel;
 	private double vitesse;
@@ -41,6 +44,10 @@ public class Etat {
 	private int fin = 0;
 	private Montagne montagne;
 	private Checkpoint check;
+	/**
+	 * position verticale de la moto
+	 */
+	public int posVert;
 	
 	/**
 	 * etat de la moto :
@@ -57,6 +64,8 @@ public class Etat {
 	public Etat() {
 		this.leftPressed = false;
 		this.rightPressed = false;
+		this.upPressed = false;
+		this.downPressed = false;
 		this.piste = new Piste(this);
 		this.check = new Checkpoint(this);
 		this.posX = 0;
@@ -64,6 +73,7 @@ public class Etat {
 		this.vitesse =  vitesseMax;
 		this.montagne = new Montagne(this);
 		this.etatMoto = 1;
+		this.posVert = 0;
 	}
 	
 	
@@ -167,7 +177,7 @@ public class Etat {
 	}
 	
 	
-	// Gestion des déplacements de la moto (sur les cotés) ----------------------------------------------------------
+	// Gestion des déplacements de la moto --------------------------------------------------------------------------------
 	
 	public void pressLeft(boolean b) {
 		this.leftPressed = b;
@@ -175,6 +185,26 @@ public class Etat {
 	
 	public void pressRight(boolean b) {
 		this.rightPressed = b;
+	}
+
+	public void pressUp(boolean b) {
+		this.upPressed = b;
+	}
+	
+	public void pressDown(boolean b) {
+		this.downPressed = b;
+	}
+	
+	public void goUp() {
+		if(posVert < PosVert_MAX) {
+			this.posVert++;
+		}
+	}
+	
+	public void goDown() {
+		if(posVert > 0) {
+			this.posVert--;
+		}
 	}
 	
 	/**
@@ -223,6 +253,15 @@ public class Etat {
 			}else {
 				//si aucune des 2 touches n'est pressée alors on va tout droit 
 				this.etatMoto = 1;
+			}
+		}
+		
+		if(this.upPressed && !this.downPressed) {
+			goUp();
+			this.etatMoto = 3;
+		}else {
+			if(this.downPressed) {
+				goDown();
 			}
 		}
 		
@@ -300,6 +339,11 @@ public class Etat {
 		updateAccel();
 		return this.accel;
 	}
+	
+	public int getPosVert() {
+		return this.posVert;
+	}
+	
 	// MOTO -----------------------------------------------------------------------------------
 	/**
 	 * @return {@link #etatMoto}
