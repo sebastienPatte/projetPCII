@@ -14,6 +14,8 @@ public class Piste {
 	public static double factRetrecissement = 1/2.5;
 	
 	public static int largeurPiste = 600;
+	public static int ObstaclesMax = 10;
+	
 	/**
 	 * décalage en hauteur entre chaque point de la piste
 	 */
@@ -75,7 +77,7 @@ public class Piste {
 	 * on ajoute un point quand le dernier entre dans le champ de vision
 	 * et on en supprime un si il sort du champ de vision
 	 */
-	private void updatePoints() {
+	void updatePoints() {
 		//on ajoute un point si le dernier point entre dans le champ de vision 
 		if(points.get(points.size()-1).y  + posY >  Affichage.posHorizon ) {
 			addPoint();
@@ -89,38 +91,21 @@ public class Piste {
 	
 	
 	/**
-	 * @return la piste sous forme de double tableau contenant les 2 ligne brisées des bords de la piste (sans perspective) 
+	 * @return la piste sous forme de double tableau contenant les 2 ligne brisées des bords de la piste (avec perspective) 
 	 */
-	public Point[][] getLigne(){
-		//System.out.println("pixels parcourus : "+posY);
+	public Point[][] getPiste(){
+		
 		updatePoints();
-		//System.out.println(points.size());
 		Point[][] res = new Point[points.size()][2]; 
 		for(int i=0; i<points.size(); i++) {
 			Point p = points.get(i);
-			res[i][0]= new Point (p.x, p.y + posY);
-			res[i][1]= new Point(p.x+largeurPiste, p.y + posY);
+			int decPespectiveT1 = (int)((Affichage.HAUT - (p.y + posY))*factRetrecissement);
+			//on applique la perspective aux points de la piste
+			res[i][0]= new Point(p.x + decPespectiveT1, p.y + posY);
+			res[i][1]= new Point(p.x+largeurPiste - decPespectiveT1, p.y + posY);
 		}
+		//System.out.println("majPiste");
 		return res;
-	}
-	
-	public Point[][] getPiste(){
-		// on récupère la piste sans perspective
-		Point[][] piste = getLigne();
-		
-		for(int i=0; i<piste.length; i++) {
-			Point[] p = piste[i];
-			
-			int decPespectiveT1 = (int)((Affichage.HAUT - p[0].y)*factRetrecissement);
-			
-			//décalage perspective bord piste gauche
-			piste[i][0] = new Point(p[0].x+decPespectiveT1, p[0].y);
-			
-			//décalage perspective bord piste droite
-			piste[i][1] = new Point(p[1].x-decPespectiveT1, p[1].y);
-			
-		}
-		return piste;
 	}
 	
 	/**
@@ -140,14 +125,26 @@ public class Piste {
 	 * @return la largeur de la piste à ce point de la piste
 	 */
 	public int getLargPisteEnY(int y) {
-		for(Point[] pts : getPiste()) {
-			if(y <= pts[0].y && pts[0].y <= y)return pts[1].x - pts[0].x;
+		int i = 0;
+		for(Point p : this.points) {
+			if(y == p.y ) {
+				Point[][] piste = getPiste(); 
+				if(i<piste.length) {
+					System.out.println(piste[i][1].x - piste[i][0].x);
+					return piste[i][1].x - piste[i][0].x;
+				}else {
+					System.err.println("Erreur : getLargPisteEnY le i trouvé est invalide !!! "+i);
+				}
+			}
+			i++;
 		}
 		System.err.println("Erreur : appel de getLargPisteEnY avec un y invalide !!! "+y);
-		etat.gameOver();
-		for(Point[] pts : getPiste()) {
-			System.err.println(pts[0].y);
+		
+		for(Point p : this.points) {
+			System.err.println(p.y);
 		}
+		
+		etat.gameOver();
 		return -1;
 	}
 	
@@ -181,7 +178,7 @@ public class Piste {
 		while(obstacles.size() > 0 && obstacles.get(0).getY() >= Affichage.HAUT) {
 			obstacles.remove(0);
 		}
-		if(randint(0,probaObstacle)==0) {
+		if(obstacles.size() < ObstaclesMax && randint(0,probaObstacle)==0) {
 			//la position y de l'obstacle est posY du dernier point de la piste (négatif, le point le plus en haut au dessus de la fenetre)
 			obstacles.add(new Obstacle(this, points.get(points.size()-1).y));
 		}

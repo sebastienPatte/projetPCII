@@ -204,7 +204,7 @@ public class Affichage extends JPanel{
 	private void drawObstacles(Graphics g) {
 		for(int i = 0; i<etat.getPiste().length;i++) {
 
-			for(Obstacle o : etat.getObstacles(g)) {
+			for(Obstacle o : etat.getObstacles()) {
 				Rectangle bounds = o.getBounds();
 				if(bounds.y > posHorizon && etat.getPiste()[i][0].y == o.getY() ) {	
 					try {
@@ -232,6 +232,7 @@ public class Affichage extends JPanel{
     public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g.clearRect(0, 0, LARG, HAUT);
+		
 		drawPiste(g2d);
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affichage score

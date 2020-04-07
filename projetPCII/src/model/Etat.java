@@ -110,6 +110,7 @@ public class Etat {
 	 * et stoppe tout les threads
 	 */
 	public void gameOver() {
+		System.out.println("GAME OVER");
 		this.vitesse = 0;
 		this.accel = 0;
 		this.fin = 1;
@@ -117,7 +118,6 @@ public class Etat {
 		for(StoppableThread t : this.threads) {
 			t.terminate();
 		}
-		
 	}
 	
 	// Avancement de la moto sur la piste ---------------------------------------------------------------------------------
@@ -232,12 +232,12 @@ public class Etat {
 	 * @param g
 	 * @return true si la moto est en collision avec un obstacle, false sinon
 	 */
-	public boolean testCollision(Graphics g){
+	public boolean testCollision(){
 		
 		for(Obstacle o : piste.getObstacles()) {
 			Rectangle oBounds = o.getBounds();
 			Rectangle motoBounds = getMotoBounds();
-			g.drawRect( Affichage.LARG/2 , Affichage.HAUT - motoBounds.height - VueMoto.decBord, motoBounds.width, motoBounds.height);
+			
 			if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - motoBounds.height ) {
 				//si l'obstacle arrive à la position y de la moto
 				
@@ -375,8 +375,8 @@ public class Etat {
 		return this.check;
 	}
 	
-	public ArrayList<Obstacle> getObstacles(Graphics g) {
-		if(testCollision(g)) {
+	public ArrayList<Obstacle> getObstacles() {
+		if(testCollision()) {
 			gameOver();
 		}
 		return piste.getObstacles();
@@ -398,6 +398,10 @@ public class Etat {
 		for(StoppableThread t : threads) {
 			t.start();
 		}
+	}
+	
+	public void majPiste() {
+		piste.updatePoints();
 	}
 	
 	
