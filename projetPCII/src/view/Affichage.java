@@ -246,7 +246,7 @@ public class Affichage extends JPanel{
 	private void drawAccel(Graphics g) {
 		// on arrondit la vitesse à 2 chiffres après la virgule pour l'affichage
 		float accel = (float)((int)(etat.getAccel()*100))/100;
-		String str = "Accélération : "+accel;
+		String str = "Accélération : "+accel+" %";
 		g.drawString(str, 10, 540);
 	}
 	

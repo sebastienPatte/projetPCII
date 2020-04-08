@@ -292,40 +292,42 @@ public class Etat {
 	 * @return l'indice d'un obstacle si la moto est en collision avec cet obstacle, -1 si il n'y a pas de collision
 	 */
 	public int testCollision(){
-		int i=0;
-		for(Obstacle o : piste.getObstacles()) {
-			Rectangle oBounds = o.getBounds();
-			Rectangle motoBounds = getMotoBounds();
-			
-			if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - VueMoto.decBord) {
-				//si l'obstacle arrive à la position y de la moto
+		if(this.posVert < 1) {	
+			int i=0;
+			for(Obstacle o : piste.getObstacles()) {
+				Rectangle oBounds = o.getBounds();
+				Rectangle motoBounds = getMotoBounds();
 				
-				if(oBounds.x <= motoBounds.x + motoBounds.width &&  oBounds.x >= motoBounds.x) {
-					//et que l'obstacle chevauche la moto par la droite
-					//
-					int x1M = motoBounds.x;
-					int x2M = motoBounds.x+motoBounds.width;
-					int x1O = oBounds.x;
-					int x2O = x1O+oBounds.width;
-					System.out.println("collision x1m "+x1M+"="+posX+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
-					//
-					return i;
-				}else {
-					if(motoBounds.x  <= oBounds.x + oBounds.width && motoBounds.x  >= oBounds.x) {
-						//et que l'obstacle chevauche la moto par la gauche
+				if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - VueMoto.decBord) {
+					//si l'obstacle arrive à la position y de la moto
+					
+					if(oBounds.x <= motoBounds.x + motoBounds.width &&  oBounds.x >= motoBounds.x) {
+						//et que l'obstacle chevauche la moto par la droite
 						//
 						int x1M = motoBounds.x;
-						int x2M = x1M+motoBounds.width;
+						int x2M = motoBounds.x+motoBounds.width;
 						int x1O = oBounds.x;
 						int x2O = x1O+oBounds.width;
-						System.out.println("collision x1m "+x1M+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
+						System.out.println("collision x1m "+x1M+"="+posX+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
 						//
 						return i;
+					}else {
+						if(motoBounds.x  <= oBounds.x + oBounds.width && motoBounds.x  >= oBounds.x) {
+							//et que l'obstacle chevauche la moto par la gauche
+							//
+							int x1M = motoBounds.x;
+							int x2M = x1M+motoBounds.width;
+							int x1O = oBounds.x;
+							int x2O = x1O+oBounds.width;
+							System.out.println("collision x1m "+x1M+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
+							//
+							return i;
+						}
 					}
+					
 				}
-				
+				i++;
 			}
-			i++;
 		}
 		return -1;
 	}	
