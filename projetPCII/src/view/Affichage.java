@@ -24,18 +24,33 @@ import model.Piste;
 
 public class Affichage extends JPanel{
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Largeur de la fenêtre
+	 */
 	public static int LARG = 1400;
+	/**
+	 * Hauteur de la fenêtre
+	 */
 	public static int HAUT = 800;
+	/**
+	 * position Y de la ligne d'horizon
+	 */
 	public static int posHorizon = 200;
+	/**
+	 * chemin vers l'image d'obstacles
+	 */
 	public static String PATH= "imgs/red.png";
 	 
 	
-	
+	// Instances du Modèle
 	private Etat etat;
 	private Checkpoint check;
+	private model.Clock clock;
+	
+	// Instances de Vues
 	private VueMoto moto;
 	private VueNuages nuages;
-	private model.Clock clock;
+	
 	
 	public Affichage(Etat etat) {
 		this.setPreferredSize(new Dimension(LARG, HAUT));
@@ -46,18 +61,31 @@ public class Affichage extends JPanel{
 		this.clock = check.getClock();
 	}
 	
-	public static void drawEnd(Graphics g) {
-		g.drawString("GAME OVER", 465, 300);
+	public void drawEnd(Graphics g) {
+		
+		//on change la police pour l'affichage de GAME OVER
+		int prevFontSize = g.getFont().getSize();
+		Font newFont = new Font(g.getFont().getFontName(), Font.PLAIN, 60);
+		g.setFont(newFont);
+		String str = "GAME OVER";
+		
+		//calcul largeur string
+		FontMetrics fm = getFontMetrics(newFont);
+		int printedLength = fm.stringWidth(str);
+		
+		// Affiche GAME OVER
+		g.drawString("GAME OVER", LARG/2 - printedLength/2, HAUT/2);
+		
+		//on revient à l'ancienne police
+		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, prevFontSize));
 	}
+	
 	/**
 	 * affiche le temps restant avant le game over
 	 * @param g
-	 * @param x
-	 * @param y
-	 * @param r
 	 */
-	public void drawClock(Graphics g, int x, int y, int r) {
-		//on change la police de l'affichage de la Clock
+	public void drawClock(Graphics g) {
+		//on change la police pour l'affichage de la Clock
 		int prevFontSize = g.getFont().getSize();
 		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 25)); 
 		
@@ -79,7 +107,6 @@ public class Affichage extends JPanel{
 		}
 		//on revient à l'ancienne police
 		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, prevFontSize));
-		
 	}
 	
 	/**
@@ -196,7 +223,10 @@ public class Affichage extends JPanel{
 	}
 	
 	
-	
+	/**
+	 * Affiche les obstacles sur la piste
+	 * @param g
+	 */
 	private void drawObstacles(Graphics g) {
 		for(Obstacle o : etat.getObstacles()) {
 				Rectangle bounds = o.getBounds();
@@ -216,6 +246,10 @@ public class Affichage extends JPanel{
 		}
 	}
 	
+	/**
+	 * Affiche le score en haut à droite
+	 * @param g
+	 */
 	private void drawScore(Graphics g) {
 		String strScore ="Score : "+ etat.getPosY();
 		   
@@ -235,7 +269,7 @@ public class Affichage extends JPanel{
 		g.drawString(str, 10, 475);
 	}
 	/**
-	 * Affiche l'altitude de la moto
+	 * Affiche l'altitude de la moto sur la partie gauche de la fenêtre
 	 * @param g
 	 */
 	private void drawAltitude(Graphics g) {
@@ -243,6 +277,10 @@ public class Affichage extends JPanel{
 		g.drawString(str, 10, 520);
 	}
 	
+	/**
+	 * Affiche l'accélération
+	 * @param g
+	 */
 	private void drawAccel(Graphics g) {
 		// on arrondit la vitesse à 2 chiffres après la virgule pour l'affichage
 		float accel = (float)((int)(etat.getAccel()*100))/100;
@@ -272,7 +310,7 @@ public class Affichage extends JPanel{
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
 		// affiche le timeout avant de perdre
-		drawClock(g,100,100,25);
+		drawClock(g);
 		//affichage score
 		drawScore(g);
 		// si on a perdu on affiche game over
