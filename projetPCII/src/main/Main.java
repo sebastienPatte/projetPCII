@@ -14,17 +14,19 @@ import view.Affichage;
 
 public class Main {
 	public static void main(String[] args) {
+		//Initialisation modèle et Vue
 		Etat mod = new Etat();
 		Affichage aff = new Affichage(mod);
+		//Initialisation Listener pour les touches clavier
 		Keys kl = new Keys(mod);
 		
+		//on passe les threads à Etat dans un tableau  
 		StoppableThread[] threads = { 
 			new RepaintScreen(aff),
 			new Avancer(mod),
 			new Vitesse(mod),
 			new TestCheckpoint(mod)
 		};
-		//démarre tout les theads
 		mod.setThreads(threads);
 		
 		

@@ -1,7 +1,11 @@
 package control;
 
 import model.Etat;
-
+/**
+ * Met à jour la {@link Etat#vitesse vitesse} de la moto en fonction de 
+ * la {@link Etat#vitesse vitesse} et l'{@link Etat#accel accélération} actuelles.
+ * 
+ */
 public class Vitesse extends StoppableThread{
 	
 	private boolean running = true;

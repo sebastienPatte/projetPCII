@@ -12,10 +12,14 @@ public class Piste {
 	 * mais si il est trop petit, les bords de la piste peuvent se croiser
 	 */
 	public static double factRetrecissement = 1/2.5;
-	
+	/**
+	 * largeur les la piste
+	 */
 	public static int largeurPiste = 600;
+	/**
+	 * Nombre d'obstacles maximum en même temps
+	 */
 	public static int ObstaclesMax = 3;
-	
 	/**
 	 * décalage en hauteur entre chaque point de la piste
 	 */
@@ -25,6 +29,9 @@ public class Piste {
 	 * (position X du point aléatoire) 
 	 */
 	public static int dec = 20;
+	/**
+	 * Probabilité qu'un obstacle apparisse (lancée à chaque rafraichissement de la fenêtre)
+	 */
 	public static int probaObstacle = 1000;
 	/**
 	 * liste des points de la ligne du bord gauche de la piste
@@ -35,10 +42,19 @@ public class Piste {
 	 * position Y du joueur (nombre de pixels pacourus)
 	 */
 	private int posY;
+	/**
+	 * Liste des obstacles
+	 */
 	private ArrayList<Obstacle> obstacles;
-	
+	/**
+	 * Instance de {@link Etat}
+	 */
 	private Etat etat;
 	
+	/**
+	 * Constructor
+	 * @param etat
+	 */
 	public Piste(Etat etat) {
 		this.etat = etat;
 		this.points = new ArrayList<Point>();
@@ -125,6 +141,7 @@ public class Piste {
 					return piste[i][1].x - piste[i][0].x;
 				}else {
 					System.err.println("Erreur : getLargPisteEnY le i trouvé est invalide !!! "+i);
+					etat.gameOver();
 				}
 			}
 			i++;
@@ -134,7 +151,7 @@ public class Piste {
 		for(Point p : this.points) {
 			System.err.println(p.y);
 		}
-		
+		//on arrete le jeu si il y a une erreur 
 		etat.gameOver();
 		return -1;
 	}
@@ -154,6 +171,10 @@ public class Piste {
 		return posY;
 	}
 	
+	/**
+	 * @param i
+	 * @return le X du milieu de la piste au point d'indice i
+	 */
 	public int getMidX(int i) {
 		if(i>=0 && i<points.size()) {
 			return points.get(i).x + largeurPiste/2;
@@ -163,6 +184,10 @@ public class Piste {
 		}	
 	}
 	
+	/**
+	 * Supprime les obstacles qui ne sont plus visibles et en génère des nouveaux avec une
+	 * probabilité de {@link #probaObstacle}
+	 */
 	private void updateObstacles() {
 		//on retire le premier obstacle (le plus ancien) tant qu'il est en dehors du champ de vision
 		while(obstacles.size() > 0 && obstacles.get(0).getY() >= Affichage.HAUT) {
@@ -174,13 +199,25 @@ public class Piste {
 		}
 	}
 	
+	/**
+	 * @return met à jour puis renvoie la liste des obstacles
+	 */
 	public ArrayList<Obstacle> getObstacles() {
 		updateObstacles();
 		return this.obstacles;
 	}
-	
+	/**
+	 * Retire l'obstacle d'indice i de la liste, utilisé quand on percute un obstacle.
+	 * Si le i est invalide on affiche une erreur et on stoppe le jeu
+	 * @param i 
+	 */
 	public void removeObstacle(int i) {
-		this.obstacles.remove(i);
+		if(i<this.obstacles.size()){
+			this.obstacles.remove(i);
+		}else {
+			System.err.println("Erreur : appel de removeObstacle avec un i invalide !!! "+i);
+			etat.gameOver();
+		}
 	}
 
 	/** Génère un chiffre aléatoire entre min et max

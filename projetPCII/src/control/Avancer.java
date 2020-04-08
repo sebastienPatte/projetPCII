@@ -2,6 +2,10 @@ package control;
 
 import model.Etat;
 
+/**
+ * Lance la fonction {@link Etat#avance()} toutes les {@link #time} 
+ *
+ */
 public class Avancer extends StoppableThread{
 	private boolean running = true;
 	public static int time = 41;

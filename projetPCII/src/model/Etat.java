@@ -39,24 +39,47 @@ public class Etat {
 	 * position x du joueur
 	 */
 	private int posX;
-	
+	/**
+	 * indique que la touche pour aller à gauche est pressée
+	 */
 	private boolean leftPressed;
+	/**
+	 * indique que la touche pour aller à droite est pressée
+	 */
 	private boolean rightPressed;
+	/**
+	 * indique que la touche pour aller en haut est pressée
+	 */
 	private boolean upPressed;
+	/**
+	 * indique que la touche pour aller en bas est pressée
+	 */
 	private boolean downPressed;
+	/**
+	 * indique que la moto est en train de descendre (pour indiquer qu'il faut "éteindre les réacteurs")
+	 */
 	private boolean goDown;
 	
+	/**
+	 * accélération (entre 0 et 101)
+	 */
 	private double accel;
+	/**
+	 * Vitesse de la moto (en px par rafraichissement)
+	 */
 	private double vitesse;
+	/**
+	 * {@link #vitesse} maximale atteingnable par la moto
+	 */
 	static double vitesseMax = 5.0;//pixels par repaint
-	private int fin = 0;
-	private Montagne montagne;
-	private Checkpoint check;
+	/**
+	 * true si le joueur a perdu, false sinon
+	 */
+	private boolean fin = false;
 	/**
 	 * position verticale de la moto
 	 */
 	public int posVert;
-	
 	/**
 	 * etat de la moto :
 	 * 0 : tourne Ã  gauche
@@ -64,8 +87,16 @@ public class Etat {
 	 * 2 : tourne Ã  droite
 	 */
 	private int etatMoto;
+	/**
+	 * Tableau de Threads ({@link control.RepaintScreen RepaintScreen}, 
+	 * {@link control.TestCheckpoint TestCheckpoint}, {@link control.Avancer Avancer} et {@link control.Vitesse Vitesse})
+	 * qui est passé par {@link main.Main Main} pour que l'Etat les stoppent quand la partie est perdue
+	 */
 	private StoppableThread[] threads;
 	
+	// Instances montagnes et checkpoints
+	private Montagne montagne;
+	private Checkpoint check;
 	/**
 	 * Constructor
 	 */
@@ -132,7 +163,7 @@ public class Etat {
 		System.out.println("GAME OVER");
 		this.vitesse = 0;
 		this.accel = 0;
-		this.fin = 1;
+		this.fin = true;
 		
 		for(StoppableThread t : this.threads) {
 			t.terminate();
@@ -143,6 +174,7 @@ public class Etat {
 	
 	/**
 	 * Met à jour la vitesse par rapport à l'accélération
+	 * appelé par {@link control.Vitesse Vitesse}
 	 */
 	public void updateVitesse() {
 		//this.vitesse = getAccel()/100*vitesse;
@@ -190,28 +222,50 @@ public class Etat {
 	
 	// Gestion des déplacements de la moto --------------------------------------------------------------------------------
 	
+	/**
+	 * On change la valeur de {@link leftPressed} par b
+	 * @param b
+	 */
 	public void pressLeft(boolean b) {
 		this.leftPressed = b;
 	}
 	
+	/**
+	 * On change la valeur de {@link rightPressed} par b
+	 * @param b
+	 */
 	public void pressRight(boolean b) {
 		this.rightPressed = b;
 	}
 
+	/**
+	 * On change la valeur de {@link upPressed} par b
+	 * @param b
+	 */
 	public void pressUp(boolean b) {
 		this.upPressed = b;
 	}
 	
+	/**
+	 * On change la valeur de {@link downPressed} par b
+	 * @param b
+	 */
 	public void pressDown(boolean b) {
 		this.downPressed = b;
 	}
 	
+	/**
+	 * fait monter la moto
+	 */
 	public void goUp() {
 		if(posVert < PosVert_MAX) {
 			this.posVert++;
 		}
 	}
 	
+	/**
+	 * Fait descendre la moto si on est dans les airs
+	 */
 	public void goDown() {
 		if(posVert > 0) {
 			this.posVert--;
@@ -249,42 +303,39 @@ public class Etat {
 	 * en fonction des valeurs de {@link #leftPressed} et {@link #rightPressed}
 	 */
 	private void majEtatMoto() {
-		
-		if(leftPressed) {
-			if(rightPressed) {
-				//si les 2 touche sont pressées en même temps alors on va tout droit 
-				this.etatMoto = 1;		
+		if(!this.fin){
+			if(leftPressed) {
+				if(rightPressed) {
+					//si les 2 touche sont pressées en même temps alors on va tout droit 
+					this.etatMoto = 1;		
+				}else {
+					//si seulement la touche pour aller à gauche est pressée alors on va à gauche
+					this.etatMoto = 0;
+					goLeft();
+				}	
 			}else {
-				//si seulement la touche pour aller à gauche est pressée alors on va à gauche
-				this.etatMoto = 0;
-				goLeft();
-			}	
-		}else {
-			if(rightPressed) {
-				//si seulement la touche pour aller à droite est pressée alors on va à droite
-				this.etatMoto = 2;
-				goRight();
-			}else {
-				//si aucune des 2 touches n'est pressée alors on va tout droit 
-				this.etatMoto = 1;
-			}
-		}
-		
-		if(this.vitesse < MinVitesseVol) {
-			goDown();
-		}else {
-			if(this.upPressed && !this.downPressed) {
-				goUp();
-			}else {
-				if(this.downPressed) {
-					goDown();
+				if(rightPressed) {
+					//si seulement la touche pour aller à droite est pressée alors on va à droite
+					this.etatMoto = 2;
+					goRight();
+				}else {
+					//si aucune des 2 touches n'est pressée alors on va tout droit 
+					this.etatMoto = 1;
 				}
 			}
-		}
-		
-		
-		
-		
+			
+			if(this.vitesse < MinVitesseVol) {
+				goDown();
+			}else {
+				if(this.upPressed && !this.downPressed) {
+					goUp();
+				}else {
+					if(this.downPressed) {
+						goDown();
+					}
+				}
+			}
+		}	
 	}
 	// Collisions avec les obstacles -------------------------------------------------------------------------------------
 	/**
@@ -350,7 +401,7 @@ public class Etat {
 	/**
 	 * @return true si on a perdu, false sinon
 	 */
-	public int getFin() {
+	public boolean getFin() {
 		return fin;
 	}
 	
@@ -381,6 +432,9 @@ public class Etat {
 		return this.etatMoto;
 	}
 	
+	/**
+	 * @return un {@link Rectangle} correspondant à la position et la taille de la moto
+	 */
 	private Rectangle getMotoBounds() {
 		String str = VueMoto.PATH+etatMoto+".png";
 		try {
@@ -446,7 +500,9 @@ public class Etat {
 	public Checkpoint getCheck(){
 		return this.check;
 	}
-	
+	/**
+	 * @return la liste des obstacles
+	 */
 	public ArrayList<Obstacle> getObstacles() {
 		int i = testCollision();
 		if(i!=-1) {
@@ -467,7 +523,10 @@ public class Etat {
 	}
 
 	// SETTERS ###################################################################################
-	
+	/**
+	 * @param threads récupérés depuis {@link main.Main Main}
+	 * on récupère les {@link Threads} et on les lance 
+	 */
 	public void setThreads(StoppableThread[] threads) {
 		this.threads= threads; 
 		for(StoppableThread t : threads) {
@@ -475,9 +534,7 @@ public class Etat {
 		}
 	}
 	
-	public void majPiste() {
-		piste.updatePoints();
-	}
+	
 	
 	
 }

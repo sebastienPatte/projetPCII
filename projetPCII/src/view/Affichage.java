@@ -51,7 +51,10 @@ public class Affichage extends JPanel{
 	private VueMoto moto;
 	private VueNuages nuages;
 	
-	
+	/**
+	 * Constructor
+	 * @param etat
+	 */
 	public Affichage(Etat etat) {
 		this.setPreferredSize(new Dimension(LARG, HAUT));
 		this.etat = etat;
@@ -61,6 +64,10 @@ public class Affichage extends JPanel{
 		this.clock = check.getClock();
 	}
 	
+	/**
+	 * Affiche le message de fin de partie
+	 * @param g
+	 */
 	public void drawEnd(Graphics g) {
 		
 		//on change la police pour l'affichage de GAME OVER
@@ -76,7 +83,7 @@ public class Affichage extends JPanel{
 		// Affiche GAME OVER
 		g.drawString("GAME OVER", LARG/2 - printedLength/2, HAUT/2);
 		
-		//on revient à l'ancienne police
+		//on revient à l'ancienne police pour la suite
 		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, prevFontSize));
 	}
 	
@@ -314,7 +321,7 @@ public class Affichage extends JPanel{
 		//affichage score
 		drawScore(g);
 		// si on a perdu on affiche game over
-		if(etat.getFin() == 1) {
+		if(etat.getFin()) {
 			drawEnd(g);
 		}
 		//affichage altitude
