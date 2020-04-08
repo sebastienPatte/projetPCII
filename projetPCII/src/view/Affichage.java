@@ -180,12 +180,7 @@ public class Affichage extends JPanel{
 		}
 	}
 	
-	/**
-	 * Fonction qui calcul et affiche la vitesse du vehicule en fonction de sa position
-	 */
-	private void drawVitesse(Graphics g) {
-		g.drawString(Double.toString(etat.getVitesse()), 75, 475);
-	}
+	
 	
 	/**
 	 * Affiche la Montagne au dessus de l'horizon
@@ -229,10 +224,36 @@ public class Affichage extends JPanel{
 		g.drawString(strScore, LARG-printedLength, 20);
 	}
 	
+	/**
+	 * affiche la vitesse du vehicule en fonction de sa position
+	 * @param g
+	 */
+	private void drawVitesse(Graphics g) {
+		// on arrondit la vitesse à 2 chiffres après la virgule pour l'affichage
+		float vitesse = (float)((int)(etat.getVitesse()*100))/100;
+		String str = "Vitesse : "+vitesse;
+		g.drawString(str, 10, 475);
+	}
+	/**
+	 * Affiche l'altitude de la moto
+	 * @param g
+	 */
+	private void drawAltitude(Graphics g) {
+		String str = "Altitude : "+ etat.getPosVert()/10;
+		g.drawString(str, 10, 520);
+	}
+	
+	private void drawAccel(Graphics g) {
+		// on arrondit la vitesse à 2 chiffres après la virgule pour l'affichage
+		float accel = (float)((int)(etat.getAccel()*100))/100;
+		String str = "Accélération : "+accel;
+		g.drawString(str, 10, 540);
+	}
+	
 	@Override
     public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		g.clearRect(0, 0, LARG, HAUT);
+		g.clearRect(0, posHorizon, LARG, HAUT);
 		
 		//dessine horizon
 		drawHorizon(g);
@@ -240,7 +261,7 @@ public class Affichage extends JPanel{
 		drawVitesse(g);
 		//affiche la piste
 		drawPiste(g2d);
-		//nettoyage horizon
+		//nettoyage horizon (pour masquer les points de la piste qui y sont)
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
@@ -258,6 +279,9 @@ public class Affichage extends JPanel{
 		if(etat.getFin() == 1) {
 			drawEnd(g);
 		}
-		System.out.println(etat.getPosVert());
+		//affichage altitude
+		drawAltitude(g);
+		//affiche accélération
+		drawAccel(g);
 	}
 }

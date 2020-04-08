@@ -178,6 +178,10 @@ public class Piste {
 		updateObstacles();
 		return this.obstacles;
 	}
+	
+	public void removeObstacle(int i) {
+		this.obstacles.remove(i);
+	}
 
 	/** Génère un chiffre aléatoire entre min et max
 	 * @param int min

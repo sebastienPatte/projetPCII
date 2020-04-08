@@ -25,7 +25,14 @@ public class Etat {
 	public static int FACT_ACCEL = Piste.largeurPiste/6;
 	public static int ACCEL_MAX = 101;
 	public static int PosVert_MAX = 50;
-	
+	/**
+	 * baisse de la vitesse quand on percute un obstacle
+	 */
+	public static int ImpactObstacle = 1;
+	/**
+	 * Vitesse minimum de la moto pour pouvoir voler (sinon elle redescend)
+	 */
+	public static int MinVitesseVol = 4;
 	private Piste piste;
 	
 	/**
@@ -37,6 +44,7 @@ public class Etat {
 	private boolean rightPressed;
 	private boolean upPressed;
 	private boolean downPressed;
+	private boolean goDown;
 	
 	private double accel;
 	private double vitesse;
@@ -62,6 +70,7 @@ public class Etat {
 	 * Constructor
 	 */
 	public Etat() {
+		this.goDown = false;
 		this.leftPressed = false;
 		this.rightPressed = false;
 		this.upPressed = false;
@@ -155,6 +164,8 @@ public class Etat {
 	 */
 	private void updateAccel() {
 		double away = (double)(Math.abs(Affichage.LARG/2 - piste.getMidX(0)) + Math.abs(posX)) / FACT_ACCEL;
+		//on ajoute un dixième de la position verticale de la moto
+		away += this.posVert/10;
 		
 		if(accel>0) {
 			accel = ACCEL_MAX - away;
@@ -204,6 +215,9 @@ public class Etat {
 	public void goDown() {
 		if(posVert > 0) {
 			this.posVert--;
+			this.goDown = true;
+		}else {
+			this.goDown = false;
 		}
 	}
 	
@@ -256,23 +270,29 @@ public class Etat {
 			}
 		}
 		
-		if(this.upPressed && !this.downPressed) {
-			goUp();
-			this.etatMoto = 3;
+		if(this.vitesse < MinVitesseVol) {
+			goDown();
 		}else {
-			if(this.downPressed) {
-				goDown();
+			if(this.upPressed && !this.downPressed) {
+				goUp();
+			}else {
+				if(this.downPressed) {
+					goDown();
+				}
 			}
 		}
+		
+		
+		
 		
 	}
 	// Collisions avec les obstacles -------------------------------------------------------------------------------------
 	/**
 	 * @param g
-	 * @return true si la moto est en collision avec un obstacle, false sinon
+	 * @return l'indice d'un obstacle si la moto est en collision avec cet obstacle, -1 si il n'y a pas de collision
 	 */
-	public boolean testCollision(){
-		
+	public int testCollision(){
+		int i=0;
 		for(Obstacle o : piste.getObstacles()) {
 			Rectangle oBounds = o.getBounds();
 			Rectangle motoBounds = getMotoBounds();
@@ -289,7 +309,7 @@ public class Etat {
 					int x2O = x1O+oBounds.width;
 					System.out.println("collision x1m "+x1M+"="+posX+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
 					//
-					return true;
+					return i;
 				}else {
 					if(motoBounds.x  <= oBounds.x + oBounds.width && motoBounds.x  >= oBounds.x) {
 						//et que l'obstacle chevauche la moto par la gauche
@@ -300,13 +320,14 @@ public class Etat {
 						int x2O = x1O+oBounds.width;
 						System.out.println("collision x1m "+x1M+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
 						//
-						return true;
+						return i;
 					}
 				}
 				
 			}
+			i++;
 		}
-		return false;
+		return -1;
 	}	
 	
 	// GETTERS ###############################################################################
@@ -342,6 +363,11 @@ public class Etat {
 	
 	public int getPosVert() {
 		return this.posVert;
+	}
+	
+	public boolean getGoDown() {
+		//aussi quand la moto descend toute seule
+		return this.goDown;
 	}
 	
 	// MOTO -----------------------------------------------------------------------------------
@@ -420,8 +446,11 @@ public class Etat {
 	}
 	
 	public ArrayList<Obstacle> getObstacles() {
-		if(testCollision()) {
-			gameOver();
+		int i = testCollision();
+		if(i!=-1) {
+			//si collision alors on retire l'obstacle cooncerné et on baisse la vitesse
+			piste.removeObstacle(i);
+			this.vitesse -= ImpactObstacle;
 		}
 		return piste.getObstacles();
 	}

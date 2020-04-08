@@ -33,6 +33,25 @@ public class VueMoto {
 	 */
 	public void drawMoto(Graphics g) {
 		
+		
+		if(etat.getPosVert()>0){
+			try {	 
+				image = ImageIO.read(new File(PATH+"ailes.png"));
+				g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord - etat.getPosVert(), null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			if(!etat.getGoDown()) {
+				try {	 
+					image = ImageIO.read(new File(PATH+"flammes.png"));
+					g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord - etat.getPosVert(), null);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		String str = PATH+etat.getEtatMoto()+".png";
 		
 		try {
@@ -41,13 +60,9 @@ public class VueMoto {
 			 
 			g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord - etat.getPosVert(), null);
 			
-			}
-			 
-			catch (IOException e) {
-			 
+		}catch (IOException e) {
 			e.printStackTrace();
-			 
-			}
+		}
 	
 	}
 	
