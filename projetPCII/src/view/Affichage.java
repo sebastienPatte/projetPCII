@@ -41,6 +41,16 @@ public class Affichage extends JPanel{
 	 */
 	public static String PATH= "imgs/red.png";
 	 
+	/** Le recul du joueur par rapport à l'écran */
+	public static final int RECUL_Z = 200;		// recul de 150, pour voir assez loin
+	/** La hauteur du regard du joueur */
+	public static final int HAUTEUR_Y = HAUT;	// regard tout en haut de l'écran, donc à HORIZON au dessus de l'horizon ;-)
+	/** position du joueur (à l'affichage) **/
+	//public static final int POSITION_X = LARG/2;	// au centre de l'écran
+	
+	/* 1. calcul de la profondeur de vue :
+	 * d'après Thales, HAUTEUR_HORIZON/HAUTEUR_Y = profondeur/(profondeur+RECUL_Z) */
+	public static int max_prof = ((HAUT-posHorizon)*RECUL_Z)/(HAUTEUR_Y-HAUT+posHorizon);
 	
 	// Instances du Modèle
 	private Etat etat;
@@ -124,6 +134,21 @@ public class Affichage extends JPanel{
 		g.drawLine(0, posHorizon, LARG, posHorizon);
 	}
 	
+	/** trace le segment qui relie deux points */
+	private void tracer(Point p1, Point p2, Graphics g) {
+		g.drawLine(p1.x, HAUT - p1.y, p2.x,  HAUT - p2.y);
+	}
+	
+	/** Cette méthode calcule la projection sur l'écran (plan xOy) d'un point définir par ses coordonnées x,y,z. */
+	private Point projection(int x, int y, int z) {
+		int posAffX = LARG/2 - etat.getPosX(); //position d'affichage posX depuis le milieu de l'écran
+		//projection sur l'axe y (de la fenetre)
+		int y_resultat = (z * (HAUTEUR_Y - y)) / (z + RECUL_Z) + y;
+		//projection sur l'axe x (de la fenetre)
+		int x_resultat = (z * (posAffX - x)) / (z + RECUL_Z) + x;
+		return new Point(x_resultat,y_resultat);
+	}
+	
 	/**
 	 * Affiche la piste et les checkpoints
 	 * @param g
@@ -132,30 +157,27 @@ public class Affichage extends JPanel{
 		int posX = etat.getPosX();
 		Point[][] piste = etat.getPiste();
 		
-		for(int i=0; i+1<piste.length; i++) {
-			Point[] t1 = piste[i];
-			Point[] t2 = piste[i+1];
+		System.out.println("profMax = "+max_prof);
+		
+		for(int i=1; i<piste.length-2; i++) {
+			
+			Point[] t1 = piste[i];		//tableau 1 de points (droite et gauche)
+			Point[] t2 = piste[i+1];	//tableau 1 de points (droite et gauche)
+			
+			Point p1g = projection(t1[0].x-posX, 0, t1[0].y); 	//point 1 de gauche projeté
+			Point p2g = projection(t2[0].x-posX, 0, t2[0].y); 	//point 2 de gauche projeté
+			Point p1d = projection(t1[1].x-posX, 0, t1[1].y); 	//point 1 de droite projeté
+			Point p2d = projection(t2[1].x-posX, 0, t2[1].y); 	//point 2 de droite projeté
 			
 			//affiche bord piste gauche
-			g.drawLine(
-					t1[0].x-posX,
-					t1[0].y,
-					t2[0].x-posX,
-					t2[0].y
-			);
+			tracer(p1g,p2g, g);
 			//affiche bord piste droite
-			g.drawLine(
-					t1[1].x-posX,
-					t1[1].y,
-					t2[1].x-posX,
-					t2[1].y
-		
-			);
+			tracer(p1d,p2d, g);
 			
-			int largPiste1 = etat.getLargPiste(i);
-			int largPiste2 = etat.getLargPiste(i+1);
+			//int largPiste1 = etat.getLargPiste(i);
+			//int largPiste2 = etat.getLargPiste(i+1);
 			//affiche separation voie gauche
-			
+			/*
 			//on met les lignes en pointillé
 			float dash[] = {20.0f,10.f};
 			g.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f));
@@ -176,7 +198,7 @@ public class Affichage extends JPanel{
 			
 			//on enleve le pointillé
 			g.setStroke(new BasicStroke(1.0f));
-			
+			*/
 			//affichage ligne milieu
 			/*
 			 if(i<=1) {
@@ -191,7 +213,7 @@ public class Affichage extends JPanel{
 			*/
 			
 			
-			
+			/* CHECKPOINTS !!!!!!!!!!!!!!!!!!!
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
 			//si t1 est sur l'indice du checkpoint, on le dessine
@@ -211,10 +233,52 @@ public class Affichage extends JPanel{
 				);
 				g.setColor(Color.BLACK);
 			}
+			*/
+		
 		}
+		
+		/* il faut maintenant gérer le cas du ou des premiers points, qui sont situés "derrière l'écran", donc avec un z
+		 * négatif : on calculer le moment où la route coupe le plan de la vue et c'est ce point qui sera notre premier
+		 * point de dessin */
+		Point p0g = piste[0][0];		//point 0 de gauche
+		Point p1g = piste[1][0];		//point 1 de gauche
+		Point p0d = piste[0][1];		//point 0 de droite
+		Point p1d = piste[1][1];		//point 1 de droite
+		
+		Point premierG = new Point(calculXdepuisYdansSegment(p0g, p1g, 0), 0);	//premier point à gauche
+		Point premierD = new Point(calculXdepuisYdansSegment(p0d, p1d, 0), 0);	//premier point à droite
+		
+		tracer(new Point(premierG.x - posX, premierG.y), projection(p1g.x - posX, 0, p1g.y), g);
+		tracer(new Point(premierD.x - posX, premierD.y), projection(p1d.x - posX, 0, p1d.y), g);
+		
+		/* et enfin, on gère le cas du dernier point, "coupé" par l'horizon */
+		Point d0g = piste[piste.length-2][0];	//avant dernier point de gauche
+		Point d1g = piste[piste.length-1][0];	//dernier point de gauche
+		
+		Point d0d = piste[piste.length-2][1];	//avant dernier point de droite
+		Point d1d = piste[piste.length-1][1];	//dernier point de droite 
+		
+		Point dernierG = new Point(calculXdepuisYdansSegment(d0g, d1g, HAUT-posHorizon), HAUT-posHorizon);
+		Point dernierD = new Point(calculXdepuisYdansSegment(d0d, d1d, HAUT-posHorizon), HAUT-posHorizon);
+		
+		tracer(projection(d0g.x - posX, 0, d0g.y), projection(dernierG.x - posX, 0, dernierG.y), g);
+		tracer(projection(d0d.x - posX, 0, d0d.y), projection(dernierD.x - posX, 0, dernierD.y), g);
 	}
 	
-	
+	/** Une fonction pour calculer la position en x d'un point sur un segment [P1 P2] à partir de sa coordonnée en y.
+	 * Ici, on ne s'en sert qu'une fois (pour "couper" le dernier segment à l'horizon) mais comme
+	 * cela va être très utile dans les autres vues, autant l'écrire tout de suite !
+	 * Dans le cas d'un segment horizontal, retourne -1. */
+	public int calculXdepuisYdansSegment(Point p1, Point p2, int y) {
+		/* cas des segments horizontaux */
+		if (p1.y==p2.y) // cela n'arrive pas avec l'horizon mais on ne sait jamais
+			return -1;
+		/* note: dans le cas particulier de l'intersection avec l'horizon, nous somme certains que ce
+		 * cas ne se produira pas car les points p1 et p2 du modèle ont des y strictement croissants.
+		 */
+		return p1.x + ((y-p1.y)*(p2.x-p1.x))/(p2.y-p1.y);
+		/* note : le parenthésage ci-dessus force la multiplication en premier */
+	}
 	
 	/**
 	 * Affiche la Montagne au dessus de l'horizon
@@ -311,7 +375,7 @@ public class Affichage extends JPanel{
 		//affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
 		//dessine obstacles
-		drawObstacles(g);
+		//drawObstacles(g);
 		//dessine moto
 		this.moto.drawMoto(g);
 		//dessine nuages

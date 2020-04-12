@@ -28,7 +28,7 @@ public class Piste {
 	 * décalage possible à droite et à gauche de la position X du point
 	 * (position X du point aléatoire) 
 	 */
-	public static int dec = 20;
+	public static int dec = 50;
 	/**
 	 * Probabilité qu'un obstacle apparisse (lancée à chaque rafraichissement de la fenêtre)
 	 */
@@ -67,7 +67,7 @@ public class Piste {
 	 * Initialise les points de la piste visibles dès le début
 	 */
 	private void initPoints() {
-		for(int i=Affichage.HAUT; i>=Affichage.posHorizon; i-=incr) {
+		for(int i=0; i<Affichage.HAUT-Affichage.posHorizon; i+=incr) {
 			int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec) + Affichage.LARG/2;
 			this.points.add(new Point(x,i));
 		}
@@ -76,7 +76,7 @@ public class Piste {
 	 * ajoute un point à la {@link Piste#points}
 	 */
 	private void addPoint() {
-		int y = points.get(points.size()-1).y - incr;
+		int y = points.get(points.size()-1).y + incr;
 		int x = randint(-largeurPiste/2-dec,-largeurPiste/2+dec) + Affichage.LARG/2;
 		this.points.add(new Point(x,y));
 	}
@@ -87,11 +87,11 @@ public class Piste {
 	 */
 	void updatePoints() {
 		//on ajoute un point si le dernier point entre dans le champ de vision 
-		if(points.get(points.size()-1).y  + posY >  Affichage.posHorizon ) {
+		if(points.get(points.size()-1).y  < posY + Affichage.max_prof) {
 			addPoint();
 		}
 		//on retire le 1er point si le deuxième sort de la fenêtre (par le bas)
-		if(points.get(1).y + posY >  Affichage.HAUT ) {
+		if(points.get(1).y  < posY) {
 			points.remove(0);
 		}
 		
@@ -99,7 +99,7 @@ public class Piste {
 	
 	
 	/**
-	 * @return la piste sous forme de double tableau contenant les 2 ligne brisées des bords de la piste (avec perspective) 
+	 * @return la piste sous forme de double tableau contenant les 2 ligne brisées des bords de la piste (sans perspective) 
 	 */
 	public Point[][] getPiste(){
 		
@@ -107,12 +107,11 @@ public class Piste {
 		Point[][] res = new Point[points.size()][2]; 
 		for(int i=0; i<points.size(); i++) {
 			Point p = points.get(i);
-			int decPespectiveT1 = (int)((Affichage.HAUT - (p.y + posY))*factRetrecissement);
 			//on applique la perspective aux points de la piste
-			res[i][0]= new Point(p.x + decPespectiveT1, p.y + posY);
-			res[i][1]= new Point(p.x+largeurPiste - decPespectiveT1, p.y + posY);
+			res[i][0]= new Point(p.x , p.y - posY);
+			res[i][1]= new Point(p.x+largeurPiste , p.y - posY);
 		}
-		//System.out.println("majPiste");
+		
 		return res;
 	}
 	
