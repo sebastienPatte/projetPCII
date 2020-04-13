@@ -130,7 +130,7 @@ public class Etat {
 			int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
 			
 			// on récupère x1 et x2 du checkpoint
-			double[] Xcheck = check.getPosX(i);
+			double[] Xcheck = check.getPosX();
 			int cX1 = this.getPiste()[i][0].x + (int)Xcheck[0];
 			int cX2 = this.getPiste()[i][1].x + (int)Xcheck[1];
 

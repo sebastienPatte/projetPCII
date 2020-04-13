@@ -55,10 +55,9 @@ public class Checkpoint {
 		return this.prevTime;
 	}
 	
-	public double[] getPosX(int i) {
+	public double[] getPosX() {
 		double[] res = new double[2];
-		int largPiste = etat.getLargPiste(i);
-		
+	
 		if(voie==0) {
 			res[0] = 0;
 			res[1] = -2./3;
@@ -72,8 +71,6 @@ public class Checkpoint {
 			}
 		}
 		
-		res[0] *= largPiste;
-		res[1] *= largPiste;
 		
 		return res;
 	}

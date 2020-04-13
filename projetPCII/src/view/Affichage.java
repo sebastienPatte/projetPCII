@@ -157,7 +157,6 @@ public class Affichage extends JPanel{
 		int posX = etat.getPosX();
 		Point[][] piste = etat.getPiste();
 		
-		System.out.println("profMax = "+max_prof);
 		
 		for(int i=1; i<piste.length-2; i++) {
 			
@@ -174,31 +173,31 @@ public class Affichage extends JPanel{
 			//affiche bord piste droite
 			tracer(p1d,p2d, g);
 			
-			//int largPiste1 = etat.getLargPiste(i);
-			//int largPiste2 = etat.getLargPiste(i+1);
+			int largPiste1 = p1d.x - p1g.x;
+			int largPiste2 = p2d.x - p2g.x;
 			//affiche separation voie gauche
-			/*
+			
 			//on met les lignes en pointillé
 			float dash[] = {20.0f,10.f};
 			g.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f));
 			//affiche separation voie gauche
 			g.drawLine(
-					t1[0].x-posX+(largPiste1 * 1/3),
-					t1[0].y,
-					t2[0].x-posX+(largPiste2 * 1/3),
-					t2[0].y
+					p1g.x+(largPiste1 / 3),
+					HAUT-p1g.y,
+					p2g.x+(largPiste2 / 3),
+					HAUT-p2g.y
 			);
 			//affiche separation voie droite
 			g.drawLine(
-					t1[1].x-posX-(largPiste1 * 1/3),
-					t1[1].y,
-					t2[1].x-posX-(largPiste2 * 1/3),
-					t2[1].y
+					p1d.x-(largPiste1 / 3),
+					HAUT-p1d.y,
+					p2d.x-(largPiste2 / 3),
+					HAUT-p2d.y
 			);
 			
 			//on enleve le pointillé
 			g.setStroke(new BasicStroke(1.0f));
-			*/
+			
 			//affichage ligne milieu
 			/*
 			 if(i<=1) {
@@ -213,28 +212,27 @@ public class Affichage extends JPanel{
 			*/
 			
 			
-			/* CHECKPOINTS !!!!!!!!!!!!!!!!!!!
+			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
 			//si t1 est sur l'indice du checkpoint, on le dessine
 			if(indice==i) {
-				
+				System.out.println("posYCheck = "+check.getPosY());
 				//on récupère le décalage des positions x1 x2 du checkpoint pour l'afficher sur la bonne voie
 				int[] decCheck = new int[2]; 
-				decCheck[0] = (int) (check.getPosX(i)[0]);
-				decCheck[1] = (int) (check.getPosX(i)[1]);
+				decCheck[0] = (int) (check.getPosX()[0] * largPiste1);
+				decCheck[1] = (int) (check.getPosX()[1] * largPiste1);
 				
 				g.setColor(Color.BLUE);
+				// on utilise pas la méthode tracer donc il faut inverser les y
 				g.drawLine(
-						t1[0].x-posX+decCheck[0],
-						t1[0].y,
-						t1[1].x-posX+decCheck[1],
-						t1[1].y
+						p1g.x+decCheck[0],
+						HAUT-p1g.y,
+						p1d.x+decCheck[1],
+						HAUT-p1d.y
 				);
 				g.setColor(Color.BLACK);
 			}
-			*/
-		
 		}
 		
 		/* il faut maintenant gérer le cas du ou des premiers points, qui sont situés "derrière l'écran", donc avec un z
@@ -251,6 +249,24 @@ public class Affichage extends JPanel{
 		tracer(new Point(premierG.x - posX, premierG.y), projection(p1g.x - posX, 0, p1g.y), g);
 		tracer(new Point(premierD.x - posX, premierD.y), projection(p1d.x - posX, 0, p1d.y), g);
 		
+		// si il y a un checkpoint au premier point, on le dessine
+		int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
+		if(indice == 0) {
+			int largPremier = p1d.x - p1g.x;
+			int[] decCheck = new int[2]; 
+			decCheck[0] = (int) (check.getPosX()[0] * largPremier);
+			decCheck[1] = (int) (check.getPosX()[1] * largPremier);
+			g.setColor(Color.BLUE);
+			// on utilise pas la méthode tracer donc il faut inverser les y
+			g.drawLine(
+					p1g.x-posX+decCheck[0],
+					HAUT-p1g.y,
+					p1d.x-posX+decCheck[1],
+					HAUT-p1d.y
+			);
+			g.setColor(Color.BLACK);
+		}
+		
 		/* et enfin, on gère le cas du dernier point, "coupé" par l'horizon */
 		Point d0g = piste[piste.length-2][0];	//avant dernier point de gauche
 		Point d1g = piste[piste.length-1][0];	//dernier point de gauche
@@ -261,8 +277,28 @@ public class Affichage extends JPanel{
 		Point dernierG = new Point(calculXdepuisYdansSegment(d0g, d1g, HAUT-posHorizon), HAUT-posHorizon);
 		Point dernierD = new Point(calculXdepuisYdansSegment(d0d, d1d, HAUT-posHorizon), HAUT-posHorizon);
 		
+		Point projAvDernierG = projection(d0g.x - posX, 0, d0g.y);
+		Point projAvDernierD = projection(d0d.x - posX, 0, d0d.y);
 		tracer(projection(d0g.x - posX, 0, d0g.y), projection(dernierG.x - posX, 0, dernierG.y), g);
 		tracer(projection(d0d.x - posX, 0, d0d.y), projection(dernierD.x - posX, 0, dernierD.y), g);
+		
+		// si il y a un checkpoint au dernier point, on le dessine
+		if(indice == piste.length-2) {
+			
+			int largDernier = projAvDernierD.x - projAvDernierG.x;
+			int[] decCheck = new int[2]; 
+			decCheck[0] = (int) (check.getPosX()[0] * largDernier);
+			decCheck[1] = (int) (check.getPosX()[1] * largDernier);
+			g.setColor(Color.BLUE);
+			// on utilise pas la méthode tracer donc il faut inverser les y
+			g.drawLine(
+					projAvDernierG.x-posX+decCheck[0],
+					HAUT-projAvDernierG.y,
+					projAvDernierD.x-posX+decCheck[1],
+					HAUT-projAvDernierD.y
+			);
+			g.setColor(Color.BLACK);
+		}
 	}
 	
 	/** Une fonction pour calculer la position en x d'un point sur un segment [P1 P2] à partir de sa coordonnée en y.
