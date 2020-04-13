@@ -123,16 +123,19 @@ public class Etat {
 	public void testCheckpoint() {
 		Rectangle mBounds = getMotoBounds();
 		
-		if(mBounds.height + this.getPosY() + VueMoto.decBord >=  check.getPosY()) {
+		if(mBounds.height + VueMoto.decBord >=  check.getPosY() - this.getPosY()) {
 		//si le checkpoint a atteint le niveau de la moto
-			
+			System.out.println("Y CHECK = "+(check.getPosY()-this.getPosY())+" Y MOTO = "+(mBounds.height + VueMoto.decBord));
 			//calcul indice checkpoint sur la piste
 			int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
 			
 			// on récupère x1 et x2 du checkpoint
+			Point pG = this.getPiste()[i][0];
+			Point pD = this.getPiste()[i][1];
 			double[] Xcheck = check.getPosX();
-			int cX1 = this.getPiste()[i][0].x + (int)Xcheck[0];
-			int cX2 = this.getPiste()[i][1].x + (int)Xcheck[1];
+			int largPiste = pD.x - pG.x; 
+			int cX1 = pG.x + (int)(Xcheck[0] * largPiste);
+			int cX2 = pD.x + (int)(Xcheck[1] * largPiste);
 
 			// on récupère x1 et x2 de la Moto
 			int mX1 = mBounds.x + Affichage.LARG/2;                
@@ -147,12 +150,14 @@ public class Etat {
 				
 			}
 		}
-		if(check.getPosY() <= this.getPosY()  + VueMoto.decBord) {
+		
+		if(check.getPosY() <= this.getPosY() + VueMoto.decBord) {
 			//sinon si, le checkpoint est sorti de la fenètre alors on passe au suivant sans ajouter de temps
 			System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
 			check.nextCheckpoint();
 			System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
 		}
+		
 	}
 	
 	/**
@@ -206,7 +211,7 @@ public class Etat {
 			accel=ACCEL_MAX;
 		}
 		
-		System.out.println("accel = "+accel+" away = "+away);
+		//System.out.println("accel = "+accel+" away = "+away);
 	}
 	
 	/**
