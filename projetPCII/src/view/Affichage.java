@@ -215,8 +215,8 @@ public class Affichage extends JPanel{
 			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
-			//si t1 est sur l'indice du checkpoint, on le dessine
-			if(indice==i) {
+			//si t1 est sur l'indice du checkpoint, on le dessine (on dessinne pas si l'indice est 1 car on le dessine juste après)
+			if(indice > 1 && indice==i) {
 				//on récupère le décalage des positions x1 x2 du checkpoint pour l'afficher sur la bonne voie
 				int[] decCheck = new int[2]; 
 				decCheck[0] = (int) (check.getPosX()[0] * largPiste1);
@@ -268,7 +268,6 @@ public class Affichage extends JPanel{
 			);
 			
 			g.setColor(Color.BLACK);
-			System.out.println("prems Y CHECKPROJ = "+(p1d.y));
 		}
 		
 		/* et enfin, on gère le cas du dernier point, "coupé" par l'horizon */
@@ -302,7 +301,6 @@ public class Affichage extends JPanel{
 					projAvDernierD.x+decCheck[1],
 					HAUT-projAvDernierD.y
 			);
-			System.out.println("dernier Y CHECKPROJ = "+(projAvDernierG.y)+" "+ d0g.y);
 			g.setColor(Color.BLACK);
 		}
 	}

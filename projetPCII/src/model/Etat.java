@@ -116,48 +116,61 @@ public class Etat {
 		this.posVert = 0;
 	}
 	
+	/** Cette méthode calcule la projection sur l'écran (plan xOy) d'un point définir par ses coordonnées x,y,z. */
+	private Point projection(int x, int y, int z) {
+		int posAffX = Affichage.LARG/2 - getPosX(); //position d'affichage posX depuis le milieu de l'écran
+		//projection sur l'axe y (de la fenetre)
+		int y_resultat = (z * (Affichage.HAUTEUR_Y - y)) / (z + Affichage.RECUL_Z) + y;
+		//projection sur l'axe x (de la fenetre)
+		int x_resultat = (z * (posAffX - x)) / (z + Affichage.RECUL_Z) + x;
+		return new Point(x_resultat,y_resultat);
+	}
 	
 	/**
 	 * on ajoute du temps quand la moto atteint un checkpoint
 	 */
 	public void testCheckpoint() {
 		Rectangle mBounds = getMotoBounds();
-		
-		if(mBounds.height + VueMoto.decBord >=  check.getPosY() - this.getPosY()) {
-		//si le checkpoint a atteint le niveau de la moto
-			System.out.println("Y CHECK = "+(check.getPosY()-this.getPosY())+" Y MOTO = "+(mBounds.height + VueMoto.decBord));
-			//calcul indice checkpoint sur la piste
-			int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
+		//calcul indice checkpoint sur la piste
+		int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
+		if(i<getPiste().length) {
+			int yCheckProj =  projection(this.getPiste()[i][0].x, 0, this.getPiste()[i][0].y).y;
+			System.out.println("yCheckProj "+yCheckProj);
+			//ancien test : if(mBounds.height + VueMoto.decBord >=  check.getPosY() - this.getPosY())
 			
-			// on récupère x1 et x2 du checkpoint
-			Point pG = this.getPiste()[i][0];
-			Point pD = this.getPiste()[i][1];
-			double[] Xcheck = check.getPosX();
-			int largPiste = pD.x - pG.x; 
-			int cX1 = pG.x + (int)(Xcheck[0] * largPiste);
-			int cX2 = pD.x + (int)(Xcheck[1] * largPiste);
-
-			// on récupère x1 et x2 de la Moto
-			int mX1 = mBounds.x + Affichage.LARG/2;                
-			int mX2 = mBounds.x + mBounds.width + Affichage.LARG/2;
-			
-			if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
-				//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on gagne du temps
-				check.addTime();
-				// et on génère le prochain checkpoint
-				check.nextCheckpoint();
-			}else {
+			if(yCheckProj <= mBounds.height + VueMoto.decBord) {
+			//si le checkpoint a atteint le niveau de la moto
+				System.out.println("Y CHECK = "+(check.getPosY()-this.getPosY())+" Y MOTO = "+(mBounds.height + VueMoto.decBord));
 				
+				// calcul points au niveau du checkpoint
+				Point pG = projection(this.getPiste()[i][0].x, 0, this.getPiste()[i][0].y);
+				Point pD = projection(this.getPiste()[i][1].x, 0, this.getPiste()[i][1].y);	
+				
+				// on récupère x1 et x2 du checkpoint
+				double[] Xcheck = check.getPosX();
+				int largPiste = pD.x - pG.x; 
+				int cX1 = pG.x + (int)(Xcheck[0] * largPiste);
+				int cX2 = pD.x + (int)(Xcheck[1] * largPiste);
+	
+				// on récupère x1 et x2 de la Moto
+				int mX1 = mBounds.x + Affichage.LARG/2;                
+				int mX2 = mBounds.x + mBounds.width + Affichage.LARG/2;
+				
+				if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
+					//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on gagne du temps
+					check.addTime();
+					// et on génère le prochain checkpoint
+					check.nextCheckpoint();
+				}
+			}
+			
+			if(check.getPosY() <= this.getPosY() + VueMoto.decBord) {
+				//sinon si, le checkpoint est sorti de la fenètre alors on passe au suivant sans ajouter de temps
+				System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
+				check.nextCheckpoint();
+				System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
 			}
 		}
-		
-		if(check.getPosY() <= this.getPosY() + VueMoto.decBord) {
-			//sinon si, le checkpoint est sorti de la fenètre alors on passe au suivant sans ajouter de temps
-			System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
-			check.nextCheckpoint();
-			System.out.println("checkPosY "+check.getPosY()+" posY "+getPosY());
-		}
-		
 	}
 	
 	/**
