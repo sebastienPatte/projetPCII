@@ -42,11 +42,10 @@ public class Affichage extends JPanel{
 	public static String PATH= "imgs/red.png";
 	 
 	/** Le recul du joueur par rapport à l'écran */
-	public static final int RECUL_Z = 200;		// recul de 150, pour voir assez loin
+	public static final int RECUL_Z = 200;
 	/** La hauteur du regard du joueur */
-	public static final int HAUTEUR_Y = HAUT;	// regard tout en haut de l'écran, donc à HORIZON au dessus de l'horizon ;-)
-	/** position du joueur (à l'affichage) **/
-	//public static final int POSITION_X = LARG/2;	// au centre de l'écran
+	public static final int HAUTEUR_Y = HAUT;	// regard tout en haut de l'écran, donc à HORIZON au dessus de l'horizon
+
 	
 	/* 1. calcul de la profondeur de vue :
 	 * d'après Thales, HAUTEUR_HORIZON/HAUTEUR_Y = profondeur/(profondeur+RECUL_Z) */
@@ -119,7 +118,7 @@ public class Affichage extends JPanel{
 		int prevTime = this.clock.getPrevTime();
 		if(tempsRestant >= prevTime) {
 			g.setColor(Color.GREEN);
-			g.drawString("+"+this.check.getPrevTime(),5 , 65);
+			g.drawString("+"+this.check.getPrevTime(),LARG/2 - 10, HAUT/2);
 			g.setColor(Color.BLACK);
 		}
 		//on revient à l'ancienne police
@@ -258,8 +257,8 @@ public class Affichage extends JPanel{
 			decCheck[0] = (int) (check.getPosX()[0] * largPremier);
 			decCheck[1] = (int) (check.getPosX()[1] * largPremier);
 			g.setColor(Color.BLUE);
-			// on utilise pas la méthode tracer donc il faut inverser les y
 			
+			// on utilise pas la méthode tracer donc il faut inverser les y
 			g.drawLine(
 					deuxiemeG.x+decCheck[0],
 					HAUT-deuxiemeG.y,
@@ -339,11 +338,11 @@ public class Affichage extends JPanel{
 	 * @param g
 	 */
 	private void drawObstacles(Graphics g) {
+		int i =0;
 		for(Obstacle o : etat.getObstacles()) {
 				Rectangle bounds = o.getBounds();
-
-				if(bounds.y > posHorizon) {	
-					
+				if(bounds.y < HAUT-posHorizon) {	
+					/*
 					try {
 						
 						Image image = ImageIO.read(new File(PATH)).getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
@@ -352,8 +351,19 @@ public class Affichage extends JPanel{
 					}catch (IOException e) {
 						e.printStackTrace(); 
 					}
-					g.drawRect(LARG/2+bounds.x-etat.getPosX(), o.getY(), bounds.width, bounds.height);
+					*/
+					//g.drawRect(LARG/2+bounds.x-etat.getPosX(), HAUT-o.getY(), bounds.width, bounds.height);
+					
+					Point p1 = new Point(bounds.x+LARG/2-etat.getPosX(), bounds.y);	//p1 : point en bas à gauche
+					Point p3 = projection(p1.x,0,p1.y);								//p3 : projection de p1 sur le plan (hauteur = 0)
+					Point p2 = projection(p1.x+bounds.width, 0, p1.y);				//p2 : projection du point en bas à droite sur le plan (hauteur = 0)
+					
+					int haut =  projection(p1.x, bounds.height, p1.y).y - p3.y;		//haut : y du point en haut à gauche (projeté sur le plan) - y de p3
+					int larg = p2.x-p3.x;											//larg : x de p2 - x de p1
+					
+					g.fillRect(p3.x, HAUT-p3.y, larg, haut);					// on inverse y pour convertir les points du modèle 
 				}
+				i++;
 		}
 	}
 	
@@ -415,7 +425,7 @@ public class Affichage extends JPanel{
 		//affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
 		//dessine obstacles
-		//drawObstacles(g);
+		drawObstacles(g);
 		//dessine moto
 		this.moto.drawMoto(g);
 		//dessine nuages

@@ -40,7 +40,6 @@ public class Checkpoint {
 			this.prevTime = this.time;
 			this.time--;
 		}
-		System.out.println(time);
 	}
 	
 	public int getPosY() {

@@ -19,7 +19,7 @@ public class Piste {
 	/**
 	 * Nombre d'obstacles maximum en même temps
 	 */
-	public static int ObstaclesMax = 3;
+	public static int ObstaclesMax = 10;
 	/**
 	 * décalage en hauteur entre chaque point de la piste
 	 */
@@ -32,7 +32,7 @@ public class Piste {
 	/**
 	 * Probabilité qu'un obstacle apparisse (lancée à chaque rafraichissement de la fenêtre)
 	 */
-	public static int probaObstacle = 1000;
+	public static int probaObstacle = 100;
 	/**
 	 * liste des points de la ligne du bord gauche de la piste
 	 * (pas besoin d'avoir les 2 bords car on a {@link #largeurPiste})
@@ -189,12 +189,15 @@ public class Piste {
 	 */
 	private void updateObstacles() {
 		//on retire le premier obstacle (le plus ancien) tant qu'il est en dehors du champ de vision
-		while(obstacles.size() > 0 && obstacles.get(0).getY() >= Affichage.HAUT) {
+		while(obstacles.size() > 0 && obstacles.get(0).getY() < 0) {
+			System.out.println("rm OBS y = "+obstacles.get(0).getY());
 			obstacles.remove(0);
+			
 		}
 		if(obstacles.size() < ObstaclesMax && randint(0,probaObstacle)==0) {
-			//la position y de l'obstacle est posY du dernier point de la piste (négatif, le point le plus en haut au dessus de la fenetre)
+			//la position y de l'obstacle est posY du dernier point de la piste (le point le plus en haut, au dessus de la fenetre)
 			obstacles.add(new Obstacle(this, points.get(points.size()-1).y));
+			System.out.println("new OBS y = "+points.get(points.size()-1).y);
 		}
 	}
 	

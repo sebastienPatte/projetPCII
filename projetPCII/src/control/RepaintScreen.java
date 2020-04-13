@@ -35,7 +35,7 @@ public class RepaintScreen extends StoppableThread{
 	@Override
 	public void run() {
 		while(this.running) {
-			try { Thread.sleep(time);  this.aff.repaint();}
+			try { Thread.sleep(time); this.aff.revalidate(); this.aff.repaint();}
 			catch (Exception e) { e.printStackTrace(); this.terminate(); }
 		}
 	}
