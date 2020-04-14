@@ -19,8 +19,8 @@ public class Checkpoint {
 	private Etat etat;
 	
 	public Checkpoint(Etat etat) {
-		this.time = 20;
-		this.prevTime = 20;
+		this.time = 50;
+		this.prevTime = 50;
 		this.posY = INCR*Piste.incr;
 		this.etat = etat;
 		this.clock = new Clock(time,etat);

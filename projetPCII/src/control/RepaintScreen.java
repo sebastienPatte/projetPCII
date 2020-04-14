@@ -10,7 +10,7 @@ public class RepaintScreen extends StoppableThread{
 	/**
 	 * temps entre chaque rafraichissement de l'affichage 
 	 */
-	public static int time = 41;
+	public static int time = 50;
 	/**
 	 * indique si le {@link Thread} tourne encore
 	 */

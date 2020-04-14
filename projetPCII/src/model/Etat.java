@@ -16,14 +16,21 @@ import view.VueMoto;
 
 public class Etat {
 	
-	public static int deplacement = 5;
+	public static int deplacement = 10;
 	/** 
 	 * ici on prend FACT_ACCEL égal à une demie largeur d'une des 3 voies
 	 * donc quand on est dans la voie du milieu l'accéléraction est > 100 donc on accélère 
 	 * et sur les voies des côtés on est en dessous de 100 donc on décélère 
 	 */
-	public static int FACT_ACCEL = Piste.largeurPiste/6;
-	public static int ACCEL_MAX = 101;
+	public static int FACT_ACCEL = Piste.largeurPiste/20;
+	/**
+	 * Facteur d'accélération concernant l'altitude, avec 1.5 l'accélération est à 100%
+	 * quand on est juste au milieu de la piste avec une altitude de 1 (suffisant pour passer au dessus des obstacles) 
+	 * mais dès qu'on s'en écarte on perd de la vitesse. Et quand la vitesse passe en dessous de {@link #MinVitesseVol}
+	 * alors la moto descend toute seule vers le sol pour accélérer. 
+	 */
+	public static double FACT_ACCEL_VERT = 1.5;
+	public static int ACCEL_MAX = 110;
 	public static int PosVert_MAX = 50;
 	/**
 	 * baisse de la vitesse quand on percute un obstacle
@@ -33,6 +40,11 @@ public class Etat {
 	 * Vitesse minimum de la moto pour pouvoir voler (sinon elle redescend)
 	 */
 	public static int MinVitesseVol = 4;
+	/**
+	 * {@link #vitesse} maximale atteingnable par la moto
+	 */
+	static double vitesseMax = 5.0;//pixels par repaint
+	
 	private Piste piste;
 	
 	/**
@@ -68,10 +80,7 @@ public class Etat {
 	 * Vitesse de la moto (en px par rafraichissement)
 	 */
 	private double vitesse;
-	/**
-	 * {@link #vitesse} maximale atteingnable par la moto
-	 */
-	static double vitesseMax = 5.0;//pixels par repaint
+	
 	/**
 	 * true si le joueur a perdu, false sinon
 	 */
@@ -212,7 +221,7 @@ public class Etat {
 	private void updateAccel() {
 		double away = (double)(Math.abs(Affichage.LARG/2 - piste.getMidX(0)) + Math.abs(posX)) / FACT_ACCEL;
 		//on ajoute un dixième de la position verticale de la moto
-		away += this.posVert/10;
+		away += this.posVert / FACT_ACCEL_VERT ;
 		
 		if(accel>0) {
 			accel = ACCEL_MAX - away;
@@ -361,34 +370,25 @@ public class Etat {
 			for(Obstacle o : piste.getObstacles()) {
 				Rectangle oBounds = o.getBounds();
 				Rectangle motoBounds = getMotoBounds();
+				//si l'obstacle arrive à la position y de la moto
+				Point p1 = new Point(oBounds.x+Affichage.LARG/2-getPosX(), oBounds.y);	//p1 : point en bas à gauche
+				Point p3 = projection(p1.x,0,p1.y);										//p3 : projection de p1 sur le plan (hauteur = 0)
+				Point p2 = projection(p1.x+oBounds.width, 0, p1.y);						//p2 : projection du point en bas à droite sur le plan (hauteur = 0)
 				
-				if(oBounds.y+oBounds.height >= Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - VueMoto.decBord) {
-					//si l'obstacle arrive à la position y de la moto
+				int haut =  projection(p1.x, oBounds.height, p1.y).y - p3.y;			//haut : y du point en haut à gauche (projeté sur le plan) - y de p3
+				int larg = p2.x-p3.x;													//larg : x de p2 - x de p1
+				Point p4 = new Point(p3.x, Affichage.HAUT - p3.y);						//point d'en bas à gauche tel qu'il est dessiné (avec Y inversé)
+				
+				// le rectangle est donc : (p4.x, p4.y, larg, haut)
+				
+				// si le bas de l'obstacle est en dessous du haut de la moto ET que le haut de l'obstacle est au dessus du bas de la moto
+				if(p4.y + haut > Affichage.HAUT - motoBounds.height - VueMoto.decBord && p4.y <= Affichage.HAUT - VueMoto.decBord) {
 					
-					if(oBounds.x <= motoBounds.x + motoBounds.width &&  oBounds.x >= motoBounds.x) {
-						//et que l'obstacle chevauche la moto par la droite
-						//
-						int x1M = motoBounds.x;
-						int x2M = motoBounds.x+motoBounds.width;
-						int x1O = oBounds.x;
-						int x2O = x1O+oBounds.width;
-						System.out.println("collision x1m "+x1M+"="+posX+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
-						//
+					// si bord gauche de OBS < bord droit de moto ET bord droit de OBS > bord gauche de moto
+					if(p4.x <= Affichage.LARG/2 + motoBounds.width && p4.x + larg >= Affichage.LARG/2) {
+						//on retourne l'indice de l'obstacle pour le faire disparaître lors de la collision
 						return i;
-					}else {
-						if(motoBounds.x  <= oBounds.x + oBounds.width && motoBounds.x  >= oBounds.x) {
-							//et que l'obstacle chevauche la moto par la gauche
-							//
-							int x1M = motoBounds.x;
-							int x2M = x1M+motoBounds.width;
-							int x1O = oBounds.x;
-							int x2O = x1O+oBounds.width;
-							System.out.println("collision x1m "+x1M+" x2m "+x2M+" x1o "+x1O+" x2o "+x2O);
-							//
-							return i;
-						}
 					}
-					
 				}
 				i++;
 			}
@@ -521,7 +521,7 @@ public class Etat {
 		if(i!=-1) {
 			//si collision alors on retire l'obstacle cooncerné et on baisse la vitesse
 			piste.removeObstacle(i);
-			//this.vitesse -= ImpactObstacle;
+			this.vitesse -= ImpactObstacle;
 		}
 		return piste.getObstacles();
 	}
