@@ -34,7 +34,20 @@ public class VueMoto {
 	public void drawMoto(Graphics g) {
 		
 		
+		
+		// si on vole 
 		if(etat.getPosVert()>0){
+			
+			// affiche ombre de la moto selon l'état de la moto (gauche, tout droit, droite)
+			String str = PATH+"ombre"+etat.getEtatMoto()+".png";
+			try {
+				image = ImageIO.read(new File(str));
+				g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord , null);
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			// affiche les ailes
 			try {	 
 				image = ImageIO.read(new File(PATH+"ailes.png"));
 				g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord - etat.getPosVert(), null);
@@ -42,6 +55,7 @@ public class VueMoto {
 				e.printStackTrace();
 			}
 			
+			// et les flammes si on est en train de gagner de l'altitude
 			if(!etat.getGoDown()) {
 				try {	 
 					image = ImageIO.read(new File(PATH+"flammes.png"));
@@ -52,14 +66,11 @@ public class VueMoto {
 			}
 		}
 		
+		// affiche la moto selon si elle va tout droit, vers la droite ou la gauche
 		String str = PATH+etat.getEtatMoto()+".png";
-		
-		try {
-			 
-			image = ImageIO.read(new File(str));
-			 
+		try { 
+			image = ImageIO.read(new File(str)); 
 			g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord - etat.getPosVert(), null);
-			
 		}catch (IOException e) {
 			e.printStackTrace();
 		}

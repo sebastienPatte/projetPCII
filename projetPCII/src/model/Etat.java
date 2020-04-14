@@ -39,7 +39,7 @@ public class Etat {
 	/**
 	 * Vitesse minimum de la moto pour pouvoir voler (sinon elle redescend)
 	 */
-	public static int MinVitesseVol = 4;
+	public static int MinVitesseVol = 2;
 	/**
 	 * {@link #vitesse} maximale atteingnable par la moto
 	 */
