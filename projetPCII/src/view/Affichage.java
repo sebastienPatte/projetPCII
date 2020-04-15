@@ -40,7 +40,6 @@ public class Affichage extends JPanel{
 	 * chemin vers l'image d'obstacles
 	 */
 	public static String PATH= "imgs/red.png";
-	 
 	/** Le recul du joueur par rapport à l'écran */
 	public static final int RECUL_Z = 200;
 	/** La hauteur du regard du joueur */
@@ -341,17 +340,8 @@ public class Affichage extends JPanel{
 		int i =0;
 		for(Obstacle o : etat.getObstacles()) {
 				Rectangle bounds = o.getBounds();
-				if(bounds.y < HAUT-posHorizon) {	
-					
-					Point p1 = new Point(bounds.x+LARG/2-etat.getPosX(), bounds.y);	//p1 : point en bas à gauche
-					Point p3 = projection(p1.x,0,p1.y);								//p3 : projection de p1 sur le plan (hauteur = 0)
-					Point p2 = projection(p1.x+bounds.width, 0, p1.y);				//p2 : projection du point en bas à droite sur le plan (hauteur = 0)
-					
-					int haut =  projection(p1.x, bounds.height, p1.y).y - p3.y;		//haut : y du point en haut à gauche (projeté sur le plan) - y de p3
-					int larg = p2.x-p3.x;											//larg : x de p2 - x de p1
-					g.setColor(Color.RED);
-					g.fillRect(p3.x, HAUT-p3.y, larg, haut);					// on inverse y pour convertir les points du modèle
-					g.setColor(Color.BLACK);
+				if(bounds.y > posHorizon) {	
+					g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 				}
 				i++;
 		}

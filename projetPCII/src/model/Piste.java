@@ -196,7 +196,7 @@ public class Piste {
 		}
 		if(obstacles.size() < ObstaclesMax && randint(0,probaObstacle)==0) {
 			//la position y de l'obstacle est posY du dernier point de la piste (le point le plus en haut, au dessus de la fenetre)
-			obstacles.add(new Obstacle(this, points.get(points.size()-1).y));
+			obstacles.add(new Obstacle(this, etat, points.get(points.size()-1).y));
 			
 		}
 	}

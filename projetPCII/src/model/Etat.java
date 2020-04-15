@@ -126,7 +126,7 @@ public class Etat {
 	}
 	
 	/** Cette méthode calcule la projection sur l'écran (plan xOy) d'un point définir par ses coordonnées x,y,z. */
-	private Point projection(int x, int y, int z) {
+	Point projection(int x, int y, int z) {
 		int posAffX = Affichage.LARG/2 - getPosX(); //position d'affichage posX depuis le milieu de l'écran
 		//projection sur l'axe y (de la fenetre)
 		int y_resultat = (z * (Affichage.HAUTEUR_Y - y)) / (z + Affichage.RECUL_Z) + y;
@@ -365,27 +365,17 @@ public class Etat {
 	 * @return l'indice d'un obstacle si la moto est en collision avec cet obstacle, -1 si il n'y a pas de collision
 	 */
 	public int testCollision(){
+		// si la moto à une altitude inférieure à 1 (sinon on ingrore les obstacles)
 		if(this.posVert < 1) {	
 			int i=0;
 			for(Obstacle o : piste.getObstacles()) {
 				Rectangle oBounds = o.getBounds();
 				Rectangle motoBounds = getMotoBounds();
-				//si l'obstacle arrive à la position y de la moto
-				Point p1 = new Point(oBounds.x+Affichage.LARG/2-getPosX(), oBounds.y);	//p1 : point en bas à gauche
-				Point p3 = projection(p1.x,0,p1.y);										//p3 : projection de p1 sur le plan (hauteur = 0)
-				Point p2 = projection(p1.x+oBounds.width, 0, p1.y);						//p2 : projection du point en bas à droite sur le plan (hauteur = 0)
-				
-				int haut =  projection(p1.x, oBounds.height, p1.y).y - p3.y;			//haut : y du point en haut à gauche (projeté sur le plan) - y de p3
-				int larg = p2.x-p3.x;													//larg : x de p2 - x de p1
-				Point p4 = new Point(p3.x, Affichage.HAUT - p3.y);						//point d'en bas à gauche tel qu'il est dessiné (avec Y inversé)
-				
-				// le rectangle est donc : (p4.x, p4.y, larg, haut)
-				
-				// si le bas de l'obstacle est en dessous du haut de la moto ET que le haut de l'obstacle est au dessus du bas de la moto
-				if(p4.y + haut > Affichage.HAUT - motoBounds.height - VueMoto.decBord && p4.y <= Affichage.HAUT - VueMoto.decBord) {
-					
+				// si l'obstacle arrive à la position y de la moto
+				// c-a-d si le bas de l'obstacle est en dessous du haut de la moto ET que le haut de l'obstacle est au dessus du bas de la moto
+				if(oBounds.y + oBounds.height > Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - VueMoto.decBord) {
 					// si bord gauche de OBS < bord droit de moto ET bord droit de OBS > bord gauche de moto
-					if(p4.x <= Affichage.LARG/2 + motoBounds.width && p4.x + larg >= Affichage.LARG/2) {
+					if(oBounds.x <= Affichage.LARG/2 + motoBounds.width && oBounds.x + oBounds.width >= Affichage.LARG/2) {
 						//on retourne l'indice de l'obstacle pour le faire disparaître lors de la collision
 						return i;
 					}
