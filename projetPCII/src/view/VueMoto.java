@@ -4,9 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import model.Etat;
 
 public class VueMoto {
@@ -32,8 +30,6 @@ public class VueMoto {
 	 * @param g
 	 */
 	public void drawMoto(Graphics g) {
-		
-		
 		
 		// si on vole 
 		if(etat.getPosVert()>0){
@@ -66,7 +62,7 @@ public class VueMoto {
 			}
 		}
 		
-		// affiche la moto selon si elle va tout droit, vers la droite ou la gauche
+		// dans tout les cas, on affiche la moto selon si elle va tout droit, vers la droite ou la gauche
 		String str = PATH+etat.getEtatMoto()+".png";
 		try { 
 			image = ImageIO.read(new File(str)); 
@@ -74,15 +70,6 @@ public class VueMoto {
 		}catch (IOException e) {
 			e.printStackTrace();
 		}
-	
 	}
-	
-	/**
-	 * @return la hauteur de l'image de la moto
-	 */
-	public int getHeight() {
-		return image.getHeight(null)+decBord;
-	}
-
 }
 

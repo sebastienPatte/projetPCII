@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.concurrent.ThreadLocalRandom;

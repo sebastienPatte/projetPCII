@@ -7,6 +7,11 @@ import javax.swing.*;
 
 public class Clock extends JPanel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private Etat etat;
 	
 	/**

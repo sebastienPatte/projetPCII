@@ -36,11 +36,6 @@ public class VueNuages {
 	 */
 	public VueNuages() {
 		this.list = new ArrayList<Nuage>();
-		try {
-			Image image = ImageIO.read(new File(PATH));
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/**
@@ -64,16 +59,11 @@ public class VueNuages {
 			}
 			
 			try {
-				 
 				Image image = ImageIO.read(new File(PATH)).getScaledInstance(nuage.getWidth(), nuage.getHeight(), 100);
-				 
-				g.drawImage(image,  nuage.getPosX() - posX, nuage.getPosY(), null);
-				
+				g.drawImage(image,  nuage.getPosX() - posX, nuage.getPosY(), null);	
 			}
-				 
 				catch (IOException e) {
-				e.printStackTrace();
-				 
+				e.printStackTrace();	 
 			}
 
 		}

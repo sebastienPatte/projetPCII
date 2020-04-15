@@ -7,14 +7,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import model.Obstacle;
@@ -337,13 +332,11 @@ public class Affichage extends JPanel{
 	 * @param g
 	 */
 	private void drawObstacles(Graphics g) {
-		int i =0;
 		for(Obstacle o : etat.getObstacles()) {
-				Rectangle bounds = o.getBounds();
-				if(bounds.y > posHorizon) {	
-					g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-				}
-				i++;
+			Rectangle bounds = o.getBounds();
+			if(bounds.y > posHorizon) {	
+				g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			}
 		}
 	}
 	

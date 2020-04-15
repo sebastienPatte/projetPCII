@@ -16,13 +16,11 @@ public class Checkpoint {
 	private int time;
 	private int prevTime;
 	private Clock clock;
-	private Etat etat;
 	
 	public Checkpoint(Etat etat) {
 		this.time = 50;
 		this.prevTime = 50;
 		this.posY = INCR*Piste.incr;
-		this.etat = etat;
 		this.clock = new Clock(time,etat);
 		this.voie = 0;
 		

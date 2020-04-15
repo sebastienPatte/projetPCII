@@ -1,13 +1,11 @@
 package model;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 import javax.imageio.ImageIO;
 
 import control.StoppableThread;
@@ -146,7 +144,7 @@ public class Etat {
 			// on projete un point au niveau Y du checkpoint pour obtenir l'Y d'affichage du checkpoint (qui prend déjà en compte posY de la moto)
 			int yCheckProj =  projection(this.getPiste()[i][0].x, 0, this.getPiste()[i][0].y).y;
 			
-			if(yCheckProj <= mBounds.height + VueMoto.decBord) {
+			if(yCheckProj <= mBounds.height) {
 			//si le checkpoint a atteint le niveau de la moto
 				// calcul points au niveau du checkpoint
 				Point pG = projection(this.getPiste()[i][0].x, 0, this.getPiste()[i][0].y);
@@ -159,8 +157,8 @@ public class Etat {
 				int cX2 = pD.x + (int)(Xcheck[1] * largPiste);
 	
 				// on récupère x1 et x2 de la Moto
-				int mX1 = mBounds.x + Affichage.LARG/2;                
-				int mX2 = mBounds.x + mBounds.width + Affichage.LARG/2;
+				int mX1 = mBounds.x;                
+				int mX2 = mBounds.x + mBounds.width;
 				
 				if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
 					//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on ajoute du temps
@@ -370,12 +368,18 @@ public class Etat {
 			int i=0;
 			for(Obstacle o : piste.getObstacles()) {
 				Rectangle oBounds = o.getBounds();
-				Rectangle motoBounds = getMotoBounds();
+				Rectangle mBounds = getMotoBounds();
+				
+				int mX1 = Affichage.LARG/2;						//bord gauche de la moto
+				int mX2 = mX1 + mBounds.width;					//bord droit de la moto
+				int mY1 = Affichage.HAUT - mBounds.height;		//bord haut de la moto
+				int mY2 = Affichage.HAUT - VueMoto.decBord;		//bord bas de la moto
+				
 				// si l'obstacle arrive à la position y de la moto
 				// c-a-d si le bas de l'obstacle est en dessous du haut de la moto ET que le haut de l'obstacle est au dessus du bas de la moto
-				if(oBounds.y + oBounds.height > Affichage.HAUT - motoBounds.height - VueMoto.decBord && oBounds.y <= Affichage.HAUT - VueMoto.decBord) {
+				if(oBounds.y + oBounds.height > mY1 && oBounds.y <= mY2) {
 					// si bord gauche de OBS < bord droit de moto ET bord droit de OBS > bord gauche de moto
-					if(oBounds.x <= Affichage.LARG/2 + motoBounds.width && oBounds.x + oBounds.width >= Affichage.LARG/2) {
+					if(oBounds.x <= mX2 && oBounds.x + oBounds.width >= mX1) {
 						//on retourne l'indice de l'obstacle pour le faire disparaître lors de la collision
 						return i;
 					}
@@ -438,15 +442,16 @@ public class Etat {
 	/**
 	 * @return un {@link Rectangle} correspondant à la position et la taille de la moto
 	 */
+	
 	private Rectangle getMotoBounds() {
 		String str = VueMoto.PATH+etatMoto+".png";
 		try {
 			Image image = ImageIO.read(new File(str));
 			
 			
-			int height = image.getHeight(null);
+			int height = image.getHeight(null) + VueMoto.decBord;
 			int width = image.getWidth(null);
-			int x = posX;
+			int x = posX + Affichage.LARG/2;
 			
 			int y = getPosY();
 			return new Rectangle(x,y,width,height);
@@ -516,15 +521,6 @@ public class Etat {
 		return piste.getObstacles();
 	}
 	
-	/** Génère un chiffre aléatoire entre min et max
-	 * @param int min
-	 * @param int max
-	 * @return random int between min and max
-	 */
-	private int randint(int min, int max) {
-		return ThreadLocalRandom.current().nextInt(min, max + 1);
-	}
-
 	// SETTERS ###################################################################################
 	/**
 	 * @param threads récupérés depuis {@link main.Main Main}
