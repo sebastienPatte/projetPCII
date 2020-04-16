@@ -2,6 +2,7 @@ package control;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import model.Etat;
 import view.Affichage;
 
 public class Nuage extends Thread{
@@ -11,6 +12,7 @@ public class Nuage extends Thread{
 	private int posY;
 	private int width;
 	private int height;
+	private Etat etat;
 	
 	public Nuage() {		
 		this.running = true;

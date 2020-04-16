@@ -25,7 +25,7 @@ public class VueNuages {
 	/**
 	 * on a une chance sur probaNuage qu'on nuage apparaisse
 	 */
-	public static int probaNuage= 1000;
+	public static int probaNuage= 100;
 	
 	/**
 	 * liste des nuages

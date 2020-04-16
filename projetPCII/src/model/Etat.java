@@ -111,6 +111,8 @@ public class Etat {
 	private Montagne montagne;
 	private Checkpoint check;
 	private ArrayList<Decor> decors;
+	private ArrayList<Ennemi> ennemis;
+	
 	/**
 	 * Constructor
 	 */
@@ -129,6 +131,7 @@ public class Etat {
 		this.etatMoto = 1;
 		this.posVert = 0;
 		this.decors = new ArrayList<Decor>();
+		this.ennemis = new ArrayList<Ennemi>();
 	}
 	
 	/** Cette méthode calcule la projection sur l'écran (plan xOy) d'un point définir par ses coordonnées x,y,z. */
@@ -402,15 +405,22 @@ public class Etat {
 	
 	public void updateDecors() {
 		int rdm = randint(0, 100);
-		//on retire le premier décor (le plus ancien) tant qu'il est en dehors du champ de vision
-		while(decors.size() > 0 && decors.get(0).getBounds().y >= Affichage.HAUT) {
-			decors.remove(0);
+		
+		
+		for (int i=0; i<decors.size();) {
+			Rectangle b = decors.get(i).getBounds();
+			//on retire l'obstacle si il sort de la vue
+			if(b.y >= Affichage.LARG || b.x+b.width <= 0 || b.x > Affichage.LARG) {
+				decors.remove(i);
+			}else {
+				i++;
+			}
 		}
 		
+		//on génére un décor si on a pas atteint le max et avec une certaine probabilité
 		if(decors.size() < maxDecors && rdm < probaDecor) {
 			this.decors.add(new Decor(this));
 		}
-		
 		
 	}
 	
@@ -549,6 +559,10 @@ public class Etat {
 			this.vitesse -= ImpactObstacle;
 		}
 		return piste.getObstacles();
+	}
+	
+	public ArrayList<Ennemi> getEnnemis() {
+		return this.ennemis;
 	}
 	
 	// SETTERS ###################################################################################

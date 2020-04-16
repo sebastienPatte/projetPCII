@@ -62,7 +62,6 @@ public class Decor {
 		
 		int haut =  etat.projection(p1.x, height, p1.y).y - p3.y;			//haut : y du point en haut à gauche (projeté sur le plan) - y de p3
 		int larg = p2.x-p3.x;												//larg : x de p2 - x de p1
-		System.out.println(getY()+" "+p3.y);
 		return new Rectangle(p3.x, Affichage.HAUT - p3.y, larg, haut);		// on renvoie direct les coordonnées avec Y inversé
 	}
 	
