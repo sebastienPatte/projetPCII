@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
@@ -53,7 +54,7 @@ public class Affichage extends JPanel{
 	// Instances de Vues
 	private VueMoto moto;
 	private VueNuages nuages;
-	
+	private VueDecors decors;
 	/**
 	 * Constructor
 	 * @param etat
@@ -65,6 +66,7 @@ public class Affichage extends JPanel{
 		this.nuages = new VueNuages();
 		this.check = etat.getCheck();
 		this.clock = check.getClock();
+		this.decors = new VueDecors(etat);
 	}
 	
 	/**
@@ -326,16 +328,27 @@ public class Affichage extends JPanel{
 		}
 	}
 	
+	private void drawCaisse(int x, int y, int width, int height, Graphics2D g) {
+		g.setColor(new Color(140, 105, 4));
+		g.fillRect(x,y,width,height);
+		g.setColor(Color.BLACK);
+		Stroke oldStroke = g.getStroke();
+		g.setStroke(new BasicStroke(height/20, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+		for(int i=y; i<y+height; i+=height/5) {
+			g.drawLine(x, i, x+width-1, i);
+		}
+		g.setStroke(oldStroke);
+	}
 	
 	/**
 	 * Affiche les obstacles sur la piste
 	 * @param g
 	 */
-	private void drawObstacles(Graphics g) {
+	private void drawObstacles(Graphics2D g) {
 		for(Obstacle o : etat.getObstacles()) {
 			Rectangle bounds = o.getBounds();
-			if(bounds.y > posHorizon) {	
-				g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			if(bounds.y +bounds.height > posHorizon) {	
+				drawCaisse(bounds.x, bounds.y, bounds.width, bounds.height, g);
 			}
 		}
 	}
@@ -393,12 +406,14 @@ public class Affichage extends JPanel{
 		drawVitesse(g);
 		//affiche la piste
 		drawPiste(g2d);
-		//nettoyage horizon (pour masquer les points de la piste qui y sont)
+		//nettoyage horizon
 		g.clearRect(0, 0, LARG, posHorizon);
 		//affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
 		//dessine obstacles
-		drawObstacles(g);
+		drawObstacles(g2d);
+		//dessine décors
+		this.decors.drawDecors(g);
 		//dessine moto
 		this.moto.drawMoto(g);
 		//dessine nuages
@@ -415,6 +430,7 @@ public class Affichage extends JPanel{
 		drawAltitude(g);
 		//affiche accélération
 		drawAccel(g);
+		
 		
 	}
 }

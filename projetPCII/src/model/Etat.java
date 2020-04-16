@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
+
 import javax.imageio.ImageIO;
 
 import control.StoppableThread;
@@ -30,6 +32,10 @@ public class Etat {
 	public static double FACT_ACCEL_VERT = 1.5;
 	public static int ACCEL_MAX = 110;
 	public static int PosVert_MAX = 50;
+	
+	public static int probaDecor = 5;
+	public static int maxDecors = 10;
+	
 	/**
 	 * baisse de la vitesse quand on percute un obstacle
 	 */
@@ -104,6 +110,7 @@ public class Etat {
 	// Instances montagnes et checkpoints
 	private Montagne montagne;
 	private Checkpoint check;
+	private ArrayList<Decor> decors;
 	/**
 	 * Constructor
 	 */
@@ -121,6 +128,7 @@ public class Etat {
 		this.montagne = new Montagne(this);
 		this.etatMoto = 1;
 		this.posVert = 0;
+		this.decors = new ArrayList<Decor>();
 	}
 	
 	/** Cette méthode calcule la projection sur l'écran (plan xOy) d'un point définir par ses coordonnées x,y,z. */
@@ -390,6 +398,24 @@ public class Etat {
 		return -1;
 	}	
 	
+	// Décors (sur les côté de la piste) -------------------------------------------------------------------------------
+	
+	public void updateDecors() {
+		int rdm = randint(0, 100);
+		//on retire le premier décor (le plus ancien) tant qu'il est en dehors du champ de vision
+		while(decors.size() > 0 && decors.get(0).getBounds().y >= Affichage.HAUT) {
+			decors.remove(0);
+		}
+		
+		if(decors.size() < maxDecors && rdm < probaDecor) {
+			this.decors.add(new Decor(this));
+		}
+		
+		
+	}
+	
+	
+	
 	// GETTERS ###############################################################################
 	
 	
@@ -428,6 +454,10 @@ public class Etat {
 	public boolean getGoDown() {
 		//aussi quand la moto descend toute seule
 		return this.goDown;
+	}
+	
+	public ArrayList<Decor> getDecors(){
+		return this.decors;
 	}
 	
 	// MOTO -----------------------------------------------------------------------------------
@@ -533,6 +563,16 @@ public class Etat {
 		}
 	}
 	
+	//##############################################################################################
+	
+	/** Génère un chiffre aléatoire entre min et max
+	 * @param int min
+	 * @param int max
+	 * @return random int between min and max
+	 */
+	private int randint(int min, int max) {
+		return ThreadLocalRandom.current().nextInt(min, max + 1);
+	}
 	
 	
 	
