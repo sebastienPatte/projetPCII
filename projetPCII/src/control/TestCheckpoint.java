@@ -16,7 +16,7 @@ public class TestCheckpoint extends StoppableThread{
 	@Override
 	public void run() {
 		while(this.running) {
-			try { Thread.sleep(time);  this.etat.testCheckpoint();}
+			try { Thread.sleep(time);  this.etat.testCheckpoint(); }
 			catch (Exception e) { e.printStackTrace(); this.terminate(); }
 		}
 	}

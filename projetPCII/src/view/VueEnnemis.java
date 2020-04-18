@@ -22,14 +22,19 @@ public class VueEnnemis {
 	
 	public void drawMotos(Graphics g) {
 		for (Ennemi ennemi : etat.getEnnemis()) {
-			// on affiche la moto selon si elle va tout droit, vers la droite ou la gauche
+			
 			Rectangle bounds = ennemi.getBounds();
-			String str = PATH+ennemi.getEtat()+".png";
-			try {
-				Image image = ImageIO.read(new File(str)); 
-				g.drawImage(image,bounds.x, bounds.y, null);
-			}catch (IOException e) {
-				e.printStackTrace();
+			//si la moto est en dessous de posHorizon
+			if(bounds.y + bounds.height > Affichage.posHorizon) {
+				// on affiche la moto selon si elle va tout droit, vers la droite ou la gauche
+				String str = PATH+ennemi.getEtatMoto()+".png";
+				try {
+					Image image = ImageIO.read(new File(str)); 
+					image = image.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
+					g.drawImage(image,bounds.x, bounds.y, null);
+				}catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

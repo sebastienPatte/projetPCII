@@ -55,6 +55,7 @@ public class Affichage extends JPanel{
 	private VueMoto moto;
 	private VueNuages nuages;
 	private VueDecors decors;
+	private VueEnnemis ennemis;
 	/**
 	 * Constructor
 	 * @param etat
@@ -67,6 +68,7 @@ public class Affichage extends JPanel{
 		this.check = etat.getCheck();
 		this.clock = check.getClock();
 		this.decors = new VueDecors(etat);
+		this.ennemis = new VueEnnemis(etat);
 	}
 	
 	/**
@@ -398,7 +400,8 @@ public class Affichage extends JPanel{
 	@Override
     public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		g.clearRect(0, posHorizon, LARG, HAUT);
+		//nettoyage ecran
+		super.paint(g);
 		
 		//dessine horizon
 		drawHorizon(g);
@@ -406,18 +409,18 @@ public class Affichage extends JPanel{
 		drawVitesse(g);
 		//affiche la piste
 		drawPiste(g2d);
-		//nettoyage horizon
-		g.clearRect(0, 0, LARG, posHorizon);
 		//affiche le décor de montagne au dessus de l'horizon
 		drawMontagne(g);
 		//dessine obstacles
 		drawObstacles(g2d);
 		//dessine décors
 		this.decors.drawDecors(g);
-		//dessine moto
-		this.moto.drawMoto(g);
+		//dessine ennemis
+		ennemis.drawMotos(g);
 		//dessine nuages
 		this.nuages.dessiner(etat.getPosX(),g);
+		//dessine moto
+		this.moto.drawMoto(g);
 		// affiche le timeout avant de perdre
 		drawClock(g);
 		//affichage score

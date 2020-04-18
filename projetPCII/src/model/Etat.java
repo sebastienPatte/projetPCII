@@ -16,7 +16,7 @@ import view.VueMoto;
 
 public class Etat {
 	
-	public static int deplacement = 10;
+	public static int deplacement = 5;
 	/** 
 	 * ici on prend FACT_ACCEL égal à une demie largeur d'une des 3 voies
 	 * donc quand on est dans la voie du milieu l'accéléraction est > 100 donc on accélère 
@@ -35,6 +35,10 @@ public class Etat {
 	
 	public static int probaDecor = 5;
 	public static int maxDecors = 10;
+	
+	public static int probaEnnemi = 1;
+	public static int maxEnnemis = 1;
+
 	
 	/**
 	 * baisse de la vitesse quand on percute un obstacle
@@ -248,6 +252,10 @@ public class Etat {
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
 		piste.avance(Math.round((float)getVitesse()));
+		// on fait avancer tout les ennemis
+		for (Ennemi ennemi : ennemis) {
+			ennemi.avance();
+		}
 	}
 	
 	
@@ -424,7 +432,23 @@ public class Etat {
 		
 	}
 	
+	// Ennemis -----------------------------------------------------------------------------------------------------------
 	
+	public void updateEnnemis() {
+		int rdm = randint(0,100);
+		
+		for (int i=0; i<ennemis.size();) {
+			Rectangle b = ennemis.get(i).getBounds();
+			//on retire l'ennemi si il sort de la vue
+			if(b.y >= Affichage.LARG) {
+				ennemis.remove(i);
+			}else {
+				i++;
+			}
+		}
+		
+		if(ennemis.size() < maxEnnemis && rdm <= probaEnnemi)ennemis.add(new Ennemi(this));
+	}
 	
 	// GETTERS ###############################################################################
 	
@@ -562,6 +586,7 @@ public class Etat {
 	}
 	
 	public ArrayList<Ennemi> getEnnemis() {
+		updateEnnemis();
 		return this.ennemis;
 	}
 	
@@ -577,7 +602,7 @@ public class Etat {
 		}
 	}
 	
-	//##############################################################################################
+	// OTHERS ######################################################################################
 	
 	/** Génère un chiffre aléatoire entre min et max
 	 * @param int min
