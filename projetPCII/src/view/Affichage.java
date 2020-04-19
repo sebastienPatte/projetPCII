@@ -208,7 +208,7 @@ public class Affichage extends JPanel{
 			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
-			//si t1 est sur l'indice du checkpoint, on le dessine (on dessinne pas si l'indice est 1 car on le dessine juste après)
+			//si t1 est sur l'indice du checkpoint, on le dessine (on dessine pas si l'indice est 1 car on le dessine juste après)
 			if(indice > 1 && indice==i) {
 				//on récupère le décalage des positions x1 x2 du checkpoint pour l'afficher sur la bonne voie
 				int[] decCheck = new int[2]; 

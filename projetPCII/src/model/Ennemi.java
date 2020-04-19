@@ -91,6 +91,12 @@ public class Ennemi {
 		}		
 	}
 	
+	public void baisseVitesse(int  n) {
+		if(this.vitesse - n > 0) {
+			this.vitesse -= n;
+		}
+	}
+	
 	private Rectangle getMotoBounds() {
 		String str = VueEnnemis.PATH+etatMoto+".png";
 		try {

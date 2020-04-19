@@ -252,10 +252,11 @@ public class Etat {
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
 		if(this.vitesse <= 0)gameOver();
-		
-		if(CollisionEnnemi()) {
+		int iEnnemi = CollisionEnnemi();
+		if(iEnnemi !=-1) {
 			// on considère qu'une collision avec un ennemi ne fait pas baisser la vitesse en dessous de 1
 			if(this.vitesse-1>1)this.vitesse -= 1;
+			this.ennemis.get(iEnnemi).avance();
 		}else {
 			piste.avance(Math.round((float)getVitesse()));
 		}
@@ -418,7 +419,8 @@ public class Etat {
 	
 	// Collisions Ennemis ----------------------------------------------------------------------------------------------
 	
-	public boolean CollisionEnnemi() {
+	public int CollisionEnnemi() {
+		int i=0;
 		for (Ennemi ennemi : ennemis) {
 			Rectangle eBounds = ennemi.getBounds();
 			Rectangle mBounds = getMotoBounds();
@@ -428,16 +430,25 @@ public class Etat {
 			int mY1 = Affichage.HAUT - mBounds.height;		//bord haut de la moto
 			int mY2 = Affichage.HAUT - VueMoto.decBord;		//bord bas de la moto
 			
-			// si l'ennemi arrive à la position y de la moto
-			// c-a-d si le bas de l'ennemi est en dessous du haut de la moto ET que le haut de l'obstacle est au dessus du bas de la moto
-			if(eBounds.y + eBounds.height > mY1 && eBounds.y <= mY2) {
+			// si la on est en dessous de 1 d'altitude et que l'ennemi arrive à la position y de la moto
+			// c-a-d si le bas de l'ennemi est en dessous du haut de la moto ET que le haut de l'ennemi est au dessus du bas de la moto
+			if(this.posVert < 1 && eBounds.y + eBounds.height > mY1 && eBounds.y <= mY2) {
 				// si bord gauche de ennemi < bord droit de moto ET bord droit de ennemi > bord gauche de moto
 				if(eBounds.x <= mX2 && eBounds.x + eBounds.width >= mX1) {
-					return true;
+					//si le haut de la moto est > au milieu de la hauteur de l'ennemi, c'est l'ennemi qui perd de la vitesse 
+					if(mY1 < eBounds.y + eBounds.height/2) {
+						ennemi.baisseVitesse(1);
+						
+					}else {
+						//sinon on retourne l'indice de l'ennemi
+						return i;
+					}
+					
 				}
 			}
+			i++;
 		}
-		return false;
+		return -1;
 	}
  	
 	// Décors (sur les côté de la piste) -------------------------------------------------------------------------------
