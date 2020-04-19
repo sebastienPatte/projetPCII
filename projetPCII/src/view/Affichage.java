@@ -172,11 +172,9 @@ public class Affichage extends JPanel{
 			
 			int largPiste1 = p1d.x - p1g.x;
 			int largPiste2 = p2d.x - p2g.x;
-			//affiche separation voie gauche
 			
-			//on met les lignes en pointillé
-			float dash[] = {20.0f,10.f};
-			g.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f));
+			
+			
 			//affiche separation voie gauche
 			g.drawLine(
 					p1g.x+(largPiste1 / 3),
@@ -192,8 +190,6 @@ public class Affichage extends JPanel{
 					HAUT-p2d.y
 			);
 			
-			//on enleve le pointillé
-			g.setStroke(new BasicStroke(1.0f));
 			
 			//affichage ligne milieu
 			/*
@@ -239,13 +235,36 @@ public class Affichage extends JPanel{
 		Point p0d = piste[0][1];		//point 0 de droite
 		Point p1d = piste[1][1];		//point 1 de droite
 		
-		Point premierG = new Point(calculXdepuisYdansSegment(p0g, p1g, 0), 0);	//premier point à gauche
-		Point premierD = new Point(calculXdepuisYdansSegment(p0d, p1d, 0), 0);	//premier point à droite
+		Point premierG = new Point(calculXdepuisYdansSegment(p0g, p1g, 0) - posX, 0);	//premier point à gauche
+		Point premierD = new Point(calculXdepuisYdansSegment(p0d, p1d, 0) - posX, 0);	//premier point à droite
 		Point deuxiemeG = projection(p1g.x - posX, 0, p1g.y);
 		Point deuxiemeD = projection(p1d.x - posX, 0, p1d.y);
 		
-		tracer(new Point(premierG.x - posX, premierG.y), deuxiemeG, g);
-		tracer(new Point(premierD.x - posX, premierD.y), deuxiemeD, g);
+		tracer(new Point(premierG.x, premierG.y), deuxiemeG, g);
+		tracer(new Point(premierD.x, premierD.y), deuxiemeD, g);
+		
+		
+		
+		//affiche separation voie gauche
+		int largPiste1 = premierD.x - premierG.x;
+		int largPiste2 = deuxiemeD.x - deuxiemeG.x;
+		g.drawLine(
+				premierG.x+(largPiste1 / 3),
+				HAUT-premierG.y,
+				deuxiemeG.x+(largPiste2 / 3),
+				HAUT-deuxiemeG.y
+		);
+		//affiche separation voie droite
+		g.drawLine(
+				premierD.x-(largPiste1 / 3),
+				HAUT-premierD.y,
+				deuxiemeD.x-(largPiste2 / 3),
+				HAUT-deuxiemeD.y
+		);
+		
+		
+		
+		
 		
 		// si il y a un checkpoint au premier point (donc en bas), on le dessine
 		int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
@@ -282,6 +301,26 @@ public class Affichage extends JPanel{
 		
 		tracer(projAvDernierG, projDernierG, g);
 		tracer(projAvDernierD, projDernierD, g);
+		
+		
+		//affiche separation voie gauche
+		largPiste1 = projAvDernierD.x - projAvDernierG.x;
+		largPiste2 = projDernierD.x - projDernierG.x;
+		g.drawLine(
+				projAvDernierG.x+(largPiste1 / 3),
+				HAUT-projAvDernierG.y,
+				projDernierG.x+(largPiste2 / 3),
+				HAUT-projDernierG.y
+		);
+		//affiche separation voie droite
+		g.drawLine(
+				projAvDernierD.x-(largPiste1 / 3),
+				HAUT-projAvDernierD.y,
+				projDernierD.x-(largPiste2 / 3),
+				HAUT-projDernierD.y
+		);
+		
+		
 		
 		// si il y a un checkpoint au dernier point (donc en haut), on le dessine
 		if(indice == piste.length-2) {
@@ -360,7 +399,7 @@ public class Affichage extends JPanel{
 	 * @param g
 	 */
 	private void drawScore(Graphics g) {
-		String strScore ="Score : "+ etat.getPosY();
+		String strScore ="Score : "+ etat.getPosY()/100;
 		   
 		FontMetrics fm = getFontMetrics(g.getFont());
 		int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord

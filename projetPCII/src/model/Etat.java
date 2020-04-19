@@ -251,7 +251,14 @@ public class Etat {
 		/* 0 <= accel/100 <= 1
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
-		piste.avance(Math.round((float)getVitesse()));
+		if(this.vitesse <= 0)gameOver();
+		
+		if(CollisionEnnemi()) {
+			// on considère qu'une collision avec un ennemi ne fait pas baisser la vitesse en dessous de 1
+			if(this.vitesse-1>1)this.vitesse -= 1;
+		}else {
+			piste.avance(Math.round((float)getVitesse()));
+		}
 		// on fait avancer tout les ennemis
 		for (Ennemi ennemi : ennemis) {
 			ennemi.avance();
@@ -407,8 +414,32 @@ public class Etat {
 			}
 		}
 		return -1;
-	}	
+	}
 	
+	// Collisions Ennemis ----------------------------------------------------------------------------------------------
+	
+	public boolean CollisionEnnemi() {
+		for (Ennemi ennemi : ennemis) {
+			Rectangle eBounds = ennemi.getBounds();
+			Rectangle mBounds = getMotoBounds();
+			
+			int mX1 = Affichage.LARG/2;						//bord gauche de la moto
+			int mX2 = mX1 + mBounds.width;					//bord droit de la moto
+			int mY1 = Affichage.HAUT - mBounds.height;		//bord haut de la moto
+			int mY2 = Affichage.HAUT - VueMoto.decBord;		//bord bas de la moto
+			
+			// si l'ennemi arrive à la position y de la moto
+			// c-a-d si le bas de l'ennemi est en dessous du haut de la moto ET que le haut de l'obstacle est au dessus du bas de la moto
+			if(eBounds.y + eBounds.height > mY1 && eBounds.y <= mY2) {
+				// si bord gauche de ennemi < bord droit de moto ET bord droit de ennemi > bord gauche de moto
+				if(eBounds.x <= mX2 && eBounds.x + eBounds.width >= mX1) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+ 	
 	// Décors (sur les côté de la piste) -------------------------------------------------------------------------------
 	
 	public void updateDecors() {
