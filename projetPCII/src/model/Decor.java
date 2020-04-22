@@ -29,13 +29,13 @@ public class Decor {
 		int rdm = randint(0, 100);
 		if(rdm < probaArbre) {
 			this.type = 0;
-			this.width = 100;
-			this.height = 200;
+			this.width = 50;
+			this.height = 100;
 			
 		}else {
 			this.type = 1;
-			this.width = 100;
-			this.height = 100;
+			this.width = 50;
+			this.height = 50;
 			
 		}
 		if(randint(0,1)==0) {
