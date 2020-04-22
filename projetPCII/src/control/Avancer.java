@@ -7,7 +7,7 @@ import model.Etat;
  *
  */
 public class Avancer extends StoppableThread{
-	private boolean running = true;
+	
 	public static int time = 41;
 	
 	private Etat etat;

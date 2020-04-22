@@ -11,6 +11,7 @@ public class Checkpoint {
 	 * nombre de points de la piste d'écart entre deux checkpoint
 	 */
 	public static int INCR = 5;
+	public static int DEFAULT_TIME = 20;
 	private int voie;
 	private int posY;
 	private int time;
@@ -18,8 +19,8 @@ public class Checkpoint {
 	private Clock clock;
 	
 	public Checkpoint(Etat etat) {
-		this.time = 50;
-		this.prevTime = 50;
+		this.time = DEFAULT_TIME;
+		this.prevTime = DEFAULT_TIME;
 		this.posY = INCR*Piste.incr;
 		this.clock = new Clock(time,etat);
 		this.voie = 0;

@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -22,7 +23,7 @@ public class Etat {
 	 * donc quand on est dans la voie du milieu l'accéléraction est > 100 donc on accélère 
 	 * et sur les voies des côtés on est en dessous de 100 donc on décélère 
 	 */
-	public static int FACT_ACCEL = Piste.largeurPiste/20;
+	public static int FACT_ACCEL = Piste.largeurPiste/30;
 	/**
 	 * Facteur d'accélération concernant l'altitude, avec 1.5 l'accélération est à 100%
 	 * quand on est juste au milieu de la piste avec une altitude de 1 (suffisant pour passer au dessus des obstacles) 
@@ -37,7 +38,7 @@ public class Etat {
 	public static int maxDecors = 10;
 	
 	public static int probaEnnemi = 1;
-	public static int maxEnnemis = 1;
+	public static int maxEnnemis = 2;
 
 	
 	/**
@@ -242,6 +243,8 @@ public class Etat {
 		if(accel>=ACCEL_MAX) {
 			accel=ACCEL_MAX;
 		}
+		
+		
 	}
 	
 	/**
@@ -251,6 +254,7 @@ public class Etat {
 		/* 0 <= accel/100 <= 1
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
+		
 		if(this.vitesse <= 0)gameOver();
 		int iEnnemi = CollisionEnnemi();
 		if(iEnnemi !=-1) {
@@ -420,8 +424,9 @@ public class Etat {
 	// Collisions Ennemis ----------------------------------------------------------------------------------------------
 	
 	public int CollisionEnnemi() {
-		int i=0;
-		for (Ennemi ennemi : ennemis) {
+		
+		for (int i=0; i< ennemis.size();i++) {
+			Ennemi ennemi = ennemis.get(i);
 			Rectangle eBounds = ennemi.getBounds();
 			Rectangle mBounds = getMotoBounds();
 			
@@ -430,14 +435,20 @@ public class Etat {
 			int mY1 = Affichage.HAUT - mBounds.height;		//bord haut de la moto
 			int mY2 = Affichage.HAUT - VueMoto.decBord;		//bord bas de la moto
 			
+			if(mY1 < eBounds.y + eBounds.height/2) {
+				System.out.println("DEVANT");
+			}
+			
 			// si la on est en dessous de 1 d'altitude et que l'ennemi arrive à la position y de la moto
 			// c-a-d si le bas de l'ennemi est en dessous du haut de la moto ET que le haut de l'ennemi est au dessus du bas de la moto
-			if(this.posVert < 1 && eBounds.y + eBounds.height > mY1 && eBounds.y <= mY2) {
-				// si bord gauche de ennemi < bord droit de moto ET bord droit de ennemi > bord gauche de moto
+			if(this.posVert < 2 && eBounds.y + eBounds.height > mY1 && eBounds.y <= mY2) {
+				
+				
+				//si bord gauche de ennemi < bord droit de moto ET bord droit de ennemi > bord gauche de moto
 				if(eBounds.x <= mX2 && eBounds.x + eBounds.width >= mX1) {
 					//si le haut de la moto est > au milieu de la hauteur de l'ennemi, c'est l'ennemi qui perd de la vitesse 
 					if(mY1 < eBounds.y + eBounds.height/2) {
-						ennemi.baisseVitesse(1);
+						ennemi.recule();
 						
 					}else {
 						//sinon on retourne l'indice de l'ennemi
@@ -446,7 +457,6 @@ public class Etat {
 					
 				}
 			}
-			i++;
 		}
 		return -1;
 	}
@@ -592,13 +602,8 @@ public class Etat {
 		return piste.getPosY();
 	}
 	
-	/**
-	 * @param i
-	 * @return la position X du point au milieu de la piste au point de piste d'indice i
-	 */
-	public int getMidPiste(int i) {
-		return this.piste.getMidX(i);
-	}
+
+	
 	
 	// Montagne, Checkpoint et Obstacles -------------------------------------------------------
 	
@@ -628,7 +633,7 @@ public class Etat {
 	}
 	
 	public ArrayList<Ennemi> getEnnemis() {
-		updateEnnemis();
+		if(!this.fin)updateEnnemis();
 		return this.ennemis;
 	}
 	

@@ -33,6 +33,12 @@ public class Keys extends KeyAdapter{
 		if(e.getKeyCode() == KeyEvent.VK_S) {
 			etat.pressDown(true);
 		}
+		
+		if(etat.getFin()) {
+			if(e.getKeyCode() == KeyEvent.VK_R) {
+				System.out.println("RETRY");
+			}
+		}
 	}
 
 	@Override

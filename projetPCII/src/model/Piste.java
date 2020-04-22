@@ -107,7 +107,7 @@ public class Piste {
 		Point[][] res = new Point[points.size()][2]; 
 		for(int i=0; i<points.size(); i++) {
 			Point p = points.get(i);
-			//on applique la perspective aux points de la piste
+			
 			res[i][0]= new Point(p.x , p.y - posY);
 			res[i][1]= new Point(p.x+largeurPiste , p.y - posY);
 		}
@@ -182,6 +182,9 @@ public class Piste {
 			return Affichage.LARG/2;
 		}	
 	}
+	
+	
+	
 	
 	/**
 	 * Supprime les obstacles qui ne sont plus visibles et en génère des nouveaux avec une

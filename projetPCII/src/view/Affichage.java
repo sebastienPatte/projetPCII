@@ -174,7 +174,7 @@ public class Affichage extends JPanel{
 			int largPiste2 = p2d.x - p2g.x;
 			
 			
-			
+			g.setColor(Color.GRAY);
 			//affiche separation voie gauche
 			g.drawLine(
 					p1g.x+(largPiste1 / 3),
@@ -189,22 +189,7 @@ public class Affichage extends JPanel{
 					p2d.x-(largPiste2 / 3),
 					HAUT-p2d.y
 			);
-			
-			
-			//affichage ligne milieu
-			/*
-			 if(i<=1) {
-			 
-			g.drawLine(
-					etat.getMidPiste(1)-posX,
-					t1[0].y,
-					etat.getMidPiste(1)-posX,
-					t2[0].y
-			);
-			}
-			*/
-			
-			
+			g.setColor(Color.BLACK);
 			
 			//calcul indice checkpoint sur la piste
 			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
@@ -244,7 +229,7 @@ public class Affichage extends JPanel{
 		tracer(new Point(premierD.x, premierD.y), deuxiemeD, g);
 		
 		
-		
+		g.setColor(Color.GRAY);
 		//affiche separation voie gauche
 		int largPiste1 = premierD.x - premierG.x;
 		int largPiste2 = deuxiemeD.x - deuxiemeG.x;
@@ -261,7 +246,7 @@ public class Affichage extends JPanel{
 				deuxiemeD.x-(largPiste2 / 3),
 				HAUT-deuxiemeD.y
 		);
-		
+		g.setColor(Color.BLACK);
 		
 		
 		
@@ -304,6 +289,7 @@ public class Affichage extends JPanel{
 		
 		
 		//affiche separation voie gauche
+		g.setColor(Color.GRAY);
 		largPiste1 = projAvDernierD.x - projAvDernierG.x;
 		largPiste2 = projDernierD.x - projDernierG.x;
 		g.drawLine(
@@ -319,7 +305,7 @@ public class Affichage extends JPanel{
 				projDernierD.x-(largPiste2 / 3),
 				HAUT-projDernierD.y
 		);
-		
+		g.setColor(Color.BLACK);
 		
 		
 		// si il y a un checkpoint au dernier point (donc en haut), on le dessine

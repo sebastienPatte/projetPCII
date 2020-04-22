@@ -4,7 +4,6 @@ import model.Etat;
 
 public class TestCheckpoint extends StoppableThread{
 	
-	private boolean running;
 	private int time = 41;
 	private Etat etat;
 	

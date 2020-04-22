@@ -14,12 +14,32 @@ import view.VueEnnemis;
 import view.VueMoto;
 
 public class Ennemi {
+	/**
+	 * temps maximum pour un virage
+	 */
 	public static int MAX_TIME = 80;
+	/**
+	 * temps minimum pour un virage
+	 */
 	public static int MIN_TIME = 30;
+	/**
+	 * Vitesse maximale d'un ennemi
+	 */
+	public static int V_MAX = 5;
 	
+	/**
+	 * Facteur de division pour le calcul de la vitesse par rapport à l'écart au milieu de la piste
+	 */
+	public static int FACT_V = 90;
+	/**
+	 * position x de l'ennemi (la position du joueur est prise en compte seulement dans {@link #getBounds()})
+	 */
 	private int x;
+	/**
+	 * position y de l'ennemi 
+	 */
 	private int y;
-	private int vitesse;
+	
 	/**
 	 * etat de la moto :
 	 * 0 : tourne Ã  gauche
@@ -32,8 +52,8 @@ public class Ennemi {
 	
 	public Ennemi(Etat etat) {
 		this.y = etat.getPosY() + Affichage.HAUT;
-		this.x = randint(Affichage.LARG/2-Piste.largeurPiste/2, Affichage.LARG/2+Piste.largeurPiste/2);
-		this.vitesse = 3;
+		this.x = randint((Affichage.LARG/2)-Piste.largeurPiste/2, (Affichage.LARG/2)+Piste.largeurPiste/2);
+		
 		this.etatMoto = 1;
 		this.etat = etat;
 		this.timeVirage = 0;
@@ -53,7 +73,7 @@ public class Ennemi {
 		
 		if(this.etatMoto == 1) {
 			if(rdm <= 5) {
-				if(this.x <= Affichage.LARG/2 + Piste.largeurPiste/2) {
+				if(this.x  <= Affichage.LARG/2 + Piste.largeurPiste/2) {
 					//etat virage droite si on a pas déjà dépassé le bord droit de la piste
 					this.etatMoto = 2;
 					this.timeVirage = randint(MIN_TIME, MAX_TIME);
@@ -62,7 +82,7 @@ public class Ennemi {
 				
 			}else {
 				if(rdm <= 10) {
-					if(this.x >= Affichage.LARG/2 - Piste.largeurPiste/2) {
+					if(this.x  >= Affichage.LARG/2 - Piste.largeurPiste/2) {
 						//etat virage gauche si on a pas déjà dépassé le bord gauche de la piste
 						this.etatMoto = 0;
 						this.timeVirage = randint(MIN_TIME, MAX_TIME);
@@ -73,28 +93,51 @@ public class Ennemi {
 		}
 	}
 	
+	/**
+	 * On calcule away qui représente la distance entre le milieu de la piste et la moto
+	 * Ici on calcule la différence entre le milieu de la fenetre et la position de la moto
+	 * divisé par {@link #V_MAX}
+	 * @return {@link #V_MAX} - away
+	 */
+	private int getVitesse() {
+		int away = Math.abs((int) ((double)(this.x - Affichage.LARG/2) / FACT_V));
+		
+		return V_MAX - away ;
+	}
+	
 	public void avance() {
 		//dans tout les cas on avance en y
-		this.y += vitesse;
+		this.y += getVitesse();
 		updateEtatMoto();
 		if(etatMoto == 0) {
 			// on va a gauche 
+			
 			this.x -= Etat.deplacement;
 			this.timeVirage--;
+			
+			// on arrete le virage si on va trop loin du centre de la fenetre
+			if(this.x <= Affichage.LARG/2 - Piste.largeurPiste/2) {
+				this.timeVirage = 0;
+			}
 			
 		}else {
 			if(etatMoto == 2) {
 				//on va a droite 
 				this.x += Etat.deplacement;
 				this.timeVirage--;
+				// on arrete le virage si on va trop loin du centre de la fenetre
+				if(this.x >= Affichage.LARG/2 + Piste.largeurPiste/2) {
+					this.timeVirage = 0;
+				}
 			}
 		}		
 	}
 	
-	public void baisseVitesse(int  n) {
-		if(this.vitesse - n > 0) {
-			this.vitesse -= n;
-		}
+	/**
+	 * fait reculer l'ennemi, appelé par {@link Etat#CollisionEnnemi()} quand le joueur fait une queue de poisson
+	 */
+	public void recule() {
+		this.y -= V_MAX;
 	}
 	
 	private Rectangle getMotoBounds() {
