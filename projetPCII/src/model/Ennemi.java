@@ -77,7 +77,6 @@ public class Ennemi {
 					//etat virage droite si on a pas déjà dépassé le bord droit de la piste
 					this.etatMoto = 2;
 					this.timeVirage = randint(MIN_TIME, MAX_TIME);
-					System.out.println("goRight");
 				}
 				
 			}else {
@@ -86,7 +85,6 @@ public class Ennemi {
 						//etat virage gauche si on a pas déjà dépassé le bord gauche de la piste
 						this.etatMoto = 0;
 						this.timeVirage = randint(MIN_TIME, MAX_TIME);
-						System.out.println("goLeft");
 					}
 				}
 			}

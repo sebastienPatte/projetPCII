@@ -25,7 +25,7 @@ public class VueNuages {
 	/**
 	 * on a une chance sur probaNuage qu'on nuage apparaisse
 	 */
-	public static int probaNuage= 100;
+	public static int probaNuage= 10;
 	
 	/**
 	 * liste des nuages
@@ -74,8 +74,8 @@ public class VueNuages {
 	 */
 	void genererNuages() {
 		//on génére des nuages seulement si on a pas dépassé la taille max
-		//System.out.println(MaxNuages);
-		if(this.list.size() < MaxNuages){
+		//et que le dernier nuage généré est entièrement visible à l'écran (pour éviter les attroupements de nuages)
+		if(this.list.size() < MaxNuages && (list.size() == 0 || list.get(list.size()-1).getPosX() + list.get(list.size()-1).getWidth() < Affichage.LARG)){
 			//on génère un oiseau si on tombe sur 1 
 			if(randint(1,probaNuage) == 1 ) {
 				//System.out.println("gen cloud "+list.size());
@@ -87,12 +87,13 @@ public class VueNuages {
 	}
 	
 	/**
-	 * termine tous les Threads Oiseau, appelé lors du Game Over
+	 * réinitialise tout les nuages (appelé quand on recommance une partie)
 	 */
-	public void finiNuages() {
+	public void retry() {
 		for(Nuage nuage : this.list) {
 			nuage.terminate();
 		}
+		this.list = new ArrayList<Nuage>();
 	}
 
 	/** Génère un chiffre aléatoire entre min et max

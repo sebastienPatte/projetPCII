@@ -5,5 +5,8 @@ public class StoppableThread extends Thread{
 	public void terminate() {
 		this.running = false;
 	}
+	public void restart() {
+		this.running = true;
+	}
 	
 }

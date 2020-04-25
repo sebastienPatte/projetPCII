@@ -18,33 +18,55 @@ import view.VueMoto;
 public class Etat {
 	
 	public static int deplacement = 5;
-	/** 
+	/** !!!!!! PAS A JOUR !!!!!!!!!!!!!!!!!
 	 * ici on prend FACT_ACCEL égal à une demie largeur d'une des 3 voies
 	 * donc quand on est dans la voie du milieu l'accéléraction est > 100 donc on accélère 
 	 * et sur les voies des côtés on est en dessous de 100 donc on décélère 
 	 */
-	public static int FACT_ACCEL = Piste.largeurPiste/30;
-	/**
+	public static int FACT_ACCEL = Piste.largeurPiste/150;
+	/** !!!!!! PAS A JOUR !!!!!!!!!!!!!!!!! 
 	 * Facteur d'accélération concernant l'altitude, avec 1.5 l'accélération est à 100%
 	 * quand on est juste au milieu de la piste avec une altitude de 1 (suffisant pour passer au dessus des obstacles) 
 	 * mais dès qu'on s'en écarte on perd de la vitesse. Et quand la vitesse passe en dessous de {@link #MinVitesseVol}
 	 * alors la moto descend toute seule vers le sol pour accélérer. 
 	 */
 	public static double FACT_ACCEL_VERT = 1.5;
-	public static int ACCEL_MAX = 110;
+	/**
+	 * accelération maximale atteignable par le joueur
+	 */
+	public static int ACCEL_MAX = 150;
+	/**
+	 * altitude maximale atteignable par le joueur
+	 */
 	public static int PosVert_MAX = 50;
 	
+	/**
+	 * probabilité qu'un décor apparaisse en haut 
+	 */
 	public static int probaDecor = 5;
+	/**
+	 * maximum de décors en même temps (les décors sont supprimés dès qu'ils sortent du champ de vision du joueur) 
+	 */
 	public static int maxDecors = 10;
 	
+	/**
+	 * probabilité (en %) qu'un ennemi apparaisse en haut de la piste
+	 */
 	public static int probaEnnemi = 1;
-	public static int maxEnnemis = 2;
+	/**
+	 * maximum d'ennemis en même temps
+	 */
+	public static int maxEnnemis = 3;
+	/**
+	 * quand le joueur est au dessus de cette hauteur il ne peut pas entrer en collision avec les moto ennemies
+	 */
+	public static int HAUT_ENNEMIS = 2;
 
 	
 	/**
 	 * baisse de la vitesse quand on percute un obstacle
 	 */
-	public static int ImpactObstacle = 1;
+	public static int ImpactObstacle = 3;
 	/**
 	 * Vitesse minimum de la moto pour pouvoir voler (sinon elle redescend)
 	 */
@@ -53,6 +75,11 @@ public class Etat {
 	 * {@link #vitesse} maximale atteingnable par la moto
 	 */
 	static double vitesseMax = 5.0;//pixels par repaint
+	
+	/**
+	 * score ajouté quand on dépasse un ennemi
+	 */
+	static int ADD_SCORE = 10;
 	
 	private Piste piste;
 	
@@ -93,7 +120,7 @@ public class Etat {
 	/**
 	 * true si le joueur a perdu, false sinon
 	 */
-	private boolean fin = false;
+	private boolean fin;
 	/**
 	 * position verticale de la moto
 	 */
@@ -105,6 +132,17 @@ public class Etat {
 	 * 2 : tourne Ã  droite
 	 */
 	private int etatMoto;
+	
+	/**
+	 * indique que l'utilisateur veut redémarrer une partie
+	 */
+	private boolean retry;
+	
+	/**
+	 * on accumule dans cette variable le score gagné en dépassant des ennemis
+	 */
+	private int score;
+	
 	/**
 	 * Tableau de Threads ({@link control.RepaintScreen RepaintScreen}, 
 	 * {@link control.TestCheckpoint TestCheckpoint}, {@link control.Avancer Avancer} et {@link control.Vitesse Vitesse})
@@ -137,6 +175,8 @@ public class Etat {
 		this.posVert = 0;
 		this.decors = new ArrayList<Decor>();
 		this.ennemis = new ArrayList<Ennemi>();
+		this.score = 0;
+		this.fin = false;
 	}
 	
 	/** Cette méthode calcule la projection sur l'écran (plan xOy) d'un point définir par ses coordonnées x,y,z. */
@@ -204,7 +244,7 @@ public class Etat {
 		this.fin = true;
 		
 		for(StoppableThread t : this.threads) {
-			t.terminate();
+			
 		}
 	}
 	
@@ -254,7 +294,6 @@ public class Etat {
 		/* 0 <= accel/100 <= 1
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
-		
 		if(this.vitesse <= 0)gameOver();
 		int iEnnemi = CollisionEnnemi();
 		if(iEnnemi !=-1) {
@@ -423,6 +462,11 @@ public class Etat {
 	
 	// Collisions Ennemis ----------------------------------------------------------------------------------------------
 	
+	/**
+	 * parcoure {@link #ennemis la liste des ennemis} et si le joueur est en collision avec un d'eux on fait 
+	 * avancer l'ennemi si il est devant et le fait reculer sinon 
+	 * @return
+	 */
 	public int CollisionEnnemi() {
 		
 		for (int i=0; i< ennemis.size();i++) {
@@ -435,23 +479,20 @@ public class Etat {
 			int mY1 = Affichage.HAUT - mBounds.height;		//bord haut de la moto
 			int mY2 = Affichage.HAUT - VueMoto.decBord;		//bord bas de la moto
 			
-			if(mY1 < eBounds.y + eBounds.height/2) {
-				System.out.println("DEVANT");
-			}
 			
 			// si la on est en dessous de 1 d'altitude et que l'ennemi arrive à la position y de la moto
 			// c-a-d si le bas de l'ennemi est en dessous du haut de la moto ET que le haut de l'ennemi est au dessus du bas de la moto
-			if(this.posVert < 2 && eBounds.y + eBounds.height > mY1 && eBounds.y <= mY2) {
+			if(this.posVert < HAUT_ENNEMIS && eBounds.y + eBounds.height > mY1 && eBounds.y <= mY2) {
 				
 				
 				//si bord gauche de ennemi < bord droit de moto ET bord droit de ennemi > bord gauche de moto
 				if(eBounds.x <= mX2 && eBounds.x + eBounds.width >= mX1) {
-					//si le haut de la moto est > au milieu de la hauteur de l'ennemi, c'est l'ennemi qui perd de la vitesse 
-					if(mY1 < eBounds.y + eBounds.height/2) {
+					//si le haut de la moto est > au haut de l'ennemi, c'est l'ennemi qui perd de la vitesse 
+					if(mY1 < eBounds.y ) {
 						ennemi.recule();
 						
 					}else {
-						//sinon on retourne l'indice de l'ennemi
+						//sinon on retourne l'indice de l'ennemi pour le faire avancer et faire perdre de la vitesse au joueur
 						return i;
 					}
 					
@@ -463,9 +504,11 @@ public class Etat {
  	
 	// Décors (sur les côté de la piste) -------------------------------------------------------------------------------
 	
+	/**
+	 * met à jour {@link #decors la liste des décors}
+	 */
 	public void updateDecors() {
 		int rdm = randint(0, 100);
-		
 		
 		for (int i=0; i<decors.size();) {
 			Rectangle b = decors.get(i).getBounds();
@@ -486,14 +529,18 @@ public class Etat {
 	
 	// Ennemis -----------------------------------------------------------------------------------------------------------
 	
+	/**
+	 * met à jour {@link #ennemis la liste des ennemis}
+	 */
 	public void updateEnnemis() {
 		int rdm = randint(0,100);
-		
 		for (int i=0; i<ennemis.size();) {
 			Rectangle b = ennemis.get(i).getBounds();
 			//on retire l'ennemi si il sort de la vue
-			if(b.y >= Affichage.LARG) {
+			if(b.y >= Affichage.HAUT) {
+				System.out.println("y = "+b.y);
 				ennemis.remove(i);
+				this.addScore();
 			}else {
 				i++;
 			}
@@ -513,6 +560,9 @@ public class Etat {
 		return this.posX;
 	}
 	
+	/**
+	 * @return {@link #vitesse}
+	 */
 	public double getVitesse() {
 		return this.vitesse;
 	}
@@ -533,15 +583,24 @@ public class Etat {
 		return this.accel;
 	}
 	
+	/**
+	 * @return {@link #posVert}
+	 */
 	public int getPosVert() {
 		return this.posVert;
 	}
 	
+	/**
+	 * indique que la moto descend, valable aussi quand la moto descend toute seule
+	 * @return {@link #goDown}
+	 */
 	public boolean getGoDown() {
-		//aussi quand la moto descend toute seule
 		return this.goDown;
 	}
 	
+	/**
+	 * @return {@link #decors la liste des décors}
+	 */
 	public ArrayList<Decor> getDecors(){
 		return this.decors;
 	}
@@ -558,7 +617,6 @@ public class Etat {
 	/**
 	 * @return un {@link Rectangle} correspondant à la position et la taille de la moto
 	 */
-	
 	private Rectangle getMotoBounds() {
 		String str = VueMoto.PATH+etatMoto+".png";
 		try {
@@ -625,16 +683,35 @@ public class Etat {
 	public ArrayList<Obstacle> getObstacles() {
 		int i = testCollision();
 		if(i!=-1) {
-			//si collision alors on retire l'obstacle cooncerné et on baisse la vitesse
+			//si collision alors on retire l'obstacle concerné et on baisse la vitesse
 			piste.removeObstacle(i);
 			this.vitesse -= ImpactObstacle;
 		}
 		return piste.getObstacles();
 	}
 	
+	/**
+	 * @return {@link }
+	 */
 	public ArrayList<Ennemi> getEnnemis() {
 		if(!this.fin)updateEnnemis();
 		return this.ennemis;
+	}
+	
+	public int getScore() {
+		return this.score + getPosY()/100;
+	}
+	
+	/**
+	 * indique à l'affichage si on est en train de relancer une partie
+	 */
+	public boolean getRetry() {
+		if(retry) {
+			this.retry = false;
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 	// SETTERS ###################################################################################
@@ -660,6 +737,36 @@ public class Etat {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
+	/**
+	 * relance une nouvelle partie
+	 */
+	public void retry() {
+		this.retry = true;
+		this.goDown = false;
+		this.leftPressed = false;
+		this.rightPressed = false;
+		this.upPressed = false;
+		this.downPressed = false;
+		this.piste = new Piste(this);
+		this.check.restart();
+		this.posX = 0;
+		this.accel = 100.;
+		this.vitesse =  vitesseMax;
+		this.montagne = new Montagne(this);
+		this.etatMoto = 1;
+		this.posVert = 0;
+		this.decors = new ArrayList<Decor>();
+		this.ennemis = new ArrayList<Ennemi>();
+		this.score = 0;
+		this.fin = false;
+		
+	}
 	
-	
+	/**
+	 * ajoute du score (appelé quand on dépasse un ennemi)
+	 */
+	private void addScore() {
+		System.out.println("ADD SCORE");
+		score += ADD_SCORE;
+	}
 }

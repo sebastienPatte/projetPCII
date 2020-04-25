@@ -89,4 +89,12 @@ public class Checkpoint {
 	public int randint(int min, int max) {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
+	
+	void restart() {
+		this.time = DEFAULT_TIME;
+		this.prevTime = DEFAULT_TIME;
+		this.posY = INCR*Piste.incr;
+		this.clock.restart();
+		this.voie = 0;
+	}
 }

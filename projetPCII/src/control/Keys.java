@@ -37,6 +37,7 @@ public class Keys extends KeyAdapter{
 		if(etat.getFin()) {
 			if(e.getKeyCode() == KeyEvent.VK_R) {
 				System.out.println("RETRY");
+				etat.retry();
 			}
 		}
 	}

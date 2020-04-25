@@ -7,9 +7,6 @@ import javax.swing.*;
 
 public class Clock extends JPanel{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private Etat etat;
@@ -99,7 +96,8 @@ public class Clock extends JPanel{
 	private Timer createTimer (){
         ActionListener action = new ActionListener (){
             public void actionPerformed (ActionEvent event){
-                if(tempsRestant>0){
+                
+            	if(tempsRestant>0){
                     setTempsRestant(tempsRestant-1);
                 }
                 else{
@@ -111,4 +109,10 @@ public class Clock extends JPanel{
         return new Timer (1000, action);
     }
 	
+	
+	public void restart() {
+		timer.stop();
+		this.tempsRestant = 20;
+		timer.start();
+	}
 }

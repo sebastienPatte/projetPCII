@@ -88,7 +88,12 @@ public class Affichage extends JPanel{
 		int printedLength = fm.stringWidth(str);
 		
 		// Affiche GAME OVER
-		g.drawString("GAME OVER", LARG/2 - printedLength/2, HAUT/2);
+		g.drawString(str, LARG/2 - printedLength/2, HAUT/2-30);
+		
+		// Affiche PRESS R TO RETRY
+		str = "PRESS R TO RETRY";
+		printedLength = fm.stringWidth(str);
+		g.drawString(str, LARG/2 - printedLength/2, HAUT/2+30);
 		
 		//on revient à l'ancienne police pour la suite
 		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, prevFontSize));
@@ -385,7 +390,7 @@ public class Affichage extends JPanel{
 	 * @param g
 	 */
 	private void drawScore(Graphics g) {
-		String strScore ="Score : "+ etat.getPosY()/100;
+		String strScore ="Score : "+ etat.getScore();
 		   
 		FontMetrics fm = getFontMetrics(g.getFont());
 		int printedLength = fm.stringWidth(strScore) +10; // on ajoute 10 pour pas etre collé au bord
@@ -420,6 +425,15 @@ public class Affichage extends JPanel{
 		float accel = (float)((int)(etat.getAccel()*100))/100;
 		String str = "Accélération : "+accel+" %";
 		g.drawString(str, 10, 540);
+	}
+	
+	public void retry() {
+		this.moto = new VueMoto(etat);
+		this.nuages = new VueNuages();
+		this.check = etat.getCheck();
+		this.clock = check.getClock();
+		this.decors = new VueDecors(etat);
+		this.ennemis = new VueEnnemis(etat);
 	}
 	
 	@Override
@@ -459,6 +473,12 @@ public class Affichage extends JPanel{
 		//affiche accélération
 		drawAccel(g);
 		
-		
+		//si on est en train de relancer une partie on réinitialise les nuages
+		if(etat.getRetry()) {
+			this.nuages.retry();
+		}
 	}
+	
+	
+	
 }
