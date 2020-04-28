@@ -60,9 +60,15 @@ public class Etat {
 	 */
 	public static int maxEnnemis = 3;
 	/**
-	 * quand le joueur est au dessus de cette hauteur il ne peut pas entrer en collision avec les moto ennemies
+	 * quand le joueur est au dessus de cette hauteur il ne peut pas entrer en collision avec les obstacles
+	 * (correspond à l'altitude 1 affichée dans le jeu)
 	 */
-	public static int HAUT_ENNEMIS = 2;
+	public static int HAUT_OBS = 10;
+	/**
+	 * quand le joueur est au dessus de cette hauteur il ne peut pas entrer en collision avec les moto ennemies 
+	 * (correspond à l'altitude 2 affichée dans le jeu)
+	 */
+	public static int HAUT_ENNEMIS = 20;
 	/**
 	 * baisse de la vitesse quand on percute un obstacle
 	 */
@@ -298,6 +304,7 @@ public class Etat {
 		/* 0 <= accel/100 <= 1
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
+		
 		if(this.vitesse <= 0)gameOver();
 		int iEnnemi = CollisionEnnemi();
 		if(iEnnemi !=-1) {
@@ -439,8 +446,8 @@ public class Etat {
 	 * @return l'indice d'un obstacle si la moto est en collision avec cet obstacle, -1 si il n'y a pas de collision
 	 */
 	public int testCollision(){
-		// si la moto à une altitude inférieure à 1 (sinon on ingrore les obstacles)
-		if(this.posVert < 1) {	
+		// si la moto à une altitude inférieure à 1 (sinon on ingrore les obstacles) (altitude 1 telle qu'affichée à l'utilisateur mais 10 en réalité)
+		if(this.posVert < HAUT_OBS) {	
 			int i=0;
 			for(Obstacle o : piste.getObstacles()) {
 				Rectangle oBounds = o.getBounds();
