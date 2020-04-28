@@ -1,14 +1,17 @@
 package control;
 
 import model.Etat;
-
+/**
+ * lance la fonction {@link Etat#testCheckpoint()} toutes les {@link #time} millisecondes
+ * pour tester le franchissement d'un checkpoint et générer le prochain si nécessaire
+ */
 public class TestCheckpoint extends StoppableThread{
 	
 	private int time = 41;
 	private Etat etat;
 	
 	public TestCheckpoint(Etat etat) {
-		this.running = true;
+		this.running = false;
 		this.etat = etat;
 	}
 	

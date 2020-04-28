@@ -21,22 +21,25 @@ public class Keys extends KeyAdapter{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		// déplacement gauche : touche Q
 		if (e.getKeyCode() == KeyEvent.VK_Q) {
 			etat.pressLeft(true);
 		}
+		// déplacement droite : touche D
 		if(e.getKeyCode() == KeyEvent.VK_D) {
 			etat.pressRight(true);
 		}
+		// déplacement haut : touche Z
 		if(e.getKeyCode() == KeyEvent.VK_Z) {
 			etat.pressUp(true);
 		}
+		// déplacement bas : touche S
 		if(e.getKeyCode() == KeyEvent.VK_S) {
 			etat.pressDown(true);
 		}
-		
+		// recommencer un partie : touche R
 		if(etat.getFin()) {
 			if(e.getKeyCode() == KeyEvent.VK_R) {
-				System.out.println("RETRY");
 				etat.retry();
 			}
 		}

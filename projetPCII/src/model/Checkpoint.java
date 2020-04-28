@@ -11,13 +11,34 @@ public class Checkpoint {
 	 * nombre de points de la piste d'écart entre deux checkpoint
 	 */
 	public static int INCR = 5;
+	/**
+	 * temps initialement ajouté pour le franchissement d'un checkpoint
+	 */
 	public static int DEFAULT_TIME = 20;
+	
+	/**
+	 * indique sur laquelle des 3 voies est le checkpoint (par une valeur entre 0 et 2)
+	 */
 	private int voie;
+	/**
+	 * position Y du checkpoint sur la piste
+	 */
 	private int posY;
+	/**
+	 * temps qu'on ajoute pour le franchissement du prochain checkpoint, décrémenté au fur et à mesure (minimum 5) 
+	 */
 	private int time;
+	/**
+	 * temps restant à la dernière actualisation (utilisé pour savoir quand on gagne du temps)
+	 */
 	private int prevTime;
+	
 	private Clock clock;
 	
+	/**
+	 * Constructor
+	 * @param etat
+	 */
 	public Checkpoint(Etat etat) {
 		this.time = DEFAULT_TIME;
 		this.prevTime = DEFAULT_TIME;
@@ -27,32 +48,51 @@ public class Checkpoint {
 		
 	}
 	
+	/**
+	 * On génére au checkpoint suivant
+	 */
 	public void nextCheckpoint() {
 		this.voie = randint(0, VOIE_MAX);
 		this.posY += INCR*Piste.incr;
 		System.out.println("next CHECK | y = "+posY);
 	}
 	
+	/**
+	 * ajoute {@link #time} au temps restant et le décrémente si {@link #time} n'est pas passé en dessous de 5 secondes
+	 */
 	public void addTime() {
 		clock.setTempsRestant(clock.getTempsRestant() + time);
-		if(time > 5) {
+		if(time >= 5) {
 			this.prevTime = this.time;
 			this.time--;
 		}
 	}
 	
+	/**
+	 * @return {@link #posY}
+	 */
 	public int getPosY() {
 		return this.posY;
 	}
 	
+	/**
+	 * 
+	 * @return le temps d'ajout actuel pour un franchissement de checkpoint {@link #time}
+	 */
 	public int getTime() {
 		return this.time;
 	}
 	
+	/**
+	 * @return le temps restant à la dernière actualisation (pour savoir si on a gagné du temps) {@link #prevTime}
+	 */
 	public int getPrevTime() {
 		return this.prevTime;
 	}
 	
+	/**
+	 * @return les décalages pour l'affichage et les tests de franchissement du checkpoint courant en fonction de sa {@link #voie} 
+	 */
 	public double[] getPosX() {
 		double[] res = new double[2];
 	
@@ -73,10 +113,16 @@ public class Checkpoint {
 		return res;
 	}
 
+	/**
+	 * @return {@link #clock}
+	 */
 	public Clock getClock() {
 		return this.clock;
 	}
 	
+	/**
+	 * @return {@link #voie}
+	 */
 	public int getVoie() {
 		return this.voie;
 	}
@@ -90,6 +136,9 @@ public class Checkpoint {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
+	/**
+	 * réinitialise le temps restant et le checkpoint courant quand le joueur relance une partie
+	 */
 	void restart() {
 		this.time = DEFAULT_TIME;
 		this.prevTime = DEFAULT_TIME;

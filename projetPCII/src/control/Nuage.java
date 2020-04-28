@@ -5,14 +5,25 @@ import java.util.concurrent.ThreadLocalRandom;
 import model.Etat;
 import view.Affichage;
 
+/**
+ * Chaque nuage dans la vue est représenté par une instance de cette classe
+ * tout les {@link #TIME} millisecondes de {@link #DEPL} pixels vers la gauche 
+ */
 public class Nuage extends Thread{
-	private int time = 100; 
+	/**
+	 * Deplacement du nuage vers la gauche (en pixels) à chaque actualisation
+	 */
+	public static int DEPL = 3; 
+	/**
+	 * temps entre chaque déplacement du nuage vers la gauche 
+	 */
+	public static int TIME = 100; 
+	
 	private boolean running;
 	private int posX;
 	private int posY;
 	private int width;
 	private int height;
-	private Etat etat;
 	
 	public Nuage() {		
 		this.running = true;
@@ -27,8 +38,8 @@ public class Nuage extends Thread{
 	public void run() {
 		while(this.running) {
 			try {
-				Thread.sleep(time);
-				this.posX -=3;
+				Thread.sleep(TIME);
+				this.posX -= DEPL;
 			}catch (Exception e) {
 				e.printStackTrace(); this.terminate(); 
 			}

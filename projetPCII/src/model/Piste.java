@@ -19,7 +19,7 @@ public class Piste {
 	/**
 	 * Nombre d'obstacles maximum en même temps
 	 */
-	public static int ObstaclesMax = 3;
+	public static int ObstaclesMax = 5;
 	/**
 	 * décalage en hauteur entre chaque point de la piste
 	 */

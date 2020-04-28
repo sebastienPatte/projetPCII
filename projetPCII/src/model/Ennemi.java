@@ -25,7 +25,7 @@ public class Ennemi {
 	/**
 	 * Vitesse maximale d'un ennemi
 	 */
-	public static int V_MAX = 5;
+	public static int V_MAX = (int) Etat.vitesseMax;
 	
 	/**
 	 * Facteur de division pour le calcul de la vitesse par rapport à l'écart au milieu de la piste

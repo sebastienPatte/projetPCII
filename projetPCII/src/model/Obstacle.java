@@ -14,14 +14,39 @@ public class Obstacle {
 	private int width;
 	private int height;
 	
+	private boolean isHole;
 	
 	public Obstacle(Piste piste, Etat etat, int y) {
 		this.piste = piste;
 		this.etat = etat;
-		this.x = randint(-Piste.largeurPiste/2,+Piste.largeurPiste/2);
 		this.y =  y;
-		this.width = randint(50, 100);
-		this.height = randint(50, 100);
+		
+		if(randint(0,2) == 0) {
+			//1 chance sur 3 que l'obstacle soit un trou
+			this.width = 100;
+			this.height = 50;
+			
+			switch (randint(0,2)) {
+			case 0:
+				this.x =  - Piste.largeurPiste/3 - height/2;
+				break;
+			case 1 :
+				this.x =  - height/2;
+				break;
+			case 2:
+				this.x =  Piste.largeurPiste/3 - height/2;
+				break;
+			default:
+				break;
+			}
+			
+			this.isHole = true;
+		}else {
+			this.x = randint(-Piste.largeurPiste/2,+Piste.largeurPiste/2);
+			this.width = randint(50, 100);
+			this.height = randint(50, 100);
+			this.isHole = false;
+		}
 	}
 	
 	/**
@@ -43,6 +68,13 @@ public class Obstacle {
 		int larg = p2.x-p3.x;												//larg : x de p2 - x de p1
 		
 		return new Rectangle(p3.x, Affichage.HAUT - p3.y, larg, haut);		// on renvoie direct les coordonnées avec Y inversé
+	}
+	
+	/**
+	 * @return true si l'obstacle est un trou, false sinon
+	 */
+	public boolean isHole() {
+		return this.isHole;
 	}
 	
 	/** Génère un chiffre aléatoire entre min et max

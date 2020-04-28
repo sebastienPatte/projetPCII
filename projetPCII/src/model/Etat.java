@@ -17,7 +17,11 @@ import view.VueMoto;
 
 public class Etat {
 	
-	public static int deplacement = 5;
+	// CONSTANTES ################################################################################################################
+	/**
+	 * deplacement de la moto sur les côtés (en pixels)
+	 */
+	public static int deplacement = 6;
 	/** !!!!!! PAS A JOUR !!!!!!!!!!!!!!!!!
 	 * ici on prend FACT_ACCEL égal à une demie largeur d'une des 3 voies
 	 * donc quand on est dans la voie du milieu l'accéléraction est > 100 donc on accélère 
@@ -39,7 +43,6 @@ public class Etat {
 	 * altitude maximale atteignable par le joueur
 	 */
 	public static int PosVert_MAX = 50;
-	
 	/**
 	 * probabilité qu'un décor apparaisse en haut 
 	 */
@@ -48,7 +51,6 @@ public class Etat {
 	 * maximum de décors en même temps (les décors sont supprimés dès qu'ils sortent du champ de vision du joueur) 
 	 */
 	public static int maxDecors = 10;
-	
 	/**
 	 * probabilité (en %) qu'un ennemi apparaisse en haut de la piste
 	 */
@@ -61,12 +63,14 @@ public class Etat {
 	 * quand le joueur est au dessus de cette hauteur il ne peut pas entrer en collision avec les moto ennemies
 	 */
 	public static int HAUT_ENNEMIS = 2;
-
-	
 	/**
 	 * baisse de la vitesse quand on percute un obstacle
 	 */
-	public static int ImpactObstacle = 3;
+	public static int ImpactObstacle = 4;
+	/**
+	 * baisse de la vitesse quand on tombe dans un trou
+	 */
+	public static int ImpactHole= 7;
 	/**
 	 * Vitesse minimum de la moto pour pouvoir voler (sinon elle redescend)
 	 */
@@ -74,14 +78,14 @@ public class Etat {
 	/**
 	 * {@link #vitesse} maximale atteingnable par la moto
 	 */
-	static double vitesseMax = 5.0;//pixels par repaint
+	static double vitesseMax = 8.0;//pixels par repaint
 	
 	/**
 	 * score ajouté quand on dépasse un ennemi
 	 */
 	static int ADD_SCORE = 10;
 	
-	private Piste piste;
+	// ATTRIBUTS ###############################################################################################################
 	
 	/**
 	 * position x du joueur
@@ -132,17 +136,14 @@ public class Etat {
 	 * 2 : tourne Ã  droite
 	 */
 	private int etatMoto;
-	
 	/**
 	 * indique que l'utilisateur veut redémarrer une partie
 	 */
 	private boolean retry;
-	
 	/**
 	 * on accumule dans cette variable le score gagné en dépassant des ennemis
 	 */
 	private int score;
-	
 	/**
 	 * Tableau de Threads ({@link control.RepaintScreen RepaintScreen}, 
 	 * {@link control.TestCheckpoint TestCheckpoint}, {@link control.Avancer Avancer} et {@link control.Vitesse Vitesse})
@@ -155,6 +156,8 @@ public class Etat {
 	private Checkpoint check;
 	private ArrayList<Decor> decors;
 	private ArrayList<Ennemi> ennemis;
+	private Piste piste;
+	
 	
 	/**
 	 * Constructor
@@ -291,6 +294,7 @@ public class Etat {
 	 * Avance {@link Piste#posY} en fonction de {@link #vitesse}
 	 */
 	public void avance() {
+		testCheckpoint();
 		/* 0 <= accel/100 <= 1
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
@@ -307,6 +311,7 @@ public class Etat {
 		for (Ennemi ennemi : ennemis) {
 			ennemi.avance();
 		}
+		testCheckpoint();
 	}
 	
 	
@@ -450,7 +455,11 @@ public class Etat {
 				if(oBounds.y + oBounds.height > mY1 && oBounds.y <= mY2) {
 					// si bord gauche de OBS < bord droit de moto ET bord droit de OBS > bord gauche de moto
 					if(oBounds.x <= mX2 && oBounds.x + oBounds.width >= mX1) {
-						//on retourne l'indice de l'obstacle pour le faire disparaître lors de la collision
+						if(o.isHole()) {
+							this.vitesse -= ImpactHole;
+						}else {
+							this.vitesse -= ImpactObstacle;
+						}
 						return i;
 					}
 				}
@@ -682,10 +691,8 @@ public class Etat {
 	 */
 	public ArrayList<Obstacle> getObstacles() {
 		int i = testCollision();
-		if(i!=-1) {
-			//si collision alors on retire l'obstacle concerné et on baisse la vitesse
-			piste.removeObstacle(i);
-			this.vitesse -= ImpactObstacle;
+		if(i >= 0) {
+			this.piste.removeObstacle(i);
 		}
 		return piste.getObstacles();
 	}

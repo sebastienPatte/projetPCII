@@ -372,6 +372,14 @@ public class Affichage extends JPanel{
 		g.setStroke(oldStroke);
 	}
 	
+	private void drawHole(int x, int y, int width, int height, Graphics g) {
+		g.setColor(Color.BLACK);
+		g.fillOval(x,y,width,height/2);
+		g.setColor(new Color(178,178,178));
+		g.drawOval(x,y,width,height/2);
+		g.setColor(Color.BLACK);
+	}
+	
 	/**
 	 * Affiche les obstacles sur la piste
 	 * @param g
@@ -380,7 +388,11 @@ public class Affichage extends JPanel{
 		for(Obstacle o : etat.getObstacles()) {
 			Rectangle bounds = o.getBounds();
 			if(bounds.y +bounds.height > posHorizon) {	
-				drawCaisse(bounds.x, bounds.y, bounds.width, bounds.height, g);
+				if(o.isHole()) {
+					drawHole(bounds.x, bounds.y, bounds.width, bounds.height, g);
+				}else {
+					drawCaisse(bounds.x, bounds.y, bounds.width, bounds.height, g);
+				}
 			}
 		}
 	}
