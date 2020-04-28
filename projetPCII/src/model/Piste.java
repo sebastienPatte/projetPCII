@@ -19,7 +19,7 @@ public class Piste {
 	/**
 	 * Nombre d'obstacles maximum en même temps
 	 */
-	public static int ObstaclesMax = 10; //5
+	public static int ObstaclesMax = 5; 
 	/**
 	 * décalage en hauteur entre chaque point de la piste
 	 */
@@ -32,7 +32,7 @@ public class Piste {
 	/**
 	 * Probabilité qu'un obstacle apparisse (lancée à chaque rafraichissement de la fenêtre)
 	 */
-	public static int probaObstacle = 10; //100
+	public static int probaObstacle = 100; 
 	/**
 	 * liste des points de la ligne du bord gauche de la piste
 	 * (pas besoin d'avoir les 2 bords car on a {@link #largeurPiste})

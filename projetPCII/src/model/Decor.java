@@ -7,8 +7,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import view.Affichage;
 
 public class Decor {
-	public static int probaArbre = 50;
-	public static int probaRock = 50;
+	public static int probaArbre = 40;
+	public static int probaRock = 40;
+	public static int probaHouse = 20;
 	
 	private int x;
 	private int y;
@@ -20,6 +21,7 @@ public class Decor {
 	/**
 	 * 0 : Arbre
 	 * 1 : Rocher
+	 * 2 : Maison
 	 */
 	private int type;
 	
@@ -28,15 +30,23 @@ public class Decor {
 		this.y = etat.getPosY() + Affichage.HAUT;
 		int rdm = randint(0, 100);
 		if(rdm < probaArbre) {
+			//arbre
 			this.type = 0;
 			this.width = 50;
 			this.height = 100;
 			
 		}else {
-			this.type = 1;
-			this.width = 50;
-			this.height = 50;
-			
+			if(rdm < probaArbre + probaRock) {
+				//rocher
+				this.type = 1;
+				this.width = 50;
+				this.height = 40;
+			}else {
+				// Maison
+				this.type = 2;
+				this.width = 100;
+				this.height = 100;
+			}
 		}
 		if(randint(0,1)==0) {
 			//décor à gauche
@@ -45,7 +55,6 @@ public class Decor {
 			//décor à droite
 			this.x = randint(Affichage.LARG/2+Piste.largeurPiste/2+Piste.dec, Affichage.LARG*2);
 		}
-		
 		
 		this.etat = etat;
 	}

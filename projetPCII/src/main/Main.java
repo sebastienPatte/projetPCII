@@ -24,7 +24,7 @@ public class Main {
 			StoppableThread[] threads = { 
 				new RepaintScreen(aff),
 				new Avancer(mod),
-				new Vitesse(mod),
+				new Vitesse(mod)
 			};
 			mod.setThreads(threads);
 			

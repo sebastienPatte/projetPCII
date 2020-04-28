@@ -31,6 +31,9 @@ public class VueDecors {
 				case 1:
 					drawRock(r.x, r.y, r.width, r.height, g);
 					break;
+				case 2:
+					drawHouse(r.x, r.y, r.width, r.height, g);
+					break;
 				default:
 					break;
 				}
@@ -58,5 +61,25 @@ public class VueDecors {
 		g.fillOval(x,y,width,height);
 		g.setColor(Color.BLACK);
 		g.drawOval(x,y,width,height);
+	}
+	
+	private void drawHouse(int x, int y, int width, int height, Graphics g) {
+		g.setColor(Color.BLACK);
+		
+		int hToit = height * 2/5; 
+		int hMurs = height - hToit;
+		
+		g.setColor(Color.BLUE);
+		g.fillPolygon(new int[] {x, x+width/2, x+width}, new int[] {y+hToit,y,y+hToit}, 3);
+		
+		g.setColor(Color.RED);
+		g.fillRect(x,y+hToit,width,hMurs);
+		
+		int xPorte = width * 4/7;
+		int hPorte = hMurs * 3/5; 
+		int yPorte = hToit+(hMurs - hPorte);
+		g.setColor(Color.YELLOW);
+		g.fillRect(x+xPorte,y+yPorte,width/3,hPorte);
+		g.setColor(Color.BLACK);
 	}
 }

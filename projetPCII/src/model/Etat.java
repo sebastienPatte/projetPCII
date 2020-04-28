@@ -52,9 +52,9 @@ public class Etat {
 	 */
 	public static int maxDecors = 10;
 	/**
-	 * probabilité (en %) qu'un ennemi apparaisse en haut de la piste
+	 * probabilité (/1000) qu'un ennemi apparaisse en haut de la piste
 	 */
-	public static int probaEnnemi = 1;
+	public static int probaEnnemi = 5;
 	/**
 	 * maximum d'ennemis en même temps
 	 */
@@ -550,7 +550,7 @@ public class Etat {
 	 * met à jour {@link #ennemis la liste des ennemis}
 	 */
 	public void updateEnnemis() {
-		int rdm = randint(0,100);
+		
 		for (int i=0; i<ennemis.size();) {
 			Rectangle b = ennemis.get(i).getBounds();
 			//on retire l'ennemi si il sort de la vue
@@ -562,7 +562,7 @@ public class Etat {
 				i++;
 			}
 		}
-		
+		int rdm = randint(0,1000);
 		if(ennemis.size() < maxEnnemis && rdm <= probaEnnemi)ennemis.add(new Ennemi(this));
 	}
 	
