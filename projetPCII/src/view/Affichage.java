@@ -385,15 +385,22 @@ public class Affichage extends JPanel{
 	 * @param g
 	 */
 	private void drawObstacles(Graphics2D g) {
-		for(Obstacle o : etat.getObstacles()) {
+		ArrayList<Obstacle> obstacles = etat.getObstacles();
+		// on parcourt la liste des obstacles à l'envers pour afficher d'abord les obstacles le plus en haut de la fenetre
+		for(int i=obstacles.size()-1; i>=0; i--) {
+			Obstacle o = obstacles.get(i);
 			Rectangle bounds = o.getBounds();
-			if(bounds.y +bounds.height > posHorizon) {	
-				if(o.isHole()) {
+			
+			if(o.isHole()) {
+				if(bounds.y > posHorizon) {	
 					drawHole(bounds.x, bounds.y, bounds.width, bounds.height, g);
-				}else {
+				}
+			}else {
+				if(bounds.y +bounds.height > posHorizon) {
 					drawCaisse(bounds.x, bounds.y, bounds.width, bounds.height, g);
 				}
 			}
+			
 		}
 	}
 	

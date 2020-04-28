@@ -307,6 +307,7 @@ public class Etat {
 		}else {
 			piste.avance(Math.round((float)getVitesse()));
 		}
+		testCheckpoint();
 		// on fait avancer tout les ennemis
 		for (Ennemi ennemi : ennemis) {
 			ennemi.avance();

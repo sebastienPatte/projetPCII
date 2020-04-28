@@ -7,7 +7,6 @@ import control.Avancer;
 import control.Keys;
 import control.RepaintScreen;
 import control.StoppableThread;
-import control.TestCheckpoint;
 import control.Vitesse;
 import model.Etat;
 import view.Affichage;
@@ -26,7 +25,6 @@ public class Main {
 				new RepaintScreen(aff),
 				new Avancer(mod),
 				new Vitesse(mod),
-				new TestCheckpoint(mod)
 			};
 			mod.setThreads(threads);
 			
