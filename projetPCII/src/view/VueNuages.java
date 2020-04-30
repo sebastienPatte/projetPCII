@@ -20,12 +20,12 @@ public class VueNuages {
 	/**
 	 * Nombre maximum de nuages 
 	 */
-	public static int MaxNuages= 3;
+	public static int MaxNuages= 4; 
 	
 	/**
 	 * on a une chance sur probaNuage qu'on nuage apparaisse
 	 */
-	public static int probaNuage= 10;
+	public static int probaNuage= 100;
 	
 	/**
 	 * liste des nuages

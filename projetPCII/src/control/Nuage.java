@@ -27,7 +27,7 @@ public class Nuage extends Thread{
 	
 	public Nuage() {		
 		this.running = true;
-		this.width = randint(50,200);
+		this.width = randint(100,200);
 		this.height = randint(50,Affichage.posHorizon);
 		this.posX = Affichage.LARG;
 		int maxY = Affichage.posHorizon - this.height;
