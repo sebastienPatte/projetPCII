@@ -10,7 +10,7 @@ public class RepaintScreen extends StoppableThread{
 	/**
 	 * temps entre chaque rafraichissement de l'affichage 
 	 */
-	public static int time = 50;
+	public static int time = 41;
 	
 	/**
 	 * instance de Affichage pour lancer le raffraichissement avec {@link Affichage#repaint()}

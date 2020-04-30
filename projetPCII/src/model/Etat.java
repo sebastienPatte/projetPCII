@@ -50,7 +50,7 @@ public class Etat {
 	/**
 	 * maximum de décors en même temps (les décors sont supprimés dès qu'ils sortent du champ de vision du joueur) 
 	 */
-	public static int maxDecors = 15; 
+	public static int maxDecors = 10; 
 	/**
 	 * probabilité (/1000) qu'un ennemi apparaisse en haut de la piste
 	 */
