@@ -33,10 +33,7 @@ public class Affichage extends JPanel{
 	 * position Y de la ligne d'horizon
 	 */
 	public static int posHorizon = 200;
-	/**
-	 * chemin vers l'image d'obstacles
-	 */
-	public static String PATH= "imgs/red.png";
+	
 	/** Le recul du joueur par rapport à l'écran */
 	public static final int RECUL_Z = 200;
 	/** La hauteur du regard du joueur */
@@ -354,11 +351,20 @@ public class Affichage extends JPanel{
 	 */
 	private void drawMontagne(Graphics g) {
 		ArrayList<Point> points = etat.getMontagne();
+		g.setColor(new Color(73,45,13));
 		for(int i=0; i+1<points.size(); i++) {
 			Point p1 = points.get(i);
 			Point p2 = points.get(i+1);
-			g.drawLine(p1.x , p1.y, p2.x, p2.y);
+			
+			//g.drawLine(p1.x , p1.y, p2.x, p2.y);
+			
+			
+			
+			
+			g.fillPolygon(new int[] {p1.x, p1.x, p2.x, p2.x}, new int[] {p1.y, posHorizon, posHorizon, p2.y}, 4);
+			
 		}
+		g.setColor(Color.BLACK);
 	}
 	
 	private void drawCaisse(int x, int y, int width, int height, Graphics2D g) {
