@@ -71,16 +71,16 @@ public class VueDecors {
 		int hToit = height * 2/5; 
 		int hMurs = height - hToit;
 		
-		g.setColor(Color.BLUE);
-		g.fillPolygon(new int[] {x, x+width/2, x+width}, new int[] {y+hToit,y,y+hToit}, 3);
+		g.setColor(new Color(114,4,4));
+		g.fillPolygon(new int[] {x-5, x+width/2, x+width+5}, new int[] {y+hToit,y,y+hToit}, 3);
 		
-		g.setColor(Color.RED);
+		g.setColor(new Color(203,169,138));
 		g.fillRect(x,y+hToit,width,hMurs);
 		
 		int xPorte = width * 4/7;
 		int hPorte = hMurs * 3/5; 
 		int yPorte = hToit+(hMurs - hPorte);
-		g.setColor(Color.YELLOW);
+		g.setColor(new Color(59,34,8));
 		g.fillRect(x+xPorte,y+yPorte,width/3,hPorte);
 		g.setColor(Color.BLACK);
 	}

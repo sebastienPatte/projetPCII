@@ -46,7 +46,7 @@ public class Decor {
 				// Maison
 				this.type = 2;
 				this.width = 100;
-				this.height = 100;
+				this.height = 125;
 			}
 		}
 		if(randint(0,1)==0) {
