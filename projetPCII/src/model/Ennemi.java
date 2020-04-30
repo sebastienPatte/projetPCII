@@ -141,7 +141,7 @@ public class Ennemi {
 	private Rectangle getMotoBounds() {
 		String str = VueEnnemis.PATH+etatMoto+".png";
 		try {
-			Image image = ImageIO.read(new File(str));
+			Image image = ImageIO.read(VueEnnemis.class.getResource(str));
 			// on multiplie par 1.2 pour que la taille soit environs la meme que la moto du joueur
 			// (car la moto du joueur n'est pas soumise à la perspective vu qu'elle est toujours au meme y)
 			int height = (int) (image.getHeight(null) * 1.2);

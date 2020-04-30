@@ -37,7 +37,8 @@ public class VueMoto {
 			// affiche ombre de la moto selon l'état de la moto (gauche, tout droit, droite)
 			String str = PATH+"ombre"+etat.getEtatMoto()+".png";
 			try {
-				image = ImageIO.read(new File(str));
+				//image = ImageIO.read(new File(str));
+				image = ImageIO.read(VueMoto.class.getResource(str));
 				g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord , null);
 			}catch (IOException e) {
 				e.printStackTrace();
@@ -45,7 +46,8 @@ public class VueMoto {
 			
 			// affiche les ailes
 			try {	 
-				image = ImageIO.read(new File(PATH+"ailes.png"));
+				//image = ImageIO.read(new File(PATH+"ailes.png"));
+				image = ImageIO.read(VueMoto.class.getResource(PATH+"ailes.png"));
 				g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord - etat.getPosVert(), null);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -54,7 +56,8 @@ public class VueMoto {
 			// et les flammes si on est en train de gagner de l'altitude
 			if(!etat.getGoDown()) {
 				try {	 
-					image = ImageIO.read(new File(PATH+"flammes.png"));
+					//image = ImageIO.read(new File(PATH+"flammes.png"));
+					image = ImageIO.read(VueMoto.class.getResource(PATH+"flammes.png"));
 					g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord - etat.getPosVert(), null);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -65,7 +68,8 @@ public class VueMoto {
 		// dans tout les cas, on affiche la moto selon si elle va tout droit, vers la droite ou la gauche
 		String str = PATH+etat.getEtatMoto()+".png";
 		try { 
-			image = ImageIO.read(new File(str)); 
+			//image = ImageIO.read(new File(str)); 
+			image = ImageIO.read(VueMoto.class.getResource(str));
 			g.drawImage(image, Affichage.LARG/2, Affichage.HAUT-image.getHeight(null)-decBord - etat.getPosVert(), null);
 		}catch (IOException e) {
 			e.printStackTrace();

@@ -29,7 +29,7 @@ public class VueEnnemis {
 				// on affiche la moto selon si elle va tout droit, vers la droite ou la gauche
 				String str = PATH+ennemi.getEtatMoto()+".png";
 				try {
-					Image image = ImageIO.read(new File(str)); 
+					Image image = ImageIO.read(VueEnnemis.class.getResource(str)); 
 					image = image.getScaledInstance(bounds.width, bounds.height, Image.SCALE_SMOOTH);
 					g.drawImage(image,bounds.x, bounds.y, null);
 				}catch (IOException e) {

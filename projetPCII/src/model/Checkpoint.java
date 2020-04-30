@@ -2,6 +2,8 @@ package model;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import control.Clock;
+
 public class Checkpoint {
 	/**
 	 * les numéro de voies vont de 0 à VOIE_MAX
@@ -28,10 +30,7 @@ public class Checkpoint {
 	 * temps qu'on ajoute pour le franchissement du prochain checkpoint, décrémenté au fur et à mesure (minimum 5) 
 	 */
 	private int time;
-	/**
-	 * temps restant à la dernière actualisation (utilisé pour savoir quand on gagne du temps)
-	 */
-	private int prevTime;
+	
 	
 	private Clock clock;
 	
@@ -41,9 +40,9 @@ public class Checkpoint {
 	 */
 	public Checkpoint(Etat etat) {
 		this.time = DEFAULT_TIME;
-		this.prevTime = DEFAULT_TIME;
 		this.posY = INCR*Piste.incr;
-		this.clock = new Clock(time,etat);
+		this.clock = new Clock(etat);
+		this.clock.start();
 		this.voie = 0;
 		
 	}
@@ -61,9 +60,8 @@ public class Checkpoint {
 	 * ajoute {@link #time} au temps restant et le décrémente si {@link #time} n'est pas passé en dessous de 5 secondes
 	 */
 	public void addTime() {
-		clock.setTempsRestant(clock.getTempsRestant() + time);
-		if(time >= 5) {
-			this.prevTime = this.time;
+		clock.incrTempsRestant(this.time);
+		if(time > 5) {
 			this.time--;
 		}
 	}
@@ -83,12 +81,6 @@ public class Checkpoint {
 		return this.time;
 	}
 	
-	/**
-	 * @return le temps restant à la dernière actualisation (pour savoir si on a gagné du temps) {@link #prevTime}
-	 */
-	public int getPrevTime() {
-		return this.prevTime;
-	}
 	
 	/**
 	 * @return les décalages pour l'affichage et les tests de franchissement du checkpoint courant en fonction de sa {@link #voie} 
@@ -141,7 +133,6 @@ public class Checkpoint {
 	 */
 	void restart() {
 		this.time = DEFAULT_TIME;
-		this.prevTime = DEFAULT_TIME;
 		this.posY = INCR*Piste.incr;
 		this.clock.restart();
 		this.voie = 0;

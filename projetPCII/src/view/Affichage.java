@@ -13,6 +13,7 @@ import java.awt.Stroke;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
+import control.Clock;
 import model.Obstacle;
 import model.Checkpoint;
 import model.Etat;
@@ -49,7 +50,7 @@ public class Affichage extends JPanel{
 	// Instances du Modèle
 	private Etat etat;
 	private Checkpoint check;
-	private model.Clock clock;
+	private Clock clock;
 	
 	// Instances de Vues
 	private VueMoto moto;
@@ -118,10 +119,10 @@ public class Affichage extends JPanel{
         }
 		
 		//quand on gagne du temps on affiche en vert le temps gagné
-		int prevTime = this.clock.getPrevTime();
-		if(tempsRestant >= prevTime) {
+		int increasing = this.clock.getIncreasing();
+		if(increasing > 0) {
 			g.setColor(Color.GREEN);
-			g.drawString("+"+this.check.getPrevTime(),LARG/2 - 10, HAUT/2);
+			g.drawString("+"+increasing,LARG/2 - 10, HAUT/2);
 			g.setColor(Color.BLACK);
 		}
 		//on revient à l'ancienne police

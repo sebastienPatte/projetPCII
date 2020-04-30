@@ -59,7 +59,8 @@ public class VueNuages {
 			}
 			
 			try {
-				Image image = ImageIO.read(new File(PATH)).getScaledInstance(nuage.getWidth(), nuage.getHeight(), 100);
+				
+				Image image = ImageIO.read(VueMoto.class.getResource(PATH)).getScaledInstance(nuage.getWidth(), nuage.getHeight(), 100);
 				g.drawImage(image,  nuage.getPosX() - posX, nuage.getPosY(), null);	
 			}
 				catch (IOException e) {

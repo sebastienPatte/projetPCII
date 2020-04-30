@@ -18,7 +18,7 @@ public class Avancer extends StoppableThread{
 	
 	@Override
 	public void run() {
-		while(this.running) {
+		while(running) {
 			try {
 				Thread.sleep(time);
 				this.etat.avance();

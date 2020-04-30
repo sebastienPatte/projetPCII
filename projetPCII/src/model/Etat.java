@@ -203,17 +203,20 @@ public class Etat {
 	 */
 	public void testCheckpoint() {
 		Rectangle mBounds = getMotoBounds();
+		Point[][] piste = getPiste();
 		//calcul indice checkpoint sur la piste
 		int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
-		if(i<getPiste().length) {
+		
+		if(i<piste.length) {
 			// on projete un point au niveau Y du checkpoint pour obtenir l'Y d'affichage du checkpoint (qui prend déjà en compte posY de la moto)
-			int yCheckProj =  projection(this.getPiste()[i][0].x, 0, this.getPiste()[i][0].y).y;
-			
-			if(yCheckProj <= mBounds.height) {
+			int yCheckProj =  projection(piste[i][0].x, 0, piste[i][0].y).y;
+
+			//on ne peut franchir un checkpoint que si on est au sol
+			if(this.posVert==0 && yCheckProj <= mBounds.height) {
 			//si le checkpoint a atteint le niveau de la moto
 				// calcul points au niveau du checkpoint
-				Point pG = projection(this.getPiste()[i][0].x, 0, this.getPiste()[i][0].y);
-				Point pD = projection(this.getPiste()[i][1].x, 0, this.getPiste()[i][1].y);	
+				Point pG = projection(piste[i][0].x, 0, piste[i][0].y);
+				Point pD = projection(piste[i][1].x, 0, piste[i][1].y);	
 				
 				// on récupère x1 et x2 du checkpoint tels qu'ils sont affichés
 				double[] Xcheck = check.getPosX();
@@ -304,9 +307,9 @@ public class Etat {
 		/* 0 <= accel/100 <= 1
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
-		
 		if(this.vitesse <= 0)gameOver();
 		int iEnnemi = CollisionEnnemi();
+		testCheckpoint();
 		if(iEnnemi !=-1) {
 			// on considère qu'une collision avec un ennemi ne fait pas baisser la vitesse en dessous de 1
 			if(this.vitesse-1>1)this.vitesse -= 1;
@@ -314,7 +317,6 @@ public class Etat {
 		}else {
 			piste.avance(Math.round((float)getVitesse()));
 		}
-		testCheckpoint();
 		// on fait avancer tout les ennemis
 		for (Ennemi ennemi : ennemis) {
 			ennemi.avance();
@@ -447,7 +449,7 @@ public class Etat {
 	 */
 	public int testCollision(){
 		// si la moto à une altitude inférieure à 1 (sinon on ingrore les obstacles) (altitude 1 telle qu'affichée à l'utilisateur mais 10 en réalité)
-		if(this.posVert < HAUT_OBS) {	
+		
 			int i=0;
 			for(Obstacle o : piste.getObstacles()) {
 				Rectangle oBounds = o.getBounds();
@@ -464,16 +466,25 @@ public class Etat {
 					// si bord gauche de OBS < bord droit de moto ET bord droit de OBS > bord gauche de moto
 					if(oBounds.x <= mX2 && oBounds.x + oBounds.width >= mX1) {
 						if(o.isHole()) {
-							this.vitesse -= ImpactHole;
+							//collision possible avec le trou seulement si on est sur le sol
+							if(this.posVert == 0){
+								this.vitesse -= ImpactHole;
+								return i;
+							}
 						}else {
-							this.vitesse -= ImpactObstacle;
+							//sinon obstacle normal collision possible quand on est en dessous de HAUT_OBS
+							if(this.posVert < HAUT_OBS) {
+								this.vitesse -= ImpactObstacle;
+								return i;
+							}
+							
 						}
-						return i;
+						
 					}
 				}
 				i++;
 			}
-		}
+		
 		return -1;
 	}
 	
@@ -637,7 +648,7 @@ public class Etat {
 	private Rectangle getMotoBounds() {
 		String str = VueMoto.PATH+etatMoto+".png";
 		try {
-			Image image = ImageIO.read(new File(str));
+			Image image = ImageIO.read(VueMoto.class.getResource(str));
 			
 			
 			int height = image.getHeight(null) + VueMoto.decBord;
