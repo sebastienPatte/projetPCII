@@ -176,6 +176,11 @@ public class Affichage extends JPanel{
 			int largPiste1 = p1d.x - p1g.x;
 			int largPiste2 = p2d.x - p2g.x;
 			
+			//herbe
+			g.setColor(new Color(49,159,51));
+			//g.drawLine(0, HAUT-p1g.y,p1g.x, HAUT-p1g.y);
+			//g.drawLine(0, HAUT-p2g.y,p2g.x, HAUT-p2g.y);
+			g.fillPolygon(new int[] {0,  0,p1g.x , p2g.x} , new int[] {HAUT-p2g.y, HAUT-p1g.y, HAUT-p1g.y, HAUT-p2g.y}, 4);
 			
 			g.setColor(Color.GRAY);
 			//affiche separation voie gauche
@@ -357,9 +362,6 @@ public class Affichage extends JPanel{
 			Point p2 = points.get(i+1);
 			
 			//g.drawLine(p1.x , p1.y, p2.x, p2.y);
-			
-			
-			
 			
 			g.fillPolygon(new int[] {p1.x, p1.x, p2.x, p2.x}, new int[] {p1.y, posHorizon, posHorizon, p2.y}, 4);
 			
