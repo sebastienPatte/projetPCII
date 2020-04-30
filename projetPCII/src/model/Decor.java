@@ -7,9 +7,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import view.Affichage;
 
 public class Decor {
-	public static int probaArbre = 40;
-	public static int probaRock = 40;
-	public static int probaHouse = 20;
+	// probaArbre + probaRock + probaHouse = 100 
+	public static int probaArbre = 55;
+	public static int probaRock = 30;
+	public static int probaHouse = 15;
 	
 	private int x;
 	private int y;

@@ -10,8 +10,7 @@ import model.Decor;
 import model.Etat;
 
 public class VueDecors {
-	public static int probaDecor = 1;
-	public static int maxDecors = 1;
+	
 	
 	private Etat etat;
 	
@@ -21,7 +20,10 @@ public class VueDecors {
 	
 	public void drawDecors(Graphics g) {
 		etat.updateDecors();
-		for (Decor decor : etat.getDecors()) {
+		ArrayList<Decor> decors = etat.getDecors();
+		//on parcours la liste à l'envers pour afficher d'abord les décors les plus en haut
+		for (int i = decors.size()-1; i>=0; i--) {
+			Decor decor = decors.get(i);
 			Rectangle r = decor.getBounds();
 			if(r.y + r.height > Affichage.posHorizon) {
 				switch (decor.getType()) {
