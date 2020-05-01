@@ -485,8 +485,6 @@ public class Affichage extends JPanel{
 		
 		//dessine horizon
 		drawHorizon(g);
-		//affiche la vitesse
-		drawVitesse(g);
 		//affiche la piste
 		drawPiste(g2d);
 		//affiche le décor de montagne au dessus de l'horizon
@@ -511,6 +509,8 @@ public class Affichage extends JPanel{
 		}
 		//affichage altitude
 		drawAltitude(g);
+		//affiche la vitesse
+		drawVitesse(g);
 		//affiche accélération
 		drawAccel(g);
 		
