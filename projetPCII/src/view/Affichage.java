@@ -181,6 +181,7 @@ public class Affichage extends JPanel{
 			//g.drawLine(0, HAUT-p1g.y,p1g.x, HAUT-p1g.y);
 			//g.drawLine(0, HAUT-p2g.y,p2g.x, HAUT-p2g.y);
 			g.fillPolygon(new int[] {0,  0,p1g.x , p2g.x} , new int[] {HAUT-p2g.y, HAUT-p1g.y, HAUT-p1g.y, HAUT-p2g.y}, 4);
+			g.fillPolygon(new int[] {p2d.x , p1d.x, LARG, LARG} , new int[] {HAUT-p2d.y, HAUT-p1d.y, HAUT-p1d.y, HAUT-p2d.y}, 4);
 			
 			g.setColor(Color.GRAY);
 			//affiche separation voie gauche
@@ -233,9 +234,14 @@ public class Affichage extends JPanel{
 		Point deuxiemeG = projection(p1g.x - posX, 0, p1g.y);
 		Point deuxiemeD = projection(p1d.x - posX, 0, p1d.y);
 		
-		tracer(new Point(premierG.x, premierG.y), deuxiemeG, g);
-		tracer(new Point(premierD.x, premierD.y), deuxiemeD, g);
+		tracer(premierG, deuxiemeG, g);
+		tracer(premierD, deuxiemeD, g);
 		
+		//premier polygone herbe (en haut)
+		g.setColor(new Color(49,159,51));
+		g.fillPolygon(new int[] {0,  0,premierG.x , deuxiemeG.x} , new int[] {HAUT-deuxiemeG.y, HAUT-premierG.y, HAUT-premierG.y, HAUT-deuxiemeG.y}, 4);
+		g.fillPolygon(new int[] {deuxiemeD.x , premierD.x, LARG, LARG} , new int[] {HAUT-deuxiemeD.y, HAUT-premierD.y, HAUT-premierD.y, HAUT-deuxiemeD.y}, 4);
+				
 		
 		g.setColor(Color.GRAY);
 		//affiche separation voie gauche
@@ -295,6 +301,10 @@ public class Affichage extends JPanel{
 		tracer(projAvDernierG, projDernierG, g);
 		tracer(projAvDernierD, projDernierD, g);
 		
+		//dernier polygone herbe (en haut)
+		g.setColor(new Color(49,159,51));
+		g.fillPolygon(new int[] {0,  0,projAvDernierG.x , projDernierG.x} , new int[] {HAUT-projDernierG.y, HAUT-projAvDernierG.y, HAUT-projAvDernierG.y, HAUT-projDernierG.y}, 4);
+		g.fillPolygon(new int[] {projDernierD.x , projAvDernierD.x, LARG, LARG} , new int[] {HAUT-projDernierD.y, HAUT-projAvDernierD.y, HAUT-projAvDernierD.y, HAUT-projDernierD.y}, 4);
 		
 		//affiche separation voie gauche
 		g.setColor(Color.GRAY);
