@@ -44,6 +44,9 @@ public class Affichage extends JPanel{
 	 * d'après Thales, HAUTEUR_HORIZON/HAUTEUR_Y = profondeur/(profondeur+RECUL_Z) */
 	public static int max_prof = ((HAUT-posHorizon)*RECUL_Z)/(HAUTEUR_Y-HAUT+posHorizon);
 	
+	public static Color COLOR_HERB = new Color(49,159,51);
+	public static Color COLOR_MOUNTAINS = new Color(73,45,13);
+	
 	// Instances du Modèle
 	private Etat etat;
 	private Checkpoint check;
@@ -177,7 +180,7 @@ public class Affichage extends JPanel{
 			int largPiste2 = p2d.x - p2g.x;
 			
 			//herbe
-			g.setColor(new Color(49,159,51));
+			g.setColor(COLOR_HERB);
 			//g.drawLine(0, HAUT-p1g.y,p1g.x, HAUT-p1g.y);
 			//g.drawLine(0, HAUT-p2g.y,p2g.x, HAUT-p2g.y);
 			g.fillPolygon(new int[] {0,  0,p1g.x , p2g.x} , new int[] {HAUT-p2g.y, HAUT-p1g.y, HAUT-p1g.y, HAUT-p2g.y}, 4);
@@ -238,7 +241,7 @@ public class Affichage extends JPanel{
 		tracer(premierD, deuxiemeD, g);
 		
 		//premier polygone herbe (en haut)
-		g.setColor(new Color(49,159,51));
+		g.setColor(COLOR_HERB);
 		g.fillPolygon(new int[] {0,  0,premierG.x , deuxiemeG.x} , new int[] {HAUT-deuxiemeG.y, HAUT-premierG.y, HAUT-premierG.y, HAUT-deuxiemeG.y}, 4);
 		g.fillPolygon(new int[] {deuxiemeD.x , premierD.x, LARG, LARG} , new int[] {HAUT-deuxiemeD.y, HAUT-premierD.y, HAUT-premierD.y, HAUT-deuxiemeD.y}, 4);
 				
@@ -302,7 +305,7 @@ public class Affichage extends JPanel{
 		tracer(projAvDernierD, projDernierD, g);
 		
 		//dernier polygone herbe (en haut)
-		g.setColor(new Color(49,159,51));
+		g.setColor(COLOR_HERB);
 		g.fillPolygon(new int[] {0,  0,projAvDernierG.x , projDernierG.x} , new int[] {HAUT-projDernierG.y, HAUT-projAvDernierG.y, HAUT-projAvDernierG.y, HAUT-projDernierG.y}, 4);
 		g.fillPolygon(new int[] {projDernierD.x , projAvDernierD.x, LARG, LARG} , new int[] {HAUT-projDernierD.y, HAUT-projAvDernierD.y, HAUT-projAvDernierD.y, HAUT-projDernierD.y}, 4);
 		
@@ -366,7 +369,7 @@ public class Affichage extends JPanel{
 	 */
 	private void drawMontagne(Graphics g) {
 		ArrayList<Point> points = etat.getMontagne();
-		g.setColor(new Color(73,45,13));
+		g.setColor(COLOR_MOUNTAINS);
 		for(int i=0; i+1<points.size(); i++) {
 			Point p1 = points.get(i);
 			Point p2 = points.get(i+1);
