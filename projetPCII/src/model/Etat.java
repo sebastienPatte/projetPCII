@@ -22,17 +22,16 @@ public class Etat {
 	 * deplacement de la moto sur les côtés (en pixels)
 	 */
 	public static int deplacement = 6;
-	/** !!!!!! PAS A JOUR !!!!!!!!!!!!!!!!!
-	 * ici on prend FACT_ACCEL égal à une demie largeur d'une des 3 voies
-	 * donc quand on est dans la voie du milieu l'accéléraction est au dessus de 100 donc on accélère 
-	 * et sur les voies des côtés on est en dessous de 100 donc on décélère 
+	/**
+	 * facteur pour pondérer l'acceleration en fonction de la distance entre la moto et le centre de la piste 
+	 * avec largPiste/150  l'accéléraction est toujours au dessus de 100 quand on est sur la voie du milieu 
+	 * Et l'accélération passe en dessous de 100 dans les voies de gauche et de droite 	 
 	 */
 	public static int FACT_ACCEL = Piste.largeurPiste/150;
-	/** !!!!!! PAS A JOUR !!!!!!!!!!!!!!!!! 
-	 * Facteur d'accélération concernant l'altitude, avec 1.5 l'accélération est à 100%
-	 * quand on est juste au milieu de la piste avec une altitude de 1 (suffisant pour passer au dessus des obstacles) 
-	 * mais dès qu'on s'en écarte on perd de la vitesse. Et quand la vitesse passe en dessous de {@link #MinVitesseVol}
-	 * alors la moto descend toute seule vers le sol pour accélérer. 
+	/** 
+	 * Facteur d'accélération concernant l'altitude, avec 1.5 l'accélération est supérieure à 100 quand on est au milieu de la piste
+	 * mais dès qu'on s'en écarte on perd très rapidement de l'accélération. Et quand la vitesse passe en dessous de {@link #MinVitesseVol}
+	 * alors la moto descend toute seule vers le sol pour regagner de la vitesse. 
 	 */
 	public static double FACT_ACCEL_VERT = 1.5;
 	/**
