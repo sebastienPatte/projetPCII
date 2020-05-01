@@ -83,9 +83,9 @@ public class Etat {
 	public static int MinVitesseVol = 2;
 	/**
 	 * {@link #vitesse} maximale atteingnable par la moto
+	 * en pixels par repaint
 	 */
-	static double vitesseMax = 10.0;//pixels par repaint
-	
+	static double vitesseMax = 10.0;
 	/**
 	 * score ajouté quand on dépasse un ennemi
 	 */
@@ -152,7 +152,7 @@ public class Etat {
 	private int score;
 	/**
 	 * Tableau de Threads ({@link control.RepaintScreen RepaintScreen}, 
-	 * {@link control.TestCheckpoint TestCheckpoint}, {@link control.Avancer Avancer} et {@link control.Vitesse Vitesse})
+	 * {@link control.Avancer Avancer} et {@link control.Vitesse Vitesse})
 	 * qui est passé par {@link main.Main Main} pour que l'Etat les stoppent quand la partie est perdue
 	 */
 	private StoppableThread[] threads;
@@ -754,8 +754,8 @@ public class Etat {
 	// OTHERS ######################################################################################
 	
 	/** Génère un chiffre aléatoire entre min et max
-	 * @param int min
-	 * @param int max
+	 * @param min
+	 * @param max
 	 * @return random int between min and max
 	 */
 	private int randint(int min, int max) {

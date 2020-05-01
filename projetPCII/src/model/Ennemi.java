@@ -171,8 +171,8 @@ public class Ennemi {
 	}
 	
 	/** Génère un chiffre aléatoire entre min et max
-	 * @param int min
-	 * @param int max
+	 * @param min
+	 * @param max
 	 * @return random int between min and max
 	 */
 	private int randint(int min, int max) {

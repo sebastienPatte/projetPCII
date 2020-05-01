@@ -71,7 +71,7 @@ public class VueNuages {
 	}
 
 	/**
-	 * à chaque rafraichissement de l'affichage on génère un oiseau avec 1 chance sur 10 000 si on a pas dépassé le {@link #MaxOiseaux maximum d'oiseaux}
+	 * à chaque rafraichissement de l'affichage on génère un oiseau avec 1 chance sur 10 000 si on a pas dépassé le {@link #MaxNuages maximum de nuages}
 	 */
 	void genererNuages() {
 		//on génére des nuages seulement si on a pas dépassé la taille max
