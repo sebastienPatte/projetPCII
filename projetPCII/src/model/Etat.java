@@ -24,7 +24,7 @@ public class Etat {
 	public static int deplacement = 6;
 	/** !!!!!! PAS A JOUR !!!!!!!!!!!!!!!!!
 	 * ici on prend FACT_ACCEL égal à une demie largeur d'une des 3 voies
-	 * donc quand on est dans la voie du milieu l'accéléraction est > 100 donc on accélère 
+	 * donc quand on est dans la voie du milieu l'accéléraction est au dessus de 100 donc on accélère 
 	 * et sur les voies des côtés on est en dessous de 100 donc on décélère 
 	 */
 	public static int FACT_ACCEL = Piste.largeurPiste/150;
@@ -444,7 +444,6 @@ public class Etat {
 	}
 	// Collisions avec les obstacles -------------------------------------------------------------------------------------
 	/**
-	 * @param g
 	 * @return l'indice d'un obstacle si la moto est en collision avec cet obstacle, -1 si il n'y a pas de collision
 	 */
 	public int testCollision(){
@@ -717,7 +716,7 @@ public class Etat {
 	}
 	
 	/**
-	 * @return {@link }
+	 * @return {@link #ennemis}
 	 */
 	public ArrayList<Ennemi> getEnnemis() {
 		if(!this.fin)updateEnnemis();
@@ -743,7 +742,7 @@ public class Etat {
 	// SETTERS ###################################################################################
 	/**
 	 * @param threads récupérés depuis {@link main.Main Main}
-	 * on récupère les {@link Threads} et on les lance 
+	 * on récupère les {@link StoppableThread Threads} et on les lance 
 	 */
 	public void setThreads(StoppableThread[] threads) {
 		this.threads= threads; 
