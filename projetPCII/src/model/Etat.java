@@ -84,7 +84,7 @@ public class Etat {
 	/**
 	 * {@link #vitesse} maximale atteingnable par la moto
 	 */
-	static double vitesseMax = 8.0;//pixels par repaint
+	static double vitesseMax = 10.0;//pixels par repaint
 	
 	/**
 	 * score ajouté quand on dépasse un ennemi
