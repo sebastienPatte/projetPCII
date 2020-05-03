@@ -84,7 +84,7 @@ public class Etat {
 	 * {@link #vitesse} maximale atteingnable par la moto
 	 * en pixels par repaint
 	 */
-	static double vitesseMax = 10.0;
+	static double vitesseMax = 8.0;
 	/**
 	 * score ajouté quand on dépasse un ennemi
 	 */
@@ -207,9 +207,15 @@ public class Etat {
 		int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
 		
 		if(i<piste.length) {
+			
 			// on projete un point au niveau Y du checkpoint pour obtenir l'Y d'affichage du checkpoint (qui prend déjà en compte posY de la moto)
 			int yCheckProj =  projection(piste[i][0].x, 0, piste[i][0].y).y;
-
+			if(yCheckProj <= VueMoto.decBord) {
+				//sinon si, le checkpoint est sorti de la fenètre alors on passe au suivant sans ajouter de temps
+				System.out.println("checkpoint missed : checkPosY "+check.getPosY()+" | posY "+getPosY());
+				check.nextCheckpoint();
+				System.out.println("checkpoint missed : checkPosY "+check.getPosY()+" | posY "+getPosY());
+			}
 			//on ne peut franchir un checkpoint que si on est au sol
 			if(this.posVert==0 && yCheckProj <= mBounds.height) {
 			//si le checkpoint a atteint le niveau de la moto
@@ -235,12 +241,7 @@ public class Etat {
 				}
 			}
 			
-			if(yCheckProj <= VueMoto.decBord) {
-				//sinon si, le checkpoint est sorti de la fenètre alors on passe au suivant sans ajouter de temps
-				System.out.println("checkpoint missed : checkPosY "+check.getPosY()+" | posY "+getPosY());
-				check.nextCheckpoint();
-				System.out.println("checkpoint missed : checkPosY "+check.getPosY()+" | posY "+getPosY());
-			}
+			
 		}
 	}
 	
