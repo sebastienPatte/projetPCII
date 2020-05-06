@@ -204,7 +204,7 @@ public class Affichage extends JPanel{
 			g.setColor(Color.BLACK);
 			
 			//calcul indice checkpoint sur la piste
-			int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
+			int indice = check.getI();
 			//si t1 est sur l'indice du checkpoint, on le dessine (on dessine pas si l'indice est 1 car on le dessine juste après)
 			if(indice > 1 && indice==i) {
 				//on récupère le décalage des positions x1 x2 du checkpoint pour l'afficher sur la bonne voie
@@ -269,7 +269,7 @@ public class Affichage extends JPanel{
 		
 		
 		// si il y a un checkpoint au premier point (donc en bas), on le dessine
-		int indice = (check.getPosY()-etat.getPosY())/Piste.incr+1;
+		int indice = check.getI();
 		if(indice == 1) {
 			int largPremier = deuxiemeD.x - deuxiemeG.x;
 			int[] decCheck = new int[2]; 

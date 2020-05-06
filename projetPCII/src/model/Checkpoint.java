@@ -26,6 +26,8 @@ public class Checkpoint {
 	 * position Y du checkpoint sur la piste
 	 */
 	private int posY;
+	
+	private int iPiste;
 	/**
 	 * temps qu'on ajoute pour le franchissement du prochain checkpoint, décrémenté au fur et à mesure (minimum 5) 
 	 */
@@ -34,15 +36,19 @@ public class Checkpoint {
 	
 	private Clock clock;
 	
+	private Piste piste;
+	
 	/**
 	 * Constructor
 	 * @param etat
 	 */
-	public Checkpoint(Etat etat) {
+	public Checkpoint(Etat etat, Piste piste) {
 		this.time = DEFAULT_TIME;
-		this.posY = INCR*Piste.incr;
+		this.iPiste = piste.getPiste().length-1;
+		this.posY = piste.getPiste()[iPiste][0].y;
 		this.clock = new Clock(etat);
 		this.clock.start();
+		this.piste = piste;
 		this.voie = 0;
 		
 	}
@@ -52,7 +58,8 @@ public class Checkpoint {
 	 */
 	public void nextCheckpoint() {
 		this.voie = randint(0, VOIE_MAX);
-		this.posY += INCR*Piste.incr;
+		this.iPiste = piste.getPiste().length-1;
+		this.posY = piste.getPiste()[iPiste][0].y;
 		System.out.println("next CHECK | y = "+posY);
 	}
 	
@@ -71,6 +78,12 @@ public class Checkpoint {
 	 */
 	public int getPosY() {
 		return this.posY;
+	}
+	
+	
+	public void decrI() {
+		this.iPiste--;
+		this.posY = piste.getPiste()[iPiste][0].y;
 	}
 	
 	/**
@@ -126,6 +139,11 @@ public class Checkpoint {
 	 */
 	public int randint(int min, int max) {
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
+	}
+	
+	public int getI() {
+		System.out.println("i = "+iPiste+" y = "+getPosY());
+		return this.iPiste;
 	}
 	
 	/**

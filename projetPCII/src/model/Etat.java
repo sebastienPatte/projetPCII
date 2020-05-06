@@ -158,7 +158,7 @@ public class Etat {
 	
 	// Instances montagnes et checkpoints
 	private Montagne montagne;
-	private Checkpoint check;
+	
 	private ArrayList<Decor> decors;
 	private ArrayList<Ennemi> ennemis;
 	private Piste piste;
@@ -174,7 +174,6 @@ public class Etat {
 		this.upPressed = false;
 		this.downPressed = false;
 		this.piste = new Piste(this);
-		this.check = new Checkpoint(this);
 		this.posX = 0;
 		this.accel = 100.;
 		this.vitesse =  vitesseMax;
@@ -197,53 +196,7 @@ public class Etat {
 		return new Point(x_resultat,y_resultat);
 	}
 	
-	/**
-	 * on ajoute du temps quand la moto atteint un checkpoint
-	 */
-	public void testCheckpoint() {
-		Rectangle mBounds = getMotoBounds();
-		Point[][] piste = getPiste();
-		//calcul indice checkpoint sur la piste
-		int i = (check.getPosY()-this.getPosY())/Piste.incr+1;
-		
-		if(i<piste.length) {
-			
-			// on projete un point au niveau Y du checkpoint pour obtenir l'Y d'affichage du checkpoint (qui prend déjà en compte posY de la moto)
-			int yCheckProj =  projection(piste[i][0].x, 0, piste[i][0].y).y;
-			if(yCheckProj <= VueMoto.decBord) {
-				//sinon si, le checkpoint est sorti de la fenètre alors on passe au suivant sans ajouter de temps
-				System.out.println("checkpoint missed : checkPosY "+check.getPosY()+" | posY "+getPosY());
-				check.nextCheckpoint();
-				System.out.println("checkpoint missed : checkPosY "+check.getPosY()+" | posY "+getPosY());
-			}
-			//on ne peut franchir un checkpoint que si on est au sol
-			if(this.posVert==0 && yCheckProj <= mBounds.height) {
-			//si le checkpoint a atteint le niveau de la moto
-				// calcul points au niveau du checkpoint
-				Point pG = projection(piste[i][0].x, 0, piste[i][0].y);
-				Point pD = projection(piste[i][1].x, 0, piste[i][1].y);	
-				
-				// on récupère x1 et x2 du checkpoint tels qu'ils sont affichés
-				double[] Xcheck = check.getPosX();
-				int largPiste = pD.x - pG.x; 
-				int cX1 = pG.x + (int)(Xcheck[0] * largPiste);
-				int cX2 = pD.x + (int)(Xcheck[1] * largPiste);
 	
-				// on récupère x1 et x2 de la Moto
-				int mX1 = mBounds.x;                
-				int mX2 = mBounds.x + mBounds.width;
-				
-				if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
-					//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on ajoute du temps
-					check.addTime();
-					// et on génère le prochain checkpoint
-					check.nextCheckpoint();
-				}
-			}
-			
-			
-		}
-	}
 	
 	/**
 	 * lance le game over, vitesse et accel à 0
@@ -303,13 +256,13 @@ public class Etat {
 	 * Avance {@link Piste#posY} en fonction de {@link #vitesse}
 	 */
 	public void avance() {
-		testCheckpoint();
+		
 		/* 0 <= accel/100 <= 1
 		 * quand accel est Ã  100 on avance de vitesseMax
 		 */
 		if(this.vitesse <= 0)gameOver();
 		int iEnnemi = CollisionEnnemi();
-		testCheckpoint();
+	
 		if(iEnnemi !=-1) {
 			// on considère qu'une collision avec un ennemi ne fait pas baisser la vitesse en dessous de 1
 			if(this.vitesse-1>1)this.vitesse -= 1;
@@ -321,7 +274,6 @@ public class Etat {
 		for (Ennemi ennemi : ennemis) {
 			ennemi.avance();
 		}
-		testCheckpoint();
 	}
 	
 	
@@ -644,7 +596,7 @@ public class Etat {
 	/**
 	 * @return un {@link Rectangle} correspondant à la position et la taille de la moto
 	 */
-	private Rectangle getMotoBounds() {
+	Rectangle getMotoBounds() {
 		String str = VueMoto.PATH+etatMoto+".png";
 		try {
 			Image image = ImageIO.read(VueMoto.class.getResource(str));
@@ -698,12 +650,11 @@ public class Etat {
 	public ArrayList<Point> getMontagne(){
 		return montagne.getPointsVisibles();
 	}
-	/**
-	 * @return {@link #check}
-	 */
-	public Checkpoint getCheck(){
-		return this.check;
+	
+	public Checkpoint getCheck() {
+		return piste.getCheck();
 	}
+	
 	/**
 	 * @return la liste des obstacles
 	 */
@@ -773,7 +724,7 @@ public class Etat {
 		this.upPressed = false;
 		this.downPressed = false;
 		this.piste = new Piste(this);
-		this.check.restart();
+		piste.getCheck().restart();
 		this.posX = 0;
 		this.accel = 100.;
 		this.vitesse =  vitesseMax;

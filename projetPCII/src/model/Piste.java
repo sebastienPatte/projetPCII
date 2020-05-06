@@ -1,11 +1,16 @@
 package model;
 
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.imageio.ImageIO;
 
 import view.Affichage;
+import view.VueMoto;
 
 public class Piste {
 	/*plus il est petit, plus la piste se rétrécit vers l'horizon
@@ -30,7 +35,7 @@ public class Piste {
 	 */
 	public static int dec = 50;
 	/**
-	 * Probabilité qu'un obstacle apparisse (lancée à chaque rafraichissement de la fenêtre)
+	 * Probabilité qu'un obstacle apparisse = 1 / probaObstacle (lancée à chaque rafraichissement de la fenêtre)
 	 */
 	public static int probaObstacle = 100; 
 	/**
@@ -50,6 +55,7 @@ public class Piste {
 	 * Instance de {@link Etat}
 	 */
 	private Etat etat;
+	private Checkpoint check;
 	
 	/**
 	 * Constructor
@@ -61,6 +67,7 @@ public class Piste {
 		this.posY = 0;
 		this.obstacles = new ArrayList<Obstacle>();
 		initPoints();
+		this.check = new Checkpoint(etat, this);	
 	}
 	
 	/**
@@ -87,13 +94,16 @@ public class Piste {
 	 */
 	void updatePoints() {
 		//on ajoute un point si le dernier point entre dans le champ de vision 
+		
 		if(points.get(points.size()-1).y  < posY + Affichage.max_prof) {
 			addPoint();
 		}
 		//on retire le 1er point si le deuxième sort de la fenêtre (par le bas)
 		if(points.get(1).y  < posY) {
 			points.remove(0);
+			this.check.decrI();
 		}
+		
 		
 	}
 	
@@ -160,7 +170,9 @@ public class Piste {
 	 * @param v vitesse du joueur
 	 */
 	public void avance(int v) {
+		testCheckpoint();
 		this.posY += v;
+		testCheckpoint();
 	}
 	
 	/**
@@ -188,7 +200,7 @@ public class Piste {
 	
 	/**
 	 * Supprime les obstacles qui ne sont plus visibles et en génère des nouveaux avec une
-	 * probabilité de {@link #probaObstacle}
+	 * probabilité de 1 / {@link #probaObstacle}
 	 */
 	private void updateObstacles() {
 		//on retire le premier obstacle (le plus ancien) tant qu'il est en dehors du champ de vision
@@ -225,6 +237,64 @@ public class Piste {
 		}
 	}
 
+	
+	/**
+	 * on ajoute du temps quand la moto atteint un checkpoint
+	 */
+	public void testCheckpoint() {
+		Rectangle mBounds = etat.getMotoBounds();
+		Point[][] piste = getPiste();
+		//calcul indice checkpoint sur la piste
+		int i = check.getI();
+		
+		if(i<piste.length) {
+			
+			// on projete un point au niveau Y du checkpoint pour obtenir l'Y d'affichage du checkpoint (qui prend déjà en compte posY de la moto)
+			int yCheckProj =  etat.projection(piste[i][0].x, 0, piste[i][0].y).y;
+			if(yCheckProj <= VueMoto.decBord) {
+				//sinon si, le checkpoint est sorti de la fenètre alors on passe au suivant sans ajouter de temps
+				System.out.println("checkpoint missed : checkPosY "+check.getPosY()+" | posY "+getPosY());
+				check.nextCheckpoint();
+				System.out.println("checkpoint missed : checkPosY "+check.getPosY()+" | posY "+getPosY());
+			}
+			//on ne peut franchir un checkpoint que si on est au sol
+			if(etat.posVert==0 && yCheckProj <= mBounds.height) {
+			//si le checkpoint a atteint le niveau de la moto
+				// calcul points au niveau du checkpoint
+				Point pG = etat.projection(piste[i][0].x, 0, piste[i][0].y);
+				Point pD = etat.projection(piste[i][1].x, 0, piste[i][1].y);	
+				
+				// on récupère x1 et x2 du checkpoint tels qu'ils sont affichés
+				double[] Xcheck = check.getPosX();
+				int largPiste = pD.x - pG.x; 
+				int cX1 = pG.x + (int)(Xcheck[0] * largPiste);
+				int cX2 = pD.x + (int)(Xcheck[1] * largPiste);
+	
+				// on récupère x1 et x2 de la Moto
+				int mX1 = mBounds.x;                
+				int mX2 = mBounds.x + mBounds.width;
+				
+				if((cX1 <= mX2 && mX2 <= cX2) || (cX1 <= mX1 && mX1 <= cX2)) {
+					//si x1 ou x2 de la moto est entre les coordonnées X du checkpoint alors on ajoute du temps
+					check.addTime();
+					// et on génère le prochain checkpoint
+					check.nextCheckpoint();
+				}
+			}
+			
+			
+		}
+	}
+	
+	
+	
+	/**
+	 * @return {@link #check}
+	 */
+	public Checkpoint getCheck(){
+		return this.check;
+	}
+	
 	/** Génère un chiffre aléatoire entre min et max
 	 * @param min
 	 * @param max
